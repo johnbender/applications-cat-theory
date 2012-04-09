@@ -4,7 +4,7 @@ This is an attempt to put something together for submission before the April 13t
 
 ## Contents
 
-The submission is a translation of my blog article on the appliation of category theory to JavaScript and jQuery. It focuses less on the category theory as it's center piece and more on the results, choosin to view the category theory as a rigorous proof of the properties needed for the performance optimization. It includes a semi-automatic performance optimization library for jQuery.
+The submission is a translation of my [blog article](http://johnbender.us/2012/02/29/faster-javascript-through-category-theory/) on the application of category theory to JavaScript and jQuery. It focuses less on the category theory as it's center piece and more on the results, choosing to view the category theory as a rigorous proof of the properties needed for the performance optimization. It includes a semi-automatic performance optimization library for jQuery.
 
 ## Compiling
 
