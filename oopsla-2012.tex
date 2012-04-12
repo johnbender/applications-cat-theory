@@ -36,10 +36,11 @@
 \copyrightyear{2012}
 \copyrightdata{[to be supplied]}
 
-\titlebanner{banner above paper title}        % These are ignored unless
-\preprintfooter{short description of paper}   % 'preprint' option specified.
+% These are ignored unless
+% 'preprint' option specified.
+\preprintfooter{Identifying jQuery Performance Optimizations}
 
-\title{Automatic Performance Optimizations for jQuery Based JavaScript Applications}
+\title{Automatically Identifying Performance Optimizations for jQuery Based JavaScript Applications}
 
 \authorinfo{John Bender}
            {}
@@ -47,7 +48,7 @@
 \maketitle
 
 \begin{abstract}
-The jQuery JavaScript library makes the manipulation of the Document Object Model easy and intuitive via chained method calls, but an unfortunate side effect of its fluent interface is that an unwary programmer can easily introduce performance issues. Though desktop browsers have become fast enough to hide much of the problem, the growing complexity of HTML documents and the ubiquity of alternative environments in which JavaScript is now runnning have returned performance to a place of importance. The solution presented achieves a dramatic reduction in jQuery object-set iterations in existing software while minimizing the overhead required from the developer to realize its benefits. As a result the developer can spend less time focusing on performance and more time on adding features and value to his or her applications.
+The jQuery JavaScript library makes the manipulation of the Document Object Model easy and intuitive via chained method calls, but an unfortunate side effect of its fluent interface is that an unwary programmer can easily introduce unnecessary performance overhead. Though desktop browsers have become fast enough to hide much of the problem, the growing complexity of HTML documents and the ubiquity of alternative environments in which JavaScript is now running have returned performance to a place of importance. Using category theory we define a set of JavaScript functions and jQuery methods that can be optimized using loop fusion. In addition, we derive a library to help developers quickly identify opportunities to make these optimizations. As a result the developer can spend less time focusing on performance and more time on adding features and value to his or her applications.
 \end{abstract}
 
 \category{D.2.7}{Distribution, Maintenance, and Enhancement}{Enhancement}
@@ -61,7 +62,29 @@ JavaScript, Category Theory, Loop Fusion, Optimization
 
 \section{Introduction}
 
-The text of the paper begins here.
+JavaScript that leverages the jQuery library can often be identified by its fluency. That is, users are encouraged to make alterations to jQuery objects by ``chaining'' methods [1]. Furthermore jQuery extension authors are counciled to always return the altered jQuery object to facilitate this form of serial method invocation [2]. A simple example will illustrate:
+
+\begin{verbatim}
+jQuery( 'div' ).hide().addClass( 'foo' ).show();
+\end{verbatim}
+
+Here, all HTMLDivElements in the document are retrieved, hidden, altered to add an additional CSS class, and then shown again. Each method, hide, addClass, and show alters all the elements in the jQuery object-set and then provides them for the next method to do the same.
+
+In many cases these method definitions take one of two forms. The first, hereafter referred to as the map-form, uses the built in jQuery method \verb|map| to apply a JavaScript function to each HTMLElement in a given jQuery object-set.
+
+\begin{verbatim}
+jQuery.fn.mapForm = function(){
+  return this.map(function( htmlElement ) {
+    // some alteration to the html element
+    return htmlElement;
+  });
+};
+\end{verbatim}
+
+The invocation of \verb|map| on \verb|this| takes a function argument, here a closure, and passes in each HTMLElement of the jQuery object-set for it to manipulate and replace. As with all methods defined on \verb|jQuery.fn|, \verb|this| represents an instance of that jQuery object-set. Upon successful iteration over the whole set of elements the result is returned for any subsequent method calls in a chain. The second form, which we won't cover here but bears mentioning, is similar but substitutes \verb|each| [3] for \verb|map|.
+
+If n methods of this form are invoked in sequence it means means n iterations over the entirety of the object-set. It appears as though the act of organizing the API into chainable methods, while seemingly easy to read and maintain can introduce unecessary overhead into applications built in this fashion. Here, we hope to aid developers in reducing the number of full iterations while maintaining the appealing fluent interface:
+
 
 \appendix
 \section{Appendix Title}
