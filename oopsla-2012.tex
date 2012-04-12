@@ -48,7 +48,7 @@
 \maketitle
 
 \begin{abstract}
-The jQuery JavaScript library makes the manipulation of the Document Object Model easy and intuitive via chained method calls, but an unfortunate side effect of its fluent interface is that an unwary programmer can easily introduce unnecessary performance overhead. Though desktop browsers have become fast enough to hide much of the problem, the growing complexity of HTML documents and the ubiquity of alternative environments in which JavaScript is now running have returned performance to a place of importance. Using category theory we define a set of JavaScript functions and jQuery methods that can be optimized using loop fusion. In addition, we derive a library to help developers quickly identify opportunities to make these optimizations. As a result the developer can spend less time focusing on performance and more time on adding features and value to his or her applications.
+The jQuery JavaScript library makes the manipulation of HTML documents easy and intuitive via chained method calls, but an unfortunate side effect of its fluent interface is that an unwary programmer can easily introduce unnecessary performance overhead. And while the JavaScript execution in desktop browsers is become fast enough to hide much of the problem the growing complexity of HTML documents and the ubiquity of web enabled mobile devices have returned performance to a place of importance in the JavaScript development community. We address this issue using category theory to identify a set of JavaScript functions and jQuery methods that can be optimized using function composition to effect loop fusion. In addition, we propose a standard and derive a library from that standard to help developers quickly identify opportunities to make these optimizations. As a result the developers should be able to spend less time focusing on performance and more time on adding features and value to his or her applications.
 \end{abstract}
 
 \category{D.2.7}{Distribution, Maintenance, and Enhancement}{Enhancement}
@@ -62,34 +62,119 @@ JavaScript, Category Theory, Loop Fusion, Optimization
 
 \section{Introduction}
 
-JavaScript that leverages the jQuery library can often be identified by its fluency. That is, users are encouraged to make alterations to jQuery objects by ``chaining'' methods [1]. Furthermore jQuery extension authors are counciled to always return the altered jQuery object to facilitate this form of serial method invocation [2]. A simple example will illustrate:
+JavaScript that leverages the jQuery library can often be identified by its fluency. That is, users are encouraged to make alterations to jQuery objects by ``chaining'' methods [!!]. Furthermore jQuery extension authors are counciled to always return the altered jQuery object to facilitate this form of serial method invocation [!!]. A simple example will illustrate:
 
+\begin{figure}[h!]
 \begin{verbatim}
-jQuery( 'div' ).hide().addClass( 'foo' ).show();
+jQuery( "div" ).hide().addClass( "foo" ).show();
 \end{verbatim}
+\caption{Sample jQuery method chain}
+\end{figure}
 
-Here, all HTMLDivElements in the document are retrieved, hidden, altered to add an additional CSS class, and then shown again. Each method, hide, addClass, and show alters all the elements in the jQuery object-set and then provides them for the next method to do the same.
+Here, all \textbf{HTMLDivElement}s in the document are retrieved using the \verb|"div"| CSS selector and used to instantiate a jQuery ``object-set''. They are then hidden, altered to add an additional CSS class, and shown again by invoking the requisite methods that object-set as illustrated in Figure 1. Each method invocation, \verb|hide|, \verb|addClass|, and \verb|show| alters \textit{all} the elements in the jQuery object-set and then provides them for the next method to do the same. More concretely, if n methods of this form are invoked in sequence it will require n full iterations over the object-set.
 
-In many cases these method definitions take one of two forms. The first, hereafter referred to as the map-form, uses the built in jQuery method \verb|map| to apply a JavaScript function to each HTMLElement in a given jQuery object-set.
+Given that each of the methods that behave in this fashion iterates over the entirety of the jQuery object-set it's easy to see where a long sequence of them presents an opportunity for optimization by reducing the number of total iterations. Clearly the act of organizing the API into chainable methods, while easy to read and maintain, can introduce unnecessary execution overhead into applications built using this promoted idiom. Here, we hope to aid developers in reducing the number of full iterations while maintaining the appealing fluent interface:
 
+\begin{enumerate}
+\item We define two categories \textbf{Html} and \textbf{Jqry} along with a Functor that maps from \textbf{Html} to \textbf{Jqry}. In doing so we will identify one set of JavaScript functions, the morphisms of \textbf{Html}, and their jQuery method counterparts, the morpishms of \textbf{Jqry}, that can be composed while remaining confident in the effects of their execution.
+\item We define a simple standard for jQuery method and plugin developers to follow that will allow end users to manually optimize their method chains where appropriate.
+\item We construct a simple and unobtrusive utility for JavaScript developers using jQuery that will alert them to possible opportunities for optimization when chaining methods that adhere to the proposed standard.
+\end{enumerate}
+
+\section{jQuery Object Method Definitions}
+
+To facilitate the discusion it's useful to understand the two general forms that jQuery methods take when opperating on the entire set of elements. The first iterates over the jQuery object-set and relies on side effects to communicate alterations of each constituant element back into the the parent jQuery object (See Apendix for more). The second maps JavaScript functions over the \textbf{HTMLElement}s belonging to the jQuery object-set. Hereafter referred to as the map-form, this is the form we will address here. A simple example that uses the jQuery method \verb|map| will illustrate:
+
+\begin{figure}[h!]
 \begin{verbatim}
 jQuery.fn.mapForm = function(){
-  return this.map(function( htmlElement ) {
+  return this.map(function( index, htmlElement ) {
     // some alteration to the html element
     return htmlElement;
   });
 };
 \end{verbatim}
+\caption{General map-form}
+\end{figure}
 
-The invocation of \verb|map| on \verb|this| takes a function argument, here a closure, and passes in each HTMLElement of the jQuery object-set for it to manipulate and replace. As with all methods defined on \verb|jQuery.fn|, \verb|this| represents an instance of that jQuery object-set. Upon successful iteration over the whole set of elements the result is returned for any subsequent method calls in a chain. The second form, which we won't cover here but bears mentioning, is similar but substitutes \verb|each| [3] for \verb|map|.
+As with all methods defined on \verb|jQuery.fn|, \verb|this| represents an instance of that jQuery object-set. The invocation of \verb|map| on \verb|this| takes a function argument, here a closure, and passes in the index and HTMLElement of each element in the jQuery object-set. Upon successful iteration over the whole set of elements the result is returned for any subsequent method calls in a chain. A naive reimplementation of the \verb|addClass| method using the map-form and \verb|map| might take the form:
 
-If n methods of this form are invoked in sequence it means means n iterations over the entirety of the object-set. It appears as though the act of organizing the API into chainable methods, while seemingly easy to read and maintain can introduce unecessary overhead into applications built in this fashion. Here, we hope to aid developers in reducing the number of full iterations while maintaining the appealing fluent interface:
+\begin{figure}[h!]
+\begin{verbatim}
+jQuery.fn.naiveAddClass = function( cls ){
+  return this.map(function( i, e ) {
+    var old = e.getAttribute( "class" );
+    e.setAttribute( "class", old + " " + cls );
+    return e;
+  });
+};
+\end{verbatim}
+\caption{A naive reimplementation of \$.fn.addClass}
+\end{figure}
+
+Here \verb|cls| is the name of a new CSS class to be added to the element and \verb|e| is each HTMLElement in the jQuery object-set. As defined it can be used as a drop in replacement for the predefined version of \verb|addClass| provided by jQuery itself in figure 1.
+
+\section{The Html Category}
+
+To define \textbf{Html} and \textbf{Jqry} we must provide objects and morphisms for each. Then for both we must show that an identity morphism exists, composition is possible for the morphisms, that composition is associative, and finally that the set of morphisms is closed under composition [!!].
+
+To start, the objects of \textbf{Html} are the \textbf{HTMLElement} type and all its subclasses provided by a standards compliant browser's JavaScript API[!!]. The morphisms are JavaScript functions that opperate on objects of the \textbf{HTMLElement} type.
+
+Next, we define the identity function for \textbf{Html} in the manner you would expect:
+
+\begin{figure}[h!]
+\begin{verbatim}
+function id( a ) {
+  return a;
+}
+\end{verbatim}
+\caption{The identity function in Html}
+\end{figure}
+
+The composition operation is nearly as simple, returning a new closure that, when invoked, will process the function execution in the expected order (See Apendix for sample invocation):
+
+\begin{figure}[h!]
+\begin{verbatim}
+function compose( f, g ){
+  return function( a ) {
+    return f(g(a));
+  };
+}
+\end{verbatim}
+\caption{The compose operation for Html}
+\end{figure}
 
 
 \appendix
 \section{Appendix Title}
 
+
+The second form, which we won't cover here but bears mentioning, is similar but substitutes \verb|each| [!!] for \verb|map|.
 This is the text of the appendix, if you need one.
+
+\begin{figure}[h!]
+\begin{verbatim}
+function a( elem ){
+  elem.setAttribute( "foo", "bar" );
+  return elem;
+}
+
+function b( elem ){
+  elem.setAttribute( "baz", "bak" );
+  return elem;
+}
+
+var elem = document.getElementById( "example-anchor" );
+elem.getAttribute( "foo" ); // undefined
+elem.getAttribute( "baz" ); // undefined
+
+elem = compose( a, b )( elem );
+elem.getAttribute( "foo" ); // "bar"
+elem.getAttribute( "baz" ); // "bak"
+\end{verbatim}
+\caption{A sample use of composition in Html}
+\end{figure}
+
 
 \acks
 
