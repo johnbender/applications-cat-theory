@@ -21,6 +21,7 @@
 
 
 \documentclass[preprint]{sigplanconf}
+\nocaptionrule
 
 % The following \documentclass options may be useful:
 %
@@ -68,7 +69,7 @@ JavaScript that leverages the jQuery library can often be identified by its flue
 \begin{verbatim}
 jQuery( "div" ).hide().addClass( "foo" ).show();
 \end{verbatim}
-\caption{Sample jQuery method chain}
+\nocaptionrule \caption{Sample jQuery method chain}
 \end{figure}
 
 Here, all \textbf{HTMLDivElement}s in the document are retrieved using the \verb|"div"| CSS selector and used to instantiate a jQuery ``object-set''. They are then hidden, altered to add an additional CSS class, and shown again by invoking the requisite methods that object-set as illustrated in Figure 1. Each method invocation, \verb|hide|, \verb|addClass|, and \verb|show| alters \textit{all} the elements in the jQuery object-set and then provides them for the next method to do the same. More concretely, if n methods of this form are invoked in sequence it will require n full iterations over the object-set.
@@ -94,10 +95,10 @@ jQuery.fn.mapForm = function(){
   });
 };
 \end{verbatim}
-\caption{General map-form}
+\nocaptionrule \caption{General map-form}
 \end{figure}
 
-As with all methods defined on \verb|jQuery.fn|, \verb|this| represents an instance of that jQuery object-set. The invocation of \verb|map| on \verb|this| takes a function argument, here a closure, and passes in the index and HTMLElement of each element in the jQuery object-set. Upon successful iteration over the whole set of elements the result is returned for any subsequent method calls in a chain. A naive reimplementation of the \verb|addClass| method using the map-form and \verb|map| might take the form:
+As with all methods defined on \verb|jQuery.fn|, \verb|this| represents an instance of the jQuery object-set. The invocation of \verb|map| on \verb|this| takes a function argument, here a closure, and passes in the index and HTMLElement of each element in the jQuery object-set. Upon successful iteration over the whole set of elements the result is returned for any subsequent method calls in a chain. A naive reimplementation of the \verb|addClass| method using the map-form might look like:
 
 \begin{figure}[h!]
 \begin{verbatim}
@@ -109,16 +110,16 @@ jQuery.fn.naiveAddClass = function( cls ){
   });
 };
 \end{verbatim}
-\caption{A naive reimplementation of \$.fn.addClass}
+\nocaptionrule \caption{A naive reimplementation of \$.fn.addClass}
 \end{figure}
 
-Here \verb|cls| is the name of a new CSS class to be added to the element and \verb|e| is each HTMLElement in the jQuery object-set. As defined it can be used as a drop in replacement for the predefined version of \verb|addClass| provided by jQuery itself in figure 1.
+Here \verb|cls| is the name of a new CSS class to be added to the element and \verb|e| is each HTMLElement in the jQuery object-set. As defined it can be used as a drop in replacement for the predefined version of \verb|addClass| provided by jQuery itself in Figure 1.
 
-\section{The Html Category}
+\section{Html}
 
-To define \textbf{Html} and \textbf{Jqry} we must provide objects and morphisms for each. Then for both we must show that an identity morphism exists, composition is possible for the morphisms, that composition is associative, and finally that the set of morphisms is closed under composition [!!].
+To define \textbf{Html} and \textbf{Jqry} we must define the classes \begin{math}ob(\mathbf{Html})\end{math} of objects and \begin{math}hom(\mathbf{Html})\end{math} of morphisms for each. Then for both we must show that an identity morphism exists, composition is possible for the morphisms, that composition is associative, and finally that the set of morphisms is closed under composition [!!].
 
-To start, the objects of \textbf{Html} are the \textbf{HTMLElement} type and all its subclasses provided by a standards compliant browser's JavaScript API[!!]. The morphisms are JavaScript functions that opperate on objects of the \textbf{HTMLElement} type.
+To start, the we define \begin{math}ob(\mathbf{Html})\end{math} as the set of the \textbf{HTMLElement} type and all its subclasses provided by a standards compliant browser's JavaScript API[!!]. We also define \begin{math}hom(\mathbf{Html})\end{math} as JavaScript functions from and to objects in \begin{math}ob(\mathbf{Html})\end{math}.
 
 Next, we define the identity function for \textbf{Html} in the manner you would expect:
 
@@ -128,7 +129,7 @@ function id( a ) {
   return a;
 }
 \end{verbatim}
-\caption{The identity function in Html}
+\nocaptionrule \caption{The identity morphism in Html}
 \end{figure}
 
 The composition operation is nearly as simple, returning a new closure that, when invoked, will process the function execution in the expected order (See Apendix for sample invocation):
@@ -141,13 +142,40 @@ function compose( f, g ){
   };
 }
 \end{verbatim}
-\caption{The compose operation for Html}
+\nocaptionrule \caption{The compose operation for Html}
 \end{figure}
 
+The associativity of function composition can be shown by reduction using the defined \verb|compose| function. Given that it behaves in the fashion defined (Figure 6) it suffices to show that given different associations the reduction remains the same (Figure 7)
+
+\begin{figure}[h!]
+\begin{displaymath}
+\begin{align*}
+(f\ \circ\ g \circ\ h)(x)\ &= f\ \circ\ g(h(x)) &= f(g(h(x)))\\
+cmps(f,cmps(g,h))(x)\ &= cmps(f, g(h(x))) &= f(g(h(x)))\\
+\end{align*}
+\end{displaymath}
+\nocaptionrule \caption{Composition behavior}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{displaymath}
+\begin{align*}
+cmps(f,cmps(g,h))(x)\ &= cmps(cmps(f,g),h)(x) \\
+cmps(f,g(h(x)))\ &= cmps(f(g),h(x)) \\
+f(g(h(x)))\ &= f(g(h(x)))\\
+\end{align*}
+\end{displaymath}
+\nocaptionrule \caption{Reduction of composition}
+\end{figure}
+
+Finally we know that the morphisms in \textbf{Html} are closed under composition because the source and target objects for each morpishm must both exist in \begin{math}ob(\mathbf{Html})\end{math}.
+
+\section{Jqry}
+
+To define \textbf{Jqry} we must demonstrate the same properties. The class \begin{math}ob(\mathbf{Jqry})\end{math} has a single object in the type of the jQuery constructor, \textbf{jQuery}. The class \begin{math}hom(\mathbf{Jqry})\end{math} is all morphisms from \textbf{jQuery} to \textbf{jQuery}.
 
 \appendix
 \section{Appendix Title}
-
 
 The second form, which we won't cover here but bears mentioning, is similar but substitutes \verb|each| [!!] for \verb|map|.
 This is the text of the appendix, if you need one.
@@ -164,7 +192,7 @@ function b( elem ){
   return elem;
 }
 
-var elem = document.getElementById( "example-anchor" );
+var elem = document.getElementById( "anchor-tag" );
 elem.getAttribute( "foo" ); // undefined
 elem.getAttribute( "baz" ); // undefined
 
@@ -172,7 +200,7 @@ elem = compose( a, b )( elem );
 elem.getAttribute( "foo" ); // "bar"
 elem.getAttribute( "baz" ); // "bak"
 \end{verbatim}
-\caption{A sample use of composition in Html}
+\nocaptionrule \caption{A sample use of composition in Html}
 \end{figure}
 
 
