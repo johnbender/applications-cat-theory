@@ -41,7 +41,7 @@
 % 'preprint' option specified.
 \preprintfooter{Identifying jQuery Performance Optimizations}
 
-\title{Automatically Identifying Performance Optimizations for jQuery Based JavaScript Applications}
+\title{Automatically Identifying Performance Optimizations for jQuery Based JavaScript}
 
 \authorinfo{John Bender}
            {}
@@ -63,7 +63,7 @@ JavaScript, Category Theory, Loop Fusion, Optimization
 
 \section{Introduction}
 
-JavaScript that leverages the jQuery library can often be identified by its fluency. That is, users are encouraged to make alterations to jQuery objects by ``chaining'' methods [!!]. Furthermore jQuery extension authors are counciled to always return the altered jQuery object to facilitate this form of serial method invocation [!!]. A simple example will illustrate:
+JavaScript that leverages the jQuery library can often be identified by its fluency. That is, users are encouraged to make alterations to jQuery objects by ``chaining'' methods [!!]. Furthermore jQuery extension authors are counciled to always return the altered jQuery object to facilitate this form of serial method invocation [!!].
 
 \begin{figure}[h!]
 \begin{verbatim}
@@ -72,9 +72,9 @@ jQuery( "div" ).hide().addClass( "foo" ).show();
 \nocaptionrule \caption{Sample jQuery method chain}
 \end{figure}
 
-Here, all \textbf{HTMLDivElement}s in the document are retrieved using the \verb|"div"| CSS selector and used to instantiate a jQuery ``object-set''. They are then hidden, altered to add an additional CSS class, and shown again by invoking the requisite methods that object-set as illustrated in Figure 1. Each method invocation, \verb|hide|, \verb|addClass|, and \verb|show| alters \textit{all} the elements in the jQuery object-set and then provides them for the next method to do the same. More concretely, if n methods of this form are invoked in sequence it will require n full iterations over the object-set.
+In Figure 1, all \textbf{HTMLDivElement}s in the document are retrieved using the \verb|"div"| CSS selector and used to instantiate a jQuery ``object-set''. They are then hidden, altered to add an additional CSS class, and shown again by invoking the requisite methods that object-set as illustrated in Figure 1. Each method invocation, \verb|hide|, \verb|addClass|, and \verb|show| alters \textit{all} the elements in the jQuery object-set and then provides them for the next method to do the same. More concretely, if n methods of this form are invoked in sequence it will require n full iterations over the object-set.
 
-Given that each of the methods that behave in this fashion iterates over the entirety of the jQuery object-set it's easy to see where a long sequence of them presents an opportunity for optimization by reducing the number of total iterations. Clearly the act of organizing the API into chainable methods, while easy to read and maintain, can introduce unnecessary execution overhead into applications built using this promoted idiom. Here, we hope to aid developers in reducing the number of full iterations while maintaining the appealing fluent interface:
+Given that each of the methods that behave in this fashion iterates over the entirety of the jQuery object-set it's easy to see where a long sequence of them presents an opportunity for optimization by reducing the number of total iterations. Here, we hope to aid developers in reducing the number of full iterations undertaken with long method chains while otherwise maintaining the appealing fluent interface:
 
 \begin{enumerate}
 \item We define two categories \textbf{Html} and \textbf{Jqry} along with a Functor that maps from \textbf{Html} to \textbf{Jqry}. In doing so we will identify one set of JavaScript functions, the morphisms of \textbf{Html}, and their jQuery method counterparts, the morpishms of \textbf{Jqry}, that can be composed while remaining confident in the effects of their execution.
@@ -84,7 +84,7 @@ Given that each of the methods that behave in this fashion iterates over the ent
 
 \section{jQuery Object Method Definitions}
 
-To facilitate the discusion it's useful to understand the two general forms that jQuery methods take when opperating on the entire set of elements. The first iterates over the jQuery object-set and relies on side effects to communicate alterations of each constituant element back into the the parent jQuery object (See Apendix for more). The second maps JavaScript functions over the \textbf{HTMLElement}s belonging to the jQuery object-set. Hereafter referred to as the map-form, this is the form we will address here. A simple example that uses the jQuery method \verb|map| will illustrate:
+To facilitate the discusion it's useful to understand the two general forms that jQuery methods take when opperating on the entire set of elements. The first iterates over the jQuery object-set and relies on side effects to communicate alterations of each constituant element back into the the parent jQuery object (See Apendix for more). The second maps JavaScript functions over the \textbf{HTMLElement}s belonging to the jQuery object-set. Hereafter referred to as the map-form, this is the form we will address here. Figure 2 illustrates a simple example that uses the jQuery method \verb|map|.
 
 \begin{figure}[h!]
 \begin{verbatim}
@@ -98,7 +98,8 @@ jQuery.fn.mapForm = function(){
 \nocaptionrule \caption{General map-form}
 \end{figure}
 
-As with all methods defined on \verb|jQuery.fn|, \verb|this| represents an instance of the jQuery object-set. The invocation of \verb|map| on \verb|this| takes a function argument, here a closure, and passes in the index and HTMLElement of each element in the jQuery object-set. Upon successful iteration over the whole set of elements the result is returned for any subsequent method calls in a chain. A naive reimplementation of the \verb|addClass| method using the map-form might look like:
+\clearpage
+As with all methods defined on \verb|jQuery.fn|, \verb|this| represents an instance of the jQuery object-set. The invocation of \verb|map| on \verb|this| takes a function argument, here a closure, and passes in the index and HTMLElement of each element in the jQuery object-set. Upon successful iteration over the whole set of elements the result is returned for any subsequent method calls in a chain.
 
 \begin{figure}[h!]
 \begin{verbatim}
@@ -113,13 +114,13 @@ jQuery.fn.naiveAddClass = function( cls ){
 \nocaptionrule \caption{A naive reimplementation of \$.fn.addClass}
 \end{figure}
 
-Here \verb|cls| is the name of a new CSS class to be added to the element and \verb|e| is each HTMLElement in the jQuery object-set. As defined it can be used as a drop in replacement for the predefined version of \verb|addClass| provided by jQuery itself in Figure 1.
+Figure 3 shows a naive reimplementation of the \verb|addClass| method using the map-form. Here \verb|cls| is the name of a new CSS class to be added to the element and \verb|e| is each HTMLElement in the jQuery object-set. As defined it can be used as a drop in replacement for the predefined version of \verb|addClass| provided by jQuery itself in Figure 1.
 
 \section{Html}
 
 To define \textbf{Html} and \textbf{Jqry} we must define the classes \begin{math}ob(\mathbf{Html})\end{math} of objects and \begin{math}hom(\mathbf{Html})\end{math} of morphisms for each. Then for both we must show that an identity morphism exists, composition is possible for the morphisms, that composition is associative, and finally that the set of morphisms is closed under composition [!!].
 
-To start, the we define \begin{math}ob(\mathbf{Html})\end{math} as the set of the \textbf{HTMLElement} type and all its subclasses provided by a standards compliant browser's JavaScript API[!!]. We also define \begin{math}hom(\mathbf{Html})\end{math} as JavaScript functions from and to objects in \begin{math}ob(\mathbf{Html})\end{math}.
+To start we define \begin{math}ob(\mathbf{Html})\end{math} as the set of the \textbf{HTMLElement} type and all its subclasses provided by a standards compliant browser's JavaScript API[!!]. We also define \begin{math}hom(\mathbf{Html})\end{math} as JavaScript functions from and to objects in \begin{math}ob(\mathbf{Html})\end{math}.
 
 Next, we define the identity function for \textbf{Html} in the manner you would expect:
 
@@ -168,11 +169,43 @@ f(g(h(x)))\ &= f(g(h(x)))\\
 \nocaptionrule \caption{Reduction of composition}
 \end{figure}
 
-Finally we know that the morphisms in \textbf{Html} are closed under composition because the source and target objects for each morpishm must both exist in \begin{math}ob(\mathbf{Html})\end{math}.
+Finally we know that the morphisms in \textbf{Html} are closed under composition because the source and target objects for each morpishm both exist in \begin{math}ob(\mathbf{Html})\end{math} as \textbf{HTMLElement} or one of its subclasses.
 
 \section{Jqry}
 
-To define \textbf{Jqry} we must demonstrate the same properties. The class \begin{math}ob(\mathbf{Jqry})\end{math} has a single object in the type of the jQuery constructor, \textbf{jQuery}. The class \begin{math}hom(\mathbf{Jqry})\end{math} is all morphisms from \textbf{jQuery} to \textbf{jQuery}.
+To define \textbf{Jqry} we must demonstrate the same properties. The class \begin{math}ob(\mathbf{Jqry})\end{math} has a single object, the type of the jQuery constructor, \textbf{jQuery}. The class \begin{math}hom(\mathbf{Jqry})\end{math} is all morphisms from \textbf{jQuery} to \textbf{jQuery}. As before we first define the identity function and then the composition operation.
+
+\begin{figure}[h!]
+\begin{verbatim}
+function id() {
+  return this;
+}
+\end{verbatim}
+\nocaptionrule \caption{The identity morphism in Jqry}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{verbatim}
+function compose( f, g ){
+  return function() {
+    return f.call(g.call(this));
+  };
+}
+\end{verbatim}
+\nocaptionrule \caption{The compose operation for Jqry}
+\end{figure}
+
+You'll note there is one very important difference when comparing both functions to their \textbf{Html} counterparts. Both ignore any parameters and rely on \verb|this| as an implicit parameter. Next we define composition for \textbf{Jqry} morphisms over explicit \verb|this| values
+
+\begin{figure}[h!]
+\begin{verbatim}
+jQuery.compose = function( f, g ){
+  return f.call(g.call(this));
+};
+\end{verbatim}
+\nocaptionrule \caption{Composition of jQuery methods}
+\end{figure}
+
 
 \appendix
 \section{Appendix Title}
@@ -202,7 +235,6 @@ elem.getAttribute( "baz" ); // "bak"
 \end{verbatim}
 \nocaptionrule \caption{A sample use of composition in Html}
 \end{figure}
-
 
 \acks
 
