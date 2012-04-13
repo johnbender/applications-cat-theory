@@ -253,34 +253,6 @@ Given what we know about loop f
 
 \appendix
 \section{Appendix Title}
-
-The second form, which we won't cover here but bears mentioning, is similar but substitutes \verb|each| [!!] for \verb|map|.
-This is the text of the appendix, if you need one.
-
-\begin{figure}[h!]
-\small
-\begin{verbatim}
-function a( elem ){
-  elem.setAttribute( "foo", "bar" );
-  return elem;
-}
-
-function b( elem ){
-  elem.setAttribute( "baz", "bak" );
-  return elem;
-}
-
-var elem = document.getElementById( "anchor-tag" );
-elem.getAttribute( "foo" ); // undefined
-elem.getAttribute( "baz" ); // undefined
-
-elem = compose( a, b )( elem );
-elem.getAttribute( "foo" ); // "bar"
-elem.getAttribute( "baz" ); // "bak"
-\end{verbatim}
-\nocaptionrule \caption{A sample use of composition in Html}
-\end{figure}
-
 \acks
 
 Acknowledgments, if needed.
