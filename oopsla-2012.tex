@@ -44,7 +44,7 @@
 % 'preprint' option specified.
 \preprintfooter{Identifying jQuery Performance Optimizations}
 
-\title{Automatically Identifying Performance Optimizations for jQuery Based JavaScript}
+\title{Automatically Identifying Performance Optimizations for jQuery Based JavaScript Applications}
 
 \authorinfo{John Bender}
            {unaffiliated}
@@ -78,7 +78,7 @@ jQuery( "div" ).hide().addClass( "foo" ).show();
 \label{fig:jquery-sample}
 \end{figure}
 
-In Figure \ref{fig:jquery-sample}, all \textbf{HTMLDivElement}s in the document are retrieved using the \verb|"div"| CSS selector and used to instantiate a jQuery ``object-set''. They are then hidden, altered to add an additional CSS class, and shown again. Each method invocation, \verb|hide|, \verb|addClass|, and \verb|show| alters \textit{all} the elements in the jQuery object-set and then provides them for the next method to do the same. More concretely, if n methods of this form are invoked in sequence it will require n full iterations over the object-set.
+In Figure \ref{fig:jquery-sample}, all \textbf{HTMLDivElement}s in the document are retrieved using the \verb|"div"| CSS selector and used to instantiate a jQuery ``object-set''. They are then hidden, altered to add an additional CSS class, and shown again. Each method invocation, \verb|hide|, \verb|addClass|, and \verb|show| alters \textit{all} the elements in the jQuery object-set and then provides them for the next method to do the same. More concretely, if \begin{math}n\end{math} methods of this form are invoked in sequence it will require \begin{math}n\end{math} full iterations over the object-set.
 
 Given that each of the methods that behave in this fashion iterates over the entirety of the jQuery object-set it's easy to see where a long sequence of them presents an opportunity for optimization by reducing the number of total iterations. Here, we hope to aid developers in reducing the number of full iterations undertaken with long method chains while otherwise maintaining the appealing fluent interface:
 
@@ -90,7 +90,7 @@ Given that each of the methods that behave in this fashion iterates over the ent
 
 \section{jQuery Object Method Definitions}
 
-To facilitate the discussion it's useful to understand the two general forms that jQuery methods take when operating on the entire set of elements. The first iterates over the jQuery object-set and relies on side effects to communicate alterations of each constituent element back into the the parent jQuery object (See Appendix A for more). The second maps JavaScript functions over the \textbf{HTMLElement}s belonging to the jQuery object-set. Hereafter referred to as the map-form, this is the form we will address here. Figure \ref{fig:map-form} illustrates a simple example that uses the jQuery method \verb|map|.
+To facilitate understanding of the machinery that underpins jQuery methods, it's useful to understand the two general forms that jQuery methods take when operating on the entire set of elements. The first iterates over the jQuery object-set and relies on side effects to communicate alterations of each constituent element back into the the parent jQuery object (See Appendix A for more). The second maps JavaScript functions over the \textbf{HTMLElement}s belonging to the jQuery object-set. Hereafter referred to as the map-form, this is the form we will address during the couse of the paper. Figure \ref{fig:map-form} illustrates a simple example that uses the jQuery method \verb|map|.
 
 \begin{figure}[!ht]
 \small
@@ -180,12 +180,12 @@ f(g(h(x)))\ &= f(g(h(x)))\\
 
 Finally we know that the morphisms in \textbf{Html} are closed under composition because the source and target objects for each morphism both exist in \begin{math}ob(\mathbf{Html})\end{math} as \textbf{HTMLElement} or one of its subclasses.
 
-To define \textbf{Jqry} we must demonstrate the same properties. The class \begin{math}ob(\mathbf{Jqry})\end{math} has a single object, the type of the jQuery constructor, \textbf{jQuery}. The class \begin{math}hom(\mathbf{Jqry})\end{math} is all morphisms from \textbf{jQuery} to \textbf{jQuery}. As before we first define the identity function and then the composition operation.
+To define \textbf{Jqry} we must demonstrate the same properties. The class \begin{math}ob(\mathbf{Jqry})\end{math} has a single object, the type of the jQuery constructor, \textbf{jQuery}. The class \begin{math}hom(\mathbf{Jqry})\end{math} is all morphisms from \textbf{jQuery} to \textbf{jQuery}. As before we first define the identity function and then the composition operation in Figure \ref{fig:jquery-id-compose}.
 
 \begin{figure}[!ht]
 \small
 \begin{verbatim}
-jQuery.fn.identity = function() {
+jQuery.fn.id = function() {
   return this;
 }
 
@@ -196,6 +196,7 @@ jQuery.compose = function( f, g ){
 }
 \end{verbatim}
 \nocaptionrule \caption{Identity and the compose operation for Jqry}
+\label{fig:jquery-id-compose}
 \end{figure}
 
 These are distinct from their \textbf{Html} counterparts in that they ignore any parameters and rely on \verb|this| as an implicit parameter. This stems from the use of the morphisms in \textbf{Jqry} with the JavaScript dot notation which dictates the value of \verb|this| and will become important later when discussing the Functor from \textbf{Html} to \textbf{Jqry}.
@@ -206,12 +207,12 @@ These are distinct from their \textbf{Html} counterparts in that they ignore any
 \begin{verbatim}
 var divs = $( "div" );
 
-assert(divs.identity() == divs);
+assert(divs.id() == divs);
 
 jQuery.fn.hideIdentity =
-  jQuery.compose(jQuery.fn.identity, jQuery.fn.hide);
+  jQuery.compose(jQuery.fn.id, jQuery.fn.hide);
 
-assert(divs.hideIdentity() == divs.hide().identity());
+assert(divs.hideIdentity() == divs.hide().id());
 \end{verbatim}
 \nocaptionrule \caption{Invocations of identity and compose Jqry}
 \label{fig:sample-jqry-compose}
@@ -219,21 +220,29 @@ assert(divs.hideIdentity() == divs.hide().identity());
 
 Again, we take associativity to be evident by reduction and we know that \textbf{Jqry} morphisms are closed under composition because the source and target object is the same.
 
-Next we define a Functor from \textbf{Html} to \textbf{Jqry} which will serve the dual purpose of exposing the proposed performance optimization and adding rigor to the definition of the morphisms in \textbf{Jqry} that can safely be optimized. The definition consists of two parts, one that operates on the objects of \textbf{Html} and one that operates on the morphisms. The Functor must also preserve identity and composition \cite[p. ~36]{bib:category-definition}.
+Next we define a Functor from \textbf{Html} to \textbf{Jqry} which will serve the dual purpose of exposing the proposed performance optimization and adding rigor to the definition of the morphisms in \textbf{Jqry} that can safely be optimized. The definition consists of two parts, one that operates on the objects of \textbf{Html}, Figure \ref{fig:functor-for-object}, and one that operates on the morphisms, Figure \ref{fig:functor-for-morphism}.
 
 \begin{figure}[!ht]
 \small
 \begin{verbatim}
 jQuery( document.getElementById("foo") );
+\end{verbatim}
+\nocaptionrule \caption{Functor definition}
+\label{fig:functor-for-object}
+\end{figure}
 
+\begin{figure}[!ht]
+\small
+\begin{verbatim}
 function functor( morphism ){
   jQuery.map(this, morphism);
 }
 \end{verbatim}
 \nocaptionrule \caption{Functor definition}
+\label{fig:functor-for-morphism}
 \end{figure}
 
-The preservation of identity and composition is made obvious through simple illustration (Figure \ref{fig:id-and-compose}).
+The Functor must also preserve identity and composition \cite[p. ~36]{bib:category-definition}. The preservation of identity and composition is made obvious through simple illustration (Figure \ref{fig:id-and-compose}).
 
 \begin{figure}[!ht]
 \small
@@ -251,11 +260,11 @@ assert(functor(compose(f, g))
 \label{fig:id-and-compose}
 \end{figure}
 
-Identity is trivial but composition warrants some explanation. On the left hand side the Functor promotes the already composed \textbf{Html} morphism using jQuery's \verb|map| method for operation on \verb|this|. On the right hand side each individual morphism is promoted and then \verb|jQuery.compose| performs the service of establishing \verb|this| for each execution. Most importantly the right hand side, as in Figure \ref{fig:sample-jqry-compose}, is functionally equivalent to the chaining of both methods promoted by the Functor. Given that the second Functor law holds we can say with complete confidence that two morphisms in \begin{math}hom(\mathbf{Html})\end{math} composed and then promoted into \begin{math}hom(\mathbf{Jqry})\end{math} are equivalent to the composition or chaining of two morphism in \begin{math}hom(\mathbf{Jqry})\end{math}. As a performance optimization this is generally referred to as loop fusion or deforestation where the intermediate data structure is the mutated jQuery object set \cite{bib:deforestation}.
+Identity is trivial but composition warrants some explanation. On the left hand side the Functor promotes the already composed \textbf{Html} morphism using jQuery's \verb|map| method for operation on \verb|this|. On the right hand side each individual morphism is promoted and then \verb|jQuery.compose| performs the service of establishing \verb|this| for each execution. Most importantly the right hand side, as in Figure \ref{fig:sample-jqry-compose}, is functionally equivalent to the chaining of both methods promoted by the Functor. Given that the second Functor law holds we can say with complete confidence that two morphisms in \begin{math}hom(\mathbf{Html})\end{math} composed and then promoted into \begin{math}hom(\mathbf{Jqry})\end{math} are equivalent to the composition or chaining of two morphism in \begin{math}hom(\mathbf{Jqry})\end{math}. As a performance optimization the choice of the former is generally referred to as loop fusion or deforestation where the intermediate data structure is the mutated jQuery object set \cite{bib:deforestation}.
 
 \section{Guidelines to Facilitate Optimization}
 
-Given that the loop fusion optimization requires the composition of at least two morphisms from \textbf{Html} and that functionality of those morphisms is provided to the end user today as the lifted version that exists in \textbf{Jqry}, we propose the following guidelines.
+Given that the loop fusion optimization requires the composition of at least two morphisms from \textbf{Html} and that functionality of those morphisms is always provided to the end user as the lifted version that exists in \textbf{Jqry}, we propose the following guidelines.
 
 \begin{enumerate}
   \item \label{item:standard-1} All methods defined on the jQuery object prototype \verb|jQuery.fn| that leverage \verb|jQuery.map| to lift an \textbf{Html} morphism into \textbf{Jqry} must provide the underlying morphism as a property for end users. Since the behavior of a given jQuery method is often too complex for the end user to determine if it meets the criteria for loop fusion, this rightly places the onus on the developers of the jQuery methods to determine and provide the necessary JavaScript function to the end user for optimization in their applications.
