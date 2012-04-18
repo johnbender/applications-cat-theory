@@ -1,0 +1,85 @@
+body {
+  width: 96in;
+  height: 48in;
+  padding: 1in;
+}
+
+h1, h2 {
+  line-height: 1em;
+  text-shadow: 0px 1px 2px #555;
+}
+
+h1 {
+  font-size: 10em;
+}
+
+h2 {
+  font-size: 2em;
+  margin-bottom: 1%;
+}
+
+#title {
+  text-align: center;
+}
+
+#title h1 {
+  width: 40%;
+  height: 4in;
+  margin: auto;
+  line-height: 1.1em;
+}
+
+#content {
+  width: 100%;
+  height: 90%;
+}
+
+#left, #middle, #right {
+  width: 32%;
+  height: 100%;
+  background-color: #EEE;
+  border-radius: 0.15in;
+  float: left;
+  padding: 1%;
+  box-sizing: border-box;
+  font-size: 6em;
+}
+
+#left, #middle {
+  margin-right: 2%;
+}
+
+.block-out {
+  background-color: #AAA;
+}
+
+#piechart-caption, #jquery-piechart {
+  height: 5in;
+}
+
+/* bootstrap alterations */
+
+pre.large {
+  font-size: 1.18em;
+  line-height: 1em;
+  padding: 1%;
+}
+
+.row-fluid {
+  margin-bottom: 1.5%;
+}
+
+h2 .label {
+  font-size: 1em;
+  border-radius: 0.15in;
+  padding: 0.25in;
+  vertical-align: baseline;
+}
+
+/* code highlights */
+
+.string {
+  color: #8b2252;
+}
+
+
