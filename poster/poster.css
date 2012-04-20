@@ -10,33 +10,31 @@ h1, h2 {
 }
 
 h1 {
-  font-size: 10em;
+  font-size: 1.5in;
 }
 
 h2 {
-  font-size: 2em;
+  font-size: 1.2in;
   margin-bottom: 1%;
 }
 
 h3 {
-  font-size: 1.5em;
+  font-size: 0.8in;
   line-height: 1.5em;
   font-weight: bold;
 }
 
 #title {
   text-align: center;
+  height: 3in;
 }
 
 #title h1 {
-  width: 40%;
-  height: 4in;
   margin: auto;
-  line-height: 1.1em;
 }
 
 .row-fluid {
-  background-color: rgba(200, 200, 200, 0.3);
+  background-color: rgba(190, 190, 190, 0.3);
 }
 
 #content {
@@ -60,6 +58,8 @@ h3 {
 }
 
 .text-block {
+  font-size: 0.5em;
+  line-height: 1.2em;
   padding: 0.25in;
   box-sizing: border-box;
 }
@@ -73,7 +73,7 @@ h3 {
 }
 
 #html-logo, #jqry-logo {
-  padding: .5in;
+  margin-top: 0.25in;
   width: 256px;
   float: left;
 }
@@ -91,36 +91,50 @@ h3 {
   color: white;
 }
 
-#explain-chaining, #piechart-caption, #jquery-piechart {
-  font-size: 0.8em;
-  line-height: 1.2em;
-}
-
 #jquery-piechart {
-  height: 12in;
+  height: 8in;
 }
 
 #for-loops {
-  width: 66.2%;
+
 }
 
-#for-loops pre {
-  font-size: 0.8em;
+.figure {
+  float: right;
+  margin-bottom: -10px;
+  font-weight: bold;1
 }
 
 /* bootstrap alterations */
 
 pre {
   border: none;
-  border-top: 10px solid #ccc;
-  margin: 0px;
-  line-height: 1.4em;
-  padding: 0.25in;
+  margin: 0;
+  font-size: 0.5em;
+  padding: 0.7em 1em;
   background-color: #FAFAFA;
+  border-radius: 0.25em 0 0 0.25em;
+}
+
+pre.first-stack {
+  margin-bottom: 0.25in;
+}
+
+pre li {
+  line-height: 1.4em;
+}
+
+pre ol {
+  margin-left: 2.3em;
+  list-style: decimal;
+}
+
+pre.linenums {
+  box-shadow: inset 2.7em 0 0 #BBB;
 }
 
 pre.large {
-  font-size: 1.18em;
+  font-size: 1.0em;
   line-height: 1em;
 }
 
