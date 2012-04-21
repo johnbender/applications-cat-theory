@@ -34,7 +34,33 @@ h3 {
 }
 
 .row-fluid {
-  background-color: rgba(190, 190, 190, 0.3);
+    background-color: rgba(190, 190, 190, 0.3);
+}
+
+.row-fluid.border-right {
+  border-right: 15px solid gray;
+  border-radius: 0 10px 10px 0;
+}
+
+.row-fluid.border-left {
+  border-left: 15px solid gray;
+  border-radius: 10px 0 0 10px;
+}
+
+.row-fluid.border-top {
+  border-top: 15px solid gray;
+  border-radius: 10px 10px 0 0;
+}
+
+.row-fluid.border-bottom {
+  border-bottom: 15px solid gray;
+  border-radius: 0 0 10px 10px;
+}
+
+
+span[class*="icon"]{
+  margin-right: 0.25em;
+/* color: #8B005A; */
 }
 
 #content {
@@ -45,7 +71,7 @@ h3 {
 #content > div {
   width: 32%;
   height: 100%;
-  background: url(img/hexellence.png);
+  background: url(../img/hexellence.png);
   float: left;
   padding: 1%;
   box-sizing: border-box;
@@ -73,8 +99,8 @@ h3 {
 }
 
 #html-logo, #jqry-logo {
-  margin-top: 0.25in;
-  width: 256px;
+  margin: 0.25in 0.3in 0.3in 0;
+  width: 516px;
   float: left;
 }
 
