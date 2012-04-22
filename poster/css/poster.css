@@ -95,9 +95,11 @@ img {
   box-sizing: border-box;
 }
 
-p {
+.text-block > p {
   line-height: 1.2em;
-  font-size: 0.25in;
+  font-size: 0.9em;
+  hyphens: auto;
+  margin-bottom: 1em;
 }
 
 #left, #middle {

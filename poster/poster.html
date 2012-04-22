@@ -21,10 +21,9 @@
 	          <img src="img/top-10k-bar.png" style="float: right; margin-top: 60px"/>
           </div>
           <div id="piechart-caption" class="span8 text-block">
-            <h3><span class="icon-th"></span>Ubiquity Thy Name is jQuery</h3>
-jQuery is an extremely popular open source JavaScript library, dual licensed under the GPL and MIT licenses. Figure 1 shows the percentage use of jQuery among the top ten thousand, hundred thousand, and one millions websites on the internet as ranked by Alexa [!!]. Additionally the project's website sees more than one hundred thousand [!!] unique visits a month from developers all over the world. Given these numbers it's fair to say that jQuery is one of the most popular libraries available to JavaScript developers, and possibly one of the most popular open source libraries available to any developer.<br/><br/>
+            <h3><span class="icon-th"></span>Ubiquity Thy Name is jQuery</h3><p>jQuery is an extremely popular open source JavaScript library, dual licensed under the GPL and MIT licenses. Figure 1 shows the percentage use of jQuery among the top ten thousand, hundred thousand, and one millions websites on the internet as ranked by Alexa [!!]. Additionally the project's website sees more than one hundred thousand [!!] unique visits a month from developers all over the world. Given these numbers it's fair to say that jQuery is one of the most popular libraries available to JavaScript developers, and possibly one of the most popular open source libraries available to any developer.</p>
 
-This popularity is due in part to the fluent interface that the library promotes for manipulating the browser's document object model. As with many abstractions that simplify complex data manipulation it often requires performance tradeoffs. Here we identify a subset of chainable jQuery methods that can be fused in the interest of increasing performance. As a result we derive a simple jQuery extension that can assist developers in identifying when these methods are being used.
+<p>This popularity is due in part to the fluent interface that the library promotes for manipulating the browser's document object model. As with many abstractions that simplify complex data manipulation it often requires performance tradeoffs. Here we identify a subset of chainable jQuery methods that can be fused in the interest of increasing performance. As a result we derive a simple jQuery extension that can assist developers in identifying when these methods are being used.</p>
           </div>
         </div>
         <div class="row-fluid" style="display: none">
@@ -35,9 +34,9 @@ jQuery( <span class="string">"div"</span> ).hide().addClass( <span class="string
         </div>
         <div class="row-fluid border-left">
           <div id="explain-chaining" class="span4 text-block">
-	    <h3><span class="icon-user"></span>Fluent Interface</h3>In Figure 2 you can see an example of a typical DOM manipulation built using jQuery's chainable methods. In this case all the `HTMLDivElement`s are selected from the DOM, hidden, the `foo` CSS class is added, and they are shown again. Figure 3 shows a "deabstracted" naive implementation of the method chain from Figure 2, and, as you can see, iterating over the set three times where one would seemingly suffice leaves room for improvement where performance is concerned.<br/><br/>
+	    <h3><span class="icon-user"></span>Fluent Interface</h3><p>In Figure 2 you can see an example of a typical DOM manipulation built using jQuery's chainable methods. In this case all the `HTMLDivElement`s are selected from the DOM, hidden, the `foo` CSS class is added, and they are shown again. Figure 3 shows a "deabstracted" naive implementation of the method chain from Figure 2, and, as you can see, iterating over the set three times where one would seemingly suffice leaves room for improvement where performance is concerned.</p>
 
-Internally these methods are implemented using for loops or in one of two forms supported by the library, the map form with `jQuery.map` and the each form with `jQuery.each`.
+<p>Internally these methods are implemented using for loops or in one of two forms supported by the library, the map form with `jQuery.map` and the each form with `jQuery.each`.</p>
           </div>
           <div id="for-loops" class="span8">
             <pre class="prettyprint linenums first-stack">jQuery( <span class="string">"div"</span> ).hide().addClass( <span class="string">"foo"</span> ).show();<div class="figure">Figure 2</div></pre>
