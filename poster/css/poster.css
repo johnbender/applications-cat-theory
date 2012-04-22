@@ -79,6 +79,11 @@ span[class*="icon"]{
   box-shadow: 0px 5px 30px #777;
 }
 
+img {
+  /* assumes figure div is above */
+  margin: 0 0.25in 0.25in 0.25in;
+}
+
 #content > div > div:first-child {
   background: none;
 }
@@ -88,6 +93,11 @@ span[class*="icon"]{
   line-height: 1.2em;
   padding: 0.25in;
   box-sizing: border-box;
+}
+
+p {
+  line-height: 1.2em;
+  font-size: 0.25in;
 }
 
 #left, #middle {
@@ -117,18 +127,20 @@ span[class*="icon"]{
   color: white;
 }
 
-#jquery-piechart {
-  height: 8in;
-}
-
 #for-loops {
 
 }
 
-.figure {
+.figure, img-figure {
   float: right;
   margin-bottom: -10px;
-  font-weight: bold;1
+  font-weight: bold;
+}
+
+.img-figure {
+  float: left;
+  font-size: 0.5em;
+  margin: 0.5in 0 0 0.5in;
 }
 
 /* bootstrap alterations */
