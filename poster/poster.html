@@ -45,15 +45,15 @@ jQuery( <span class="string">"div"</span> ).hide().addClass( <span class="string
 <span class="keyword">var</span> <span class="variable-name">$divs</span> = $( <span class="string">"div"</span> );
 
 <span class="keyword">for</span>( <span class="keyword">var</span> <span class="variable-name">i</span> = 0; i &lt;= length; i++ ) {
-  $divs.eq(i).attr(<span class="string">"style"</span>, <span class="string">"display: none;"</span> );
+  $divs[i].setAttribute( <span class="string">"style"</span>, <span class="string">"display: none;"</span> );
 }
 
-<span class="keyword">for</span>( <span class="keyword">var</span> <span class="variable-name">i</span> = 0; i &lt;= length; i++ ) {
-  $divs.eq(i).attr(<span class="string">"class"</span>, <span class="string">"foo"</span> );
+<span class="keyword">for</span>( i = 0; i &lt;= length; i++ ) {
+  $divs[i].setAttribute( <span class="string">"class"</span>, <span class="string">"foo"</span> );
 }
 
-<span class="keyword">for</span>( <span class="keyword">var</span> <span class="variable-name">i</span> = 0; i &lt;= length; i++ ) {
-  $divs.eq(i).attr(<span class="string">"style"</span>, <span class="string">"display: block;"</span>);
+<span class="keyword">for</span>( i = 0; i &lt;= length; i++ ) {
+  $divs[i].setAttribute( <span class="string">"style"</span>, <span class="string">"display: block;"</span> );
 }<div class="figure">Figure 3</div>
 </pre>
           </div>
