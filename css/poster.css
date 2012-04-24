@@ -1,0 +1,249 @@
+body {
+  width: 96in;
+  height: 48in;
+  padding: 1in;
+}
+
+h1, h2 {
+  line-height: 1em;
+  text-shadow: 0px 1px 2px #555;
+}
+
+h1 {
+  font-size: 1.5in;
+}
+
+h2 {
+  font-size: 1.2in;
+  margin-bottom: 1%;
+}
+
+h3 {
+  font-size: 0.8in;
+  line-height: 1.5em;
+  font-weight: bold;
+}
+
+#title {
+  text-align: center;
+  height: 3in;
+}
+
+#title h1 {
+  margin: auto;
+}
+
+.row-fluid {
+    background-color: rgba(190, 190, 190, 0.3);
+}
+
+.row-fluid.border-right {
+  border-right: 15px solid gray;
+  border-radius: 0 10px 10px 0;
+}
+
+.row-fluid.border-left {
+  border-left: 15px solid gray;
+  border-radius: 10px 0 0 10px;
+}
+
+.row-fluid.border-top {
+  border-top: 15px solid gray;
+  border-radius: 10px 10px 0 0;
+}
+
+.row-fluid.border-bottom {
+  border-bottom: 15px solid gray;
+  border-radius: 0 0 10px 10px;
+}
+
+
+span[class*="icon"]{
+  margin-right: 0.25em;
+/* color: #8B005A; */
+}
+
+#content {
+  width: 100%;
+  height: 90%;
+}
+
+#content > div {
+  width: 32%;
+  height: 100%;
+  background: url(../img/hexellence.png);
+  float: left;
+  padding: 1%;
+  box-sizing: border-box;
+  font-size: 6em;
+  box-shadow: 0px 5px 30px #777;
+}
+
+img {
+  /* assumes figure div is above */
+  margin: 0 0.25in 0.25in 0.25in;
+}
+
+#content > div > div:first-child {
+  background: none;
+}
+
+.text-block {
+  font-size: 0.5em;
+  line-height: 1.2em;
+  padding: 0.25in;
+  box-sizing: border-box;
+}
+
+.text-block > p {
+  line-height: 1.2em;
+  font-size: 0.9em;
+  hyphens: auto;
+  margin-bottom: 1em;
+}
+
+#left, #middle {
+  margin-right: 2%;
+}
+
+#html, #jqry {
+  height: 19in;
+}
+
+#html-logo, #jqry-logo {
+  margin: 0.25in 0.3in 0.3in 0;
+  width: 516px;
+  float: left;
+}
+
+#functor, #functor-law-fusion {
+  height: 9.5in;
+}
+
+.block-out {
+  /* border-radius: .15in; */
+  background-color: #999;
+  padding: 0.25in;
+  box-sizing: border-box;
+  line-height: 1em;
+  color: white;
+}
+
+#for-loops {
+
+}
+
+.figure, img-figure {
+  float: right;
+  margin-bottom: -10px;
+  font-weight: bold;
+}
+
+.img-figure {
+  float: left;
+  font-size: 0.5em;
+  margin: 0.5in 0 0 0.5in;
+}
+
+/* bootstrap alterations */
+
+pre {
+  border: none;
+  margin: 0;
+  font-size: 0.5em;
+  padding: 0.7em 1em;
+  background-color: #FAFAFA;
+  border-radius: 0.25em 0 0 0.25em;
+}
+
+pre.first-stack {
+  margin-bottom: 0.25in;
+}
+
+pre li {
+  line-height: 1.4em;
+}
+
+pre ol {
+  margin-left: 2.3em;
+  list-style: decimal;
+}
+
+pre.linenums {
+  box-shadow: inset 2.7em 0 0 #BBB;
+}
+
+pre.large {
+  font-size: 1.0em;
+  line-height: 1em;
+}
+
+.row-fluid {
+  margin-bottom: 1.5%;
+}
+
+h2 .label {
+  font-size: 1em;
+  border-radius: 0.15in;
+  padding: 0.25in;
+  vertical-align: baseline;
+}
+
+/* code highlights */
+.builtin {
+  /* font-lock-builtin-face */
+  color: #62124b;
+}
+.comment {
+  /* font-lock-comment-face */
+  color: #aea79f;
+  font-style: italic;
+}
+
+.comment-delimiter {
+  /* font-lock-comment-delimiter-face */
+  color: #aea79f;
+  font-style: italic;
+}
+
+.function-name {
+  /* font-lock-function-name-face */
+  color: #860e73;
+  font-weight: bold;
+}
+.keyword {
+  /* font-lock-keyword-face */
+  color: #f47321;
+  font-weight: bold;
+}
+.string {
+  /* font-lock-string-face */
+  color: #dd1144;
+}
+.variable-name {
+  /* font-lock-variable-name-face */
+  color: #8b005a;
+}
+
+b .variable-name {
+  color: white;
+}
+
+.css-property {
+  /* css-property */
+  color: #8b005a;
+}
+.css-selector {
+  /* css-selector */
+  color: #860e73;
+  font-weight: bold;
+}
+
+.type {
+  /* font-lock-type-face */
+  color: #83a525;
+}
+.constant {
+  /* font-lock-constant-face */
+  color: #f68d47;
+}
