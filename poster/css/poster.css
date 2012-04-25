@@ -147,6 +147,12 @@ img {
 
 /* bootstrap alterations */
 
+code {
+  background: none;
+  border: none;
+  font-size: 1em;
+}
+
 pre {
   border: none;
   margin: 0;
