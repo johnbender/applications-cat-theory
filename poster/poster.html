@@ -39,7 +39,7 @@ jQuery( <span class="string">"div"</span> ).hide().addClass( <span class="string
 <p>Internally these methods are implemented using for loops or in one of two forms supported by the library, the map form with <code>jQuery.map</code> and the each form with <code>jQuery.each</code>.</p>
           </div>
           <div id="for-loops" class="span8">
-            <pre class="prettyprint linenums first-stack">jQuery( <span class="string">"div"</span> ).hide().addClass( <span class="string">"foo"</span> ).show();<div class="figure">Figure 2</div></pre>
+            <pre class="prettyprint linenums stack">jQuery( <span class="string">"div"</span> ).hide().addClass( <span class="string">"foo"</span> ).show();<div class="figure">Figure 2</div></pre>
 
             <pre class="prettyprint linenums">
 <span class="keyword">var</span> <span class="variable-name">$divs</span> = $( <span class="string">"div"</span> );
@@ -106,20 +106,115 @@ Given that many of jQuery's core methods and the thriving plugin ecosystem that 
           <div id="html" class="span6 text-block">
             <img src="img/html5-logo-512.png" id="html-logo"></img>
             <h3><span class="icon-check"></span>Defining Html</h3>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut scelerisque nulla ut neque pharetra commodo. Fusce sed aliquet odio. Praesent id augue in nisl commodo interdum ac id orci. Integer nec nisl tellus, eu lacinia mauris. Nulla nec urna nibh, quis luctus leo. Nullam eget sapien eu ipsum molestie tristique eget id ligula. Integer lacus massa, adipiscing sed dictum vitae, laoreet non est. Integer adipiscing aliquam ultrices. Pellentesque aliquet, tellus non volutpat tempor, nunc nisi sagittis tortor, vel porttitor odio lorem non metus. Praesent malesuada metus sed libero malesuada eleifend vestibulum nibh facilisis.
+            <div class="category-preamble">
+              <p>The Category <strong>Html</strong> is extremely simple. The objects in <strong>Html</strong> are the HTMLElements that the reader may be familiar with from the JavaScript DOM API (eg, HTMLAnchorElement). The morphisms are JavaScript functions from HTMLElements to to HTMLElements</p>
+              <p>Next we verify that <strong>Html</strong> satisfies the three category laws: identity, composition, and closure under composition (Figures 6,7,8).</p>
+            </div>
+            <div class="row-fluid">
+              <div class="span6">
+                <pre class="prettyprint linenums">
+<span class="keyword">function</span> <span class="function-name">id</span>( <span class="js2-function-param">a</span> ) {
+  <span class="keyword">return</span> a;
+}
 
-Sed lobortis interdum mauris eget porttitor. Vivamus vehicula faucibus enim ac tristique. Ut dictum tempor tortor, sit amet eleifend nisl eleifend ac. Nulla dapibus lacus sit amet sapien pharetra sed posuere nibh cursus. Donec ornare sem nec velit viverra imperdiet. Ut eget purus at metus vestibulum tristique quis id diam. Donec cursus fringilla libero, vel euismod orci semper non. Ut non sem quis urna semper adipiscing. Vestibulum est velit, consectetur non pharetra non, dictum et lorem. Praesent vehicula hendrerit magna, posuere accumsan tellus feugiat at.
+<div class="figure">Figure 6</div></pre>
+              </div>
+              <div class="span6">
+                <pre class="prettyprint linenums">
+<span class="keyword">function</span> <span class="function-name">compose</span>( <span class="js2-function-param">f</span>, <span class="js2-function-param">g</span> ){
+  <span class="keyword">return</span> <span class="keyword">function</span>( <span class="js2-function-param">a</span> ) {
+    <span class="keyword">return</span> f(g(a));
+  };
+}<div class="figure">Figure 7</div></pre>
+              </div>
+            </div>
 
-Sed rutrum, purus ac dictum rutrum, nisi elit mollis erat, eget eleifend massa magna ac nulla. Nulla at vehicula augue. Aenean pulvinar ultricies elit, nec vehicula felis pretium non. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed sit amet massa quam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce lobortis nulla in risus convallis hendrerit auctor risus dapibus. Etiam a ipsum quis ipsum laoreet congue. Phasellus scelerisque hendrerit varius. Cras congue nibh non tortor commodo eu suscipit diam fringilla. Curabitur magna dui, vehicula sed euismod vel, pulvinar quis ipsum. Nullam suscipit volutpat neque a fermentum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nunc ac risus purus. In volutpat, mi sit amet sodales interdum, diam nisl cursus nisi, vitae imperdiet ligula risus ac sem. Ut sodales, augue vel viverra tempus, neque libero euismod diam, et condimentum nunc ante at mauris.
+            <p>The identity function is trivial and function composition is always associative. We know that the morphisms in <strong>Html</strong> are closed under composition because the functions accept as their only argument HTMLElements and return only HTMLElements. Having met the three requirements for a category with <strong>Html</strong> we can move on to the second, and more complex category <strong>Jqry</strong>.</p>
+
+            <pre class="prettyprint linenums stack">
+<span class="keyword">function</span> <span class="function-name">a</span>( <span class="js2-function-param">elem</span> ){
+  elem.setAttribute( <span class="string">"foo"</span>, <span class="string">"bar"</span> );
+  <span class="keyword">return</span> elem;
+}
+
+<span class="keyword">function</span> <span class="function-name">b</span>( <span class="js2-function-param">elem</span> ){
+  elem.setAttribute( <span class="string">"baz"</span>, <span class="string">"bak"</span> );
+  <span class="keyword">return</span> elem;
+}
+
+<span class="keyword">var</span> <span class="variable-name">elem</span> = document.getElementById( <span class="string">"example-anchor"</span> );
+elem.getAttribute( <span class="string">"foo"</span> ); <span class="comment">// undefined
+</span>elem.getAttribute( <span class="string">"baz"</span> ); <span class="comment">// undefined
+</span>
+elem = compose( a, b )( elem );
+elem.getAttribute( <span class="string">"foo"</span> ); <span class="comment">// "bar"
+</span>elem.getAttribute( <span class="string">"baz"</span> ); <span class="comment">// "bak"</span><div class="figure">Figure 8</div></pre>
+
           </div>
           <div id="jqry" class="span6 text-block">
             <img src="img/jquery-logo-320.png" id="jqry-logo"></img>
             <h3><span class="icon-check"></span>Defining Jqry</h3>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut scelerisque nulla ut neque pharetra commodo. Fusce sed aliquet odio. Praesent id augue in nisl commodo interdum ac id orci. Integer nec nisl tellus, eu lacinia mauris. Nulla nec urna nibh, quis luctus leo. Nullam eget sapien eu ipsum molestie tristique eget id ligula. Integer lacus massa, adipiscing sed dictum vitae, laoreet non est. Integer adipiscing aliquam ultrices. Pellentesque aliquet, tellus non volutpat tempor, nunc nisi sagittis tortor, vel porttitor odio lorem non metus. Praesent malesuada metus sed libero malesuada eleifend vestibulum nibh facilisis.
+            <div class="category-preamble">
+              <p><strong>Jqry</strong> is the category of <code>jQuery</code> objects and functions from <code>jQuery</code> objects to <code>jQuery</code> objects.<sup>3</sup> It&#8217;s only slightly more complex than <strong>Html</strong> because the reader must accept <code>this</code> as an implicit parameter to the JavaScript functions that are the category&#8217;s morphisms. Also, these morphisms must be defined on the <code>$.fn</code> object to guarantee the value of <code>this</code> is a <code>jQuery</code> object.</p>
+            </div>
 
-Sed lobortis interdum mauris eget porttitor. Vivamus vehicula faucibus enim ac tristique. Ut dictum tempor tortor, sit amet eleifend nisl eleifend ac. Nulla dapibus lacus sit amet sapien pharetra sed posuere nibh cursus. Donec ornare sem nec velit viverra imperdiet. Ut eget purus at metus vestibulum tristique quis id diam. Donec cursus fringilla libero, vel euismod orci semper non. Ut non sem quis urna semper adipiscing. Vestibulum est velit, consectetur non pharetra non, dictum et lorem. Praesent vehicula hendrerit magna, posuere accumsan tellus feugiat at.
+            <div class="row-fluid">
+              <div class="span6">
+            <pre class="prettyprint linenums">
+<span class="js2-external-variable">$</span>.fn.<span class="function-name">id</span> = <span class="keyword">function</span>(){
+  <span class="keyword">return</span> <span class="builtin">this</span>;
+};
 
-Sed rutrum, purus ac dictum rutrum, nisi elit mollis erat, eget eleifend massa magna ac nulla. Nulla at vehicula augue. Aenean pulvinar ultricies elit, nec vehicula felis pretium non. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed sit amet massa quam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce lobortis nulla in risus convallis hendrerit auctor risus dapibus. Etiam a ipsum quis ipsum laoreet congue. Phasellus scelerisque hendrerit varius. Cras congue nibh non tortor commodo eu suscipit diam fringilla. Curabitur magna dui, vehicula sed euismod vel, pulvinar quis ipsum. Nullam suscipit volutpat neque a fermentum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nunc ac risus purus. In volutpat, mi sit amet sodales interdum, diam nisl cursus nisi, vitae imperdiet ligula risus ac sem. Ut sodales, augue vel viverra tempus, neque libero euismod diam, et condimentum nunc ante at mauris.
+<div class="figure">Figure 9</div>
+</pre>
+              </div>
+              <div class="span6">
+            <pre class="prettyprint linenums">
+<span class="keyword">var</span> <span class="variable-name">$a</span> = $( <span class="string">"#example-anchor"</span> );
+
+assert($elem.id() == $elem);
+
+<div class="figure">Figure 10</div></pre>
+              </div>
+            </div>
+            <p>As you can see, the value of <code>this</code>, and therefore the constraint that the morphisms must be defined on <code>$.fn</code>, plays an important role in the way that the functions behave in the <strong>Jqry</strong> category. If it&#8217;s unclear why that is, remember that <code>this</code> is whatever object the method is invoked on using dot notation in JavaScript. Also recall that <code>$.fn == $.prototype</code>, meaning when you call <code>$("div").foo()</code> it finds <code>foo</code> on the <code>$.fn</code> by following the prototype chain.</p>
+
+            <pre class="prettyprint linenums stack">
+<span class="js2-external-variable">$</span>.<span class="function-name">compose</span> = <span class="keyword">function</span>( <span class="js2-function-param">f</span>, <span class="js2-function-param">g</span> ){
+  <span class="keyword">return</span> <span class="keyword">function</span>(){
+    <span class="keyword">return</span> f.apply(g.apply(<span class="builtin">this</span>, arguments), arguments);
+  };
+};
+            </pre>
+
+            <p>Defining composition is a bit more complex for <strong>Jqry</strong> than it is for <strong>Html</strong> if only because forcing the value that <code>this</code> will represent in the composed functions takes more work than just passing in the values as parameters. The first function, <code>g</code>, is invoked by forwarding the arguments and explicitly defining its <code>this</code> value using the <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/apply">apply</a> method common to all JavaScript functions. The value returned by applying <code>g</code> is a jQuery object, as required by membership in the category <strong>Jqry</strong>, which is used to explicitly define <code>this</code> in the application of <code>f</code>.</p>
+
+            <pre class="prettyprint linenums stack">
+<span class="js2-external-variable">$</span>.fn.<span class="function-name">a</span> = <span class="keyword">function</span>(){
+  <span class="keyword">return</span> <span class="builtin">this</span>.map(<span class="keyword">function</span>( <span class="js2-function-param">elem</span> ){
+    elem.setAttribute( <span class="string">"foo"</span>, <span class="string">"bar"</span> );
+    <span class="keyword">return</span> elem;
+  });
+};
+
+<span class="js2-external-variable">$</span>.fn.<span class="function-name">b</span> = <span class="keyword">function</span>(){
+  <span class="keyword">return</span> <span class="builtin">this</span>.map(<span class="keyword">function</span>( <span class="js2-function-param">elem</span> ){
+    elem.setAttribute( <span class="string">"baz"</span>, <span class="string">"bak"</span> );
+    <span class="keyword">return</span> elem;
+  });
+};
+
+<span class="keyword">var</span> <span class="variable-name"><span class="js2-warning">$elem</span></span> = $( <span class="string">"#example-anchor"</span> );
+$elem.attr( <span class="string">"foo"</span> );         <span class="comment">// undefined
+</span>$elem.attr( <span class="string">"baz"</span> );         <span class="comment">// undefined
+</span><span class="js2-external-variable">$</span>.fn.aAndB = $.compose( $.fn.a, $.fn.b );
+
+$elem.aAndB().attr( <span class="string">"foo"</span> ); <span class="comment">// "bar"
+</span>$elem.attr( <span class="string">"baz"</span> );         <span class="comment">// "bak"
+</span></pre>
+
+            <p>Please direct your attention to the fact that you could substitute the <code>a</code> and <code>b</code> functions from the <strong>Html</strong> <code>compose</code> example here for the functions that are mapped using <code>this.map</code> (<code>$.fn.map</code>) over the set of elements in the jQuery object (represented by <code>this</code>). This will be important when defining the Functor from <strong>Html</strong> to <strong>Jqry</strong>.</p>
+<p>Again, we know that the morphisms of <strong>Jqry</strong> are closed under composition because each accepts and returns only jQuery objects.</p>
           </div>
         </div>
         <div class="row-fluid border-left">
