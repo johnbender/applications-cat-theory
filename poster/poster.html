@@ -61,12 +61,14 @@ jQuery( <span class="string">"div"</span> ).hide().addClass( <span class="string
         <div class="row-fluid border-left">
           <div id="map-form-content" class="span6">
             <div class="text-block">
-              <h3><span class="icon-share"></span>Map Form</h3>One of the two general forms that jQuery methods take is referred to here as the "map form". This leverages the jQuery helper methods <code>jQuery.map</code> or <code>jQuery.fn.map</code> to alter each element in the jQuery object set. This is the form with which our work is predominantly concerned due to the way it promotes operations on elements without side effects.
+              <h3><span class="icon-share"></span>Map Form</h3>
+              <p>One of the two general forms that jQuery methods take is referred to here as the "map form". This leverages the jQuery helper methods <code>jQuery.map</code> or <code>jQuery.fn.map</code> to alter each element in the jQuery object set. This is the form with which our work is predominantly concerned due to the way it promotes operations on elements without side effects.</p>
             </div>
           </div>
           <div id="each-form-content" class="span6">
             <div class="text-block">
-              <h3><span class="icon-edit"></span>Each Form</h3>The second of the two forms that one might find underlying jQuery methods is the "each form". Here side effects are the order of the day as there is no expectation that the element provided to the callback will be returned, Figure 5. The standard and optimizations described here can also be applied with this form because of JavaScript's pass by reference nature where objects are concerned. Unfortunately composition becomes impossible and the category definitions will not apply in those cases.
+              <h3><span class="icon-edit"></span>Each Form</h3>
+              <p>The second of the two forms that one might find underlying jQuery methods is the "each form". Here side effects are the order of the day as there is no expectation that the element provided to the callback will be returned, Figure 5. The standard and optimizations described here can also be applied with this form because of JavaScript's pass by reference nature where objects are concerned. Unfortunately composition becomes impossible and the category definitions will not apply in those cases.</p>
             </div>
           </div>
         </div>
@@ -91,7 +93,7 @@ $.each( <span class="builtin">this</span>, <span class="keyword">function</span>
         <div class="row-fluid">
           <div class="text-block span6">
             <h3>When to Optimize?</h3>
-Given that many of jQuery's core methods and the thriving plugin ecosystem that accompanies them leverage these forms [!! - possible list them in a figure] there is likely great value in identifying ways to reduce the full number of set itterations made when they are used in chains. Unfortunately the source that makes up these methods is often complex even from the implementors perspective so a rigorous definition of which can be targetted for optimization has value. For that purpose we turn to some rudimentary category theory.
+            <p>Given that many of jQuery's core methods and the thriving plugin ecosystem that accompanies them leverage these forms [!! - possible list them in a figure] there is likely great value in identifying ways to reduce the full number of set itterations made when they are used in chains. Unfortunately the source that makes up these methods is often complex even from the implementors perspective so a rigorous definition of which can be targetted for optimization has value. For that purpose we turn to some rudimentary category theory.</p>
           </div>
           <div class="text-block span6">
             <h3>jQuery Itterative Methods</h3> TODO show some percentage of the jQuery api that is itterative. Pie chart?
