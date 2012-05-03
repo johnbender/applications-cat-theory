@@ -79,6 +79,8 @@ span[class*="icon"]{
   box-shadow: 0px 5px 30px #777;
 }
 
+
+
 img {
   /* assumes figure div is above */
   margin: 0 0.25in 0.25in 0.25in;
@@ -95,19 +97,23 @@ img {
   box-sizing: border-box;
 }
 
-.text-block > p {
+.text-block  p {
   line-height: 1.2em;
   font-size: 0.9em;
   hyphens: auto;
   margin-bottom: 1em;
 }
 
+.category-preamble {
+  min-height: 4.6in;
+}
+
 #left, #middle {
   margin-right: 2%;
 }
 
-#html, #jqry {
-  height: 19in;
+#html pre, #jqry pre {
+  font-size: 0.7em;
 }
 
 #html-logo, #jqry-logo {
@@ -117,7 +123,7 @@ img {
 }
 
 #functor, #functor-law-fusion {
-  height: 9.5in;
+  height: 2in;
 }
 
 .block-out {
@@ -129,9 +135,6 @@ img {
   color: white;
 }
 
-#for-loops {
-
-}
 
 .figure, img-figure {
   float: right;
@@ -147,6 +150,12 @@ img {
 
 /* bootstrap alterations */
 
+code {
+  background: none;
+  border: none;
+  font-size: 1em;
+}
+
 pre {
   border: none;
   margin: 0;
@@ -156,7 +165,7 @@ pre {
   border-radius: 0.25em 0 0 0.25em;
 }
 
-pre.first-stack {
+pre.stack {
   margin-bottom: 0.25in;
 }
 
