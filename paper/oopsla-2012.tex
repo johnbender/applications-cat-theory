@@ -161,18 +161,18 @@ To show associativity it suffices that, given different associations, the reduct
 
 \begin{figure}[!ht]
 \begin{displaymath}
-\begin{align*}
+\begin{aligned}
 (f\ \circ\ g \circ\ h)(x)\ &= f\ \circ\ g(h(x)) &= f(g(h(x)))\\
 cmps(f,cmps(g,h))(x)\ &= cmps(f, g(h(x))) &= f(g(h(x)))\\
-\end{align*}
+\end{aligned}
 \end{displaymath}
 
 \begin{displaymath}
-\begin{align*}
+\begin{aligned}
 cmps(f,cmps(g,h))(x)\ &= cmps(cmps(f,g),h)(x) \\
 cmps(f,g(h(x)))\ &= cmps(f(g),h(x)) \\
 f(g(h(x)))\ &= f(g(h(x)))\\
-\end{align*}
+\end{aligned}
 \end{displaymath}
 \nocaptionrule \caption{Reduction of composition}
 \label{fig:html-associativity}
@@ -282,10 +282,10 @@ Newly instantiated jQuery objects derive the bulk of their functionality from th
 
 \begin{figure}[!ht]
 \begin{equation} \label{eq:jquery-default}
- jQuery \xrightharpoonup{\ \ f\ \ } jQuery.fn}
+ jQuery \xrightharpoonup{\ \ f\ \ } jQuery.fn
 \end{equation}
 \begin{equation} \label{eq:jquery-with-proxy}
- jQuery \xrightharpoonup{\ \ f\ \ } Proxy \xmapsto{\ \ f\ \ } jQuery.fn}
+ jQuery \xrightharpoonup{\ \ f\ \ } Proxy \xmapsto{\ \ f\ \ } jQuery.fn
 \end{equation}
 \end{figure}
 
