@@ -112,8 +112,12 @@ img {
   margin-right: 2%;
 }
 
-#html pre, #jqry pre {
+#html pre.small, #jqry pre.small {
   font-size: 0.65em;
+}
+
+#html pre, #jqry pre {
+  font-size: 1em;
 }
 
 #html-logo, #jqry-logo {
