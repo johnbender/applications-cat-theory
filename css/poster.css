@@ -99,7 +99,7 @@ img {
 
 .text-block  p {
   line-height: 1.2em;
-  font-size: 0.9em;
+  font-size: 1em;
   hyphens: auto;
   margin-bottom: 1em;
 }
@@ -112,13 +112,17 @@ img {
   margin-right: 2%;
 }
 
+#html pre.small, #jqry pre.small {
+  font-size: 0.65em;
+}
+
 #html pre, #jqry pre {
-  font-size: 0.7em;
+  font-size: 1em;
 }
 
 #html-logo, #jqry-logo {
   margin: 0.25in 0.3in 0.3in 0;
-  width: 516px;
+  height: 450px;
   float: left;
 }
 
