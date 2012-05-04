@@ -24,10 +24,12 @@ On Ubuntu after installing the texlive distribution with
 
 The document can be compiled to `.dvi` and viewed with
 
+    $ cd paper
     $ latex oopsla-2012.tex
     $ evince oopsla-2012.dvi
 
 or to `.pdf` with
 
+    $ cd paper
     $ pdflatex oopsla-2012.tex
     $ evince oopsla-2012.pdf
