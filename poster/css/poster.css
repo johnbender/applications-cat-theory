@@ -115,7 +115,41 @@ img {
 }
 
 pre.small {
-  font-size: 0.35em;
+  font-size: 0.3em;
+}
+
+.maths > div {
+  height: 3in;
+  position: relative;
+  text-align: center;
+}
+
+.maths > div > div {
+  background: rgba( 70, 70, 70, 0.7 );
+  border-radius: 0.25in;
+  box-shadow: 0 0 0.15in #777;
+  position: absolute;
+  width: 130%;
+  top: -0.25in;
+  left: -0.7in;
+  padding: 0.25in;
+  box-sizing: border-box;
+}
+
+.maths img {
+  margin: 0;
+}
+
+#identity img {
+  height: 135%;
+}
+
+#closed-composition img {
+  height: 115%;
+}
+
+#closed-composition > div > div {
+  top: -0.5in;
 }
 
 #html pre, #jqry pre {
