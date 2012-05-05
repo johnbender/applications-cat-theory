@@ -33,26 +33,22 @@ h3 {
   margin: auto;
 }
 
-.row-fluid {
-    background-color: rgba(190, 190, 190, 0.3);
-}
-
-.row-fluid.border-right {
+.border-right {
   border-right: 15px solid gray;
   border-radius: 0 10px 10px 0;
 }
 
-.row-fluid.border-left {
+.border-left {
   border-left: 15px solid gray;
   border-radius: 10px 0 0 10px;
 }
 
-.row-fluid.border-top {
+.border-top {
   border-top: 15px solid gray;
   border-radius: 10px 10px 0 0;
 }
 
-.row-fluid.border-bottom {
+.border-bottom {
   border-bottom: 15px solid gray;
   border-radius: 0 0 10px 10px;
 }
@@ -93,7 +89,7 @@ img {
 .text-block {
   font-size: 0.5em;
   line-height: 1.2em;
-  padding: 0.25in;
+  padding: 0.25in 0.25in 0 0.25in;
   box-sizing: border-box;
 }
 
@@ -104,6 +100,12 @@ img {
   margin-bottom: 1em;
 }
 
+
+
+.text-block p.last {
+  margin-bottom: 0;
+}
+
 .category-preamble {
   min-height: 4.6in;
 }
@@ -112,8 +114,42 @@ img {
   margin-right: 2%;
 }
 
-#html pre.small, #jqry pre.small {
-  font-size: 0.65em;
+pre.small {
+  font-size: 0.3em;
+}
+
+.maths > div {
+  height: 3in;
+  position: relative;
+  text-align: center;
+}
+
+.maths > div > div {
+  background: rgba( 70, 70, 70, 0.7 );
+  border-radius: 0.25in;
+  box-shadow: 0 0 0.15in #777;
+  position: absolute;
+  width: 130%;
+  top: -0.25in;
+  left: -0.7in;
+  padding: 0.25in;
+  box-sizing: border-box;
+}
+
+.maths img {
+  margin: 0;
+}
+
+#identity img {
+  height: 120%;
+}
+
+#closed-composition img {
+  height: 115%;
+}
+
+#closed-composition > div > div {
+  top: -0.5in;
 }
 
 #html pre, #jqry pre {
@@ -193,6 +229,12 @@ pre.large {
 
 .row-fluid {
   margin-bottom: 1.5%;
+  background-color: rgba(190, 190, 190, 0.3);
+  box-sizing: border-box;
+}
+
+.row-fluid.stack {
+  margin-bottom: 0;
 }
 
 h2 .label {
