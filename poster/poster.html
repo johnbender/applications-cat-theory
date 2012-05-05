@@ -125,7 +125,6 @@ $.each( <span class="builtin">this</span>, <span class="keyword">function</span>
   <span class="keyword">return</span> a;
 }
 
-
 <div class="figure">Figure 6</div></pre>
           </div>
           <div class="span3">
@@ -134,8 +133,7 @@ $.each( <span class="builtin">this</span>, <span class="keyword">function</span>
   <span class="keyword">return</span> <span class="keyword">function</span>( <span class="js2-function-param">a</span> ) {
     <span class="keyword">return</span> f(g(a));
   };
-}
-<div class="figure">Figure 7</div></pre>
+}<div class="figure">Figure 7</div></pre>
           </div>
 
           <div class="span3">
@@ -143,7 +141,6 @@ $.each( <span class="builtin">this</span>, <span class="keyword">function</span>
 <span class="js2-external-variable">$</span>.fn.<span class="function-name">id</span> = <span class="keyword">function</span>(){
   <span class="keyword">return</span> <span class="builtin">this</span>;
 };
-
 
 <div class="figure">Figure 9</div></pre>
           </div>
@@ -153,8 +150,7 @@ $.each( <span class="builtin">this</span>, <span class="keyword">function</span>
   <span class="keyword">return</span> <span class="keyword">function</span>(){
     <span class="keyword">return</span> f.apply(g.apply(<span class="builtin">this</span>))
   };
-};
-<div class="figure">Figure 10</div></pre>
+};<div class="figure">Figure 10</div></pre>
           </div>
         </div>
 
@@ -176,7 +172,7 @@ $.each( <span class="builtin">this</span>, <span class="keyword">function</span>
 
         <div class="row-fluid stack">
           <div class="span6">
-            <pre class="prettyprint linenums stack">
+            <pre class="prettyprint linenums">
 <span class="keyword">function</span> <span class="function-name">a</span>( <span class="js2-function-param">elem</span> ){
   elem.setAttribute( <span class="string">"foo"</span>, <span class="string">"bar"</span> );
   <span class="keyword">return</span> elem;
@@ -196,24 +192,24 @@ elem.getAttribute( <span class="string">"foo"</span> ); <span class="comment">//
 </span>elem.getAttribute( <span class="string">"baz"</span> ); <span class="comment">// "bak"</span><div class="figure">Figure 8</div></pre>
           </div>
           <div class="span6">
-            <pre class="prettyprint linenums stack">
+            <pre class="prettyprint linenums">
 <span class="js2-external-variable">$</span>.fn.<span class="function-name">a</span> = <span class="keyword">function</span>(){
-  <span class="keyword">return</span> $.map( <span class="builtin">this</span>, a );      <span class="comment">// a in figure 8
-</span>};
+  <span class="comment">// a from Figure 8</span>
+  <span class="keyword">return</span> $.map( <span class="builtin">this</span>, a );
+};
 
 <span class="js2-external-variable">$</span>.fn.<span class="function-name">b</span> = <span class="keyword">function</span>(){
-  <span class="keyword">return</span> $.map( <span class="builtin">this</span>, b );      <span class="comment">// b in figure 8
-</span>};
+  <span class="comment">// b from Figure 8</span>
+  <span class="keyword">return</span> $.map( <span class="builtin">this</span>, b );
+};
 
 <span class="keyword">var</span> <span class="variable-name">$elem</span> = $( <span class="string">"#sample"</span> );
-$elem.attr( <span class="string">"foo"</span> );            <span class="comment">// undefined
-</span>$elem.attr( <span class="string">"baz"</span> );            <span class="comment">// undefined
+$elem.attr( <span class="string">"foo"</span> );         <span class="comment">// undefined
+</span>$elem.attr( <span class="string">"baz"</span> );         <span class="comment">// undefined
 </span><span class="js2-external-variable">$</span>.fn.aAndB = $.compose( $.fn.a, $.fn.b );
 
-$elem.aAndB().attr( <span class="string">"foo"</span> );    <span class="comment">// "bar"
-</span>$elem.attr( <span class="string">"baz"</span> );            <span class="comment">// "bak"</span>
-
-<div class="figure">Figure 11</div></pre>
+$elem.aAndB().attr( <span class="string">"foo"</span> ); <span class="comment">// "bar"
+</span>$elem.attr( <span class="string">"baz"</span> );         <span class="comment">// "bak"</span><div class="figure">Figure 11</div></pre>
           </div>
         </div>
 
@@ -229,7 +225,7 @@ $elem.aAndB().attr( <span class="string">"foo"</span> );    <span class="comment
             </div>
           </div>
           <div class="span5 text-block">
-            <p>Defining composition is a bit more complex for <strong>Jqry</strong> than it is for <strong>Html</strong> if only because forcing the value that <code>this</code> will represent in the composed functions takes more work than just passing in the values as parameters. The first function, <code>g</code>, in Figure 10 is invoked by forwarding the arguments and explicitly defining its <code>this</code> value using the <code>apply</code> method common to all JavaScript functions. The return value is a jQuery object which becomes <code>this</code> in the application of <code>f</code>. As a result, we know that the morphisms of <strong>Jqry</strong> are closed under composition because each accepts and returns only jQuery objects.</p>
+            <p>Composition works by taking the first function, <code>g</code>, in Figure 10 and explicitly defining its <code>this</code> value using the <code>apply</code> method of the JavaScript function prototype. The return value is a jQuery object which is used to define <code>this</code> in the application of <code>f</code>. As a result, we know that the morphisms of <strong>Jqry</strong> are closed under composition because each accepts and returns only jQuery objects.</p>
           </div>
         </div>
         </div>

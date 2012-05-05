@@ -140,16 +140,16 @@ pre.small {
   margin: 0;
 }
 
-#identity img {
-  height: 120%;
+.maths img {
+  height: 310px;
+}
+
+#identity {
+  min-height: 3.9in;
 }
 
 #closed-composition img {
-  height: 115%;
-}
-
-#closed-composition > div > div {
-  top: -0.5in;
+  height: 110%;
 }
 
 #html pre, #jqry pre {
@@ -175,6 +175,9 @@ pre.small {
   color: white;
 }
 
+p {
+  font-family: Arial;
+}
 
 .figure, img-figure {
   float: right;
