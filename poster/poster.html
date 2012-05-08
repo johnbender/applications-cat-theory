@@ -109,13 +109,13 @@ $.each( <span class="builtin">this</span>, <span class="keyword">function</span>
           <div id="html" class="span6 text-block">
             <img src="img/html5-logo-512.png" id="html-logo"></img>
             <h3><span class="icon-check"></span>Defining Html</h3>
-            <p>The Category <strong>Html</strong> is extremely simple. The objects in <strong>Html</strong> are the HTMLElements that the reader may be familiar with from the JavaScript DOM API (eg, HTMLAnchorElement). The morphisms are JavaScript functions from HTMLElements to to HTMLElements. Next we verify that <strong>Html</strong> satisfies the three category laws: identity, composition, and closure under composition (Figures 6,7,8).</p>
+            <p>The Category <strong>Html</strong> is extremely simple. The objects in <strong>Html</strong> are the HTMLElements that the reader may be familiar with from the JavaScript DOM API (eg, HTMLDivElement). The morphisms are JavaScript functions from HTMLElements to to HTMLElements. Next we verify that <strong>Html</strong> satisfies the three category laws: identity, composition, and closure under composition (Figures 6,7,8).</p>
 
           </div>
           <div id="jqry" class="span6 text-block">
             <img src="img/jquery-logo-320.png" id="jqry-logo"></img>
             <h3><span class="icon-check"></span>Defining Jqry</h3>
-            <p><strong>Jqry</strong> is the category of <code>jQuery</code> objects and functions from <code>jQuery</code> objects to <code>jQuery</code> objects. It&#8217;s only slightly more complex than <strong>Html</strong> because the reader must accept <code>this</code> as an implicit parameter to the JavaScript functions that are the category&#8217;s morphisms. Also, these morphisms must be defined on the <code>$.fn</code> object to guarantee the value of <code>this</code> is a <code>jQuery</code> object.</p>
+            <p><strong>Jqry</strong> is the category of <code>jQuery</code> objects and functions from <code>jQuery</code> objects to <code>jQuery</code> objects. It's only slightly more complex than <strong>Html</strong> because we take <code>this</code> to be an implicit parameter to the JavaScript functions that are the category&#8217;s morphisms. Also, these morphisms must be defined on the <code>$.fn</code> object to guarantee the value of <code>this</code> is a <code>jQuery</code> object.</p>
           </div>
         </div>
         <div class="row-fluid stack">
@@ -166,7 +166,7 @@ $.each( <span class="builtin">this</span>, <span class="keyword">function</span>
             </div>
           </div>
           <div class="span5 text-block">
-            <p>The value of <code>this</code>, and the constraint that the morphisms must be defined on <code>$.fn</code>, plays an important role in the way that the functions behave in the <strong>Jqry</strong> category. The prototype of all jQuery objects is <code>$.fn</code>, meaning when you call <code>$("div").foo()</code> it finds <code>foo</code> on the <code>$.fn</code> by following the prototype chain.</p>
+            <p>The value of <code>this</code>, and the constraint that the morphisms must be defined on <code>$.fn</code>, play an important role in the way that the morphisms of <strong>Jqry</strong> behave. The prototype of all jQuery objects is <code>$.fn</code>, meaning when you call <code>$("div").foo()</code> it finds <code>foo</code> on the <code>$.fn</code> by following the prototype chain.</p>
           </div>
         </div>
 
@@ -225,13 +225,37 @@ $elem.aAndB().attr( <span class="string">"foo"</span> ); <span class="comment">/
             </div>
           </div>
           <div class="span5 text-block">
-            <p>Composition works by taking the first function, <code>g</code>, in Figure 10 and explicitly defining its <code>this</code> value using the <code>apply</code> method of the JavaScript function prototype. The return value is a jQuery object which is used to define <code>this</code> in the application of <code>f</code>. As a result, we know that the morphisms of <strong>Jqry</strong> are closed under composition because each accepts and returns only jQuery objects.</p>
+            <p>Composition works by taking the first function, <code>g</code>, in Figure 10 and explicitly defining its <code>this</code> value using the <code>apply</code> method. The return value is a jQuery object which is used to define <code>this</code> in the application of <code>f</code>. As a result, we know that the morphisms of <strong>Jqry</strong> are closed under composition because each accepts and returns only jQuery objects.</p>
           </div>
         </div>
         </div>
         <div class="row-fluid border-left">
-          <div id="functor" class="span12 text-block">
+          <div id="functor" class="span4 text-block">
             <h3><span class="icon-check"></span>Defining a Functor</h3>
+            <p>The benefits of providing these two categories are realized in a Functor from <b>Html</b> to <b>Jqry</b>. jQuery's constructor, nearly always aliased as <code>$</code>, transports the objects from <b>Html</b> (Figure !!) and <code>$.map</code> partially applied to <code>this</code> transports the morphisms (Figure !!). The preservation of composition in Figure !! suggests that jQuery methods using <code>$.map</code> with composed <b>Html</b> morphisms can be relied upon to behave identically to chains (compositions) of their transprted <b>Jqry</b> morphism counterparts.</p>
+          </div>
+          <div class="span8">
+            <pre class="prettyprint linenums stack">
+<span class="keyword">var</span> <span class="variable-name">elem</span>  = document.getElementById( <span class="string">"example"</span> ); <span class="comment">// HTMLElement
+</span><span class="keyword">var</span> <span class="variable-name">$elem</span> = $( elem ); <span class="comment">/* or */</span> $( <span class="string">"#example"</span> );  <span class="comment">// jQuery
+</span></pre>
+
+            <pre class="prettyprint linenums">
+<span class="keyword">function</span> <span class="function-name">Functor</span>( <span class="js2-function-param">htmlMorphism</span> ) {
+  <span class="keyword">return</span> <span class="keyword">function</span>() {
+    <span class="keyword">return</span> $.map( <span class="builtin">this</span>, htmlMorphism );
+  };
+}
+
+<span class="comment">//HTMLElement &#8594; HTMLElement
+</span><span class="keyword">function</span> <span class="function-name">f</span>( <span class="js2-function-param">elem</span> ){
+  <span class="comment">// alter HTMLElement
+</span>  <span class="keyword">return</span> elem;
+}
+
+Functor(f); <span class="comment">// jQuery &#8594; jQuery</pre>
+
+
           </div>
         </div>
         <div class="row-fluid border-left">
