@@ -148,10 +148,6 @@ pre.small {
   min-height: 3.9in;
 }
 
-#closed-composition img {
-  height: 110%;
-}
-
 #html pre, #jqry pre {
   font-size: 1em;
 }
