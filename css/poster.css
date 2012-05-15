@@ -67,7 +67,7 @@ span[class*="icon"]{
 #content > div {
   width: 32%;
   height: 100%;
-  background: url(../img/hexellence.png);
+  background: url(../img/cartographer.png);
   float: left;
   padding: 1%;
   box-sizing: border-box;
@@ -119,7 +119,7 @@ pre.small {
 }
 
 .maths > div {
-  height: 3in;
+  height: 4in;
   position: relative;
   text-align: center;
 }
@@ -138,18 +138,24 @@ pre.small {
 
 .maths img {
   margin: 0;
+  height: 380px;
 }
 
-#identity img {
-  height: 120%;
+#identity {
+  min-height: 3.9in;
 }
 
-#closed-composition img {
-  height: 115%;
+#distribute-composition > div > div {
+  width: auto;
+  margin-top: 20px;
 }
 
-#closed-composition > div > div {
-  top: -0.5in;
+#distribute-composition > div {
+  height: 3.1in;
+}
+
+#distribute-composition img {
+  height: 290px;
 }
 
 #html pre, #jqry pre {
@@ -158,12 +164,8 @@ pre.small {
 
 #html-logo, #jqry-logo {
   margin: 0.25in 0.3in 0.3in 0;
-  height: 450px;
+  height: 530px;
   float: left;
-}
-
-#functor, #functor-law-fusion {
-  height: 2in;
 }
 
 .block-out {
@@ -175,6 +177,9 @@ pre.small {
   color: white;
 }
 
+p {
+  font-family: Arial;
+}
 
 .figure, img-figure {
   float: right;
@@ -199,10 +204,10 @@ code {
 pre {
   border: none;
   margin: 0;
-  font-size: 0.5em;
+  font-size: 0.45em;
   padding: 0.7em 1em;
   background-color: #FAFAFA;
-  border-radius: 0.25em 0 0 0.25em;
+  border-radius: 0.4em 0 0 0.4em;
 }
 
 pre.stack {
@@ -229,7 +234,7 @@ pre.large {
 
 .row-fluid {
   margin-bottom: 1.5%;
-  background-color: rgba(190, 190, 190, 0.3);
+  background-color: rgba(180, 180, 180, 0.4);
   box-sizing: border-box;
 }
 
