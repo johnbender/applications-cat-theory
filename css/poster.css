@@ -35,22 +35,22 @@ h3 {
 
 .border-right {
   border-right: 15px solid gray;
-  border-radius: 0 10px 10px 0;
+  border-radius: 0 0.1in 0.1in 0;
 }
 
 .border-left {
   border-left: 15px solid gray;
-  border-radius: 10px 0 0 10px;
+  border-radius: 0.1in 0 0 0.1in;
 }
 
 .border-top {
   border-top: 15px solid gray;
-  border-radius: 10px 10px 0 0;
+  border-radius: 0.1in 0.1in 0 0;
 }
 
 .border-bottom {
   border-bottom: 15px solid gray;
-  border-radius: 0 0 10px 10px;
+  border-radius: 0 0 0.1in 0.1in;
 }
 
 
@@ -73,8 +73,8 @@ span[class*="icon"]{
   box-sizing: border-box;
   font-size: 6em;
   box-shadow: 0px 5px 30px #777;
+  border-radius: 0.1in;
 }
-
 
 
 img {
@@ -194,6 +194,10 @@ p {
 }
 
 /* bootstrap alterations */
+
+li {
+  line-height: 1.2em;
+}
 
 code {
   background: none;
