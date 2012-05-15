@@ -77,7 +77,6 @@ span[class*="icon"]{
 }
 
 
-
 img {
   /* assumes figure div is above */
   margin: 0 0.25in 0.25in 0.25in;
@@ -195,6 +194,10 @@ p {
 }
 
 /* bootstrap alterations */
+
+li {
+  line-height: 1.2em;
+}
 
 code {
   background: none;

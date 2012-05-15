@@ -7,13 +7,13 @@ The proposed optimization requires that the Html morphism underlying each morphi
 
 1. All jQuery methods should, wherever possible and performant, be built using the `$.map` and `$.fn.map` methods. This enforces consistency and readability so that when the Html morphism isn't provided seperately end users can make their own attempt at provding it.
 2. Methods defined using the map form should provide the underlying Html morphism as the `composable` attribute on the method itself. Providing a consistent property makes fusion easier for the end user and enables automatic tool creation.
-3. Performance must be measured when converting existing jQuery methods to the map form. Developers should verify, when converting jQuery methods from the for and each forms that there isn't a performance degredation. This will guarantees that any theoretical speed benefits of composing the Html morphisms won't be negated by the conversion.
+3. Performance must be measured when converting existing jQuery methods to the map form. Developers should verify, when converting jQuery methods from the for and each forms that there isn't a performance degredation. This will guarantees that any theoretical speed benefits garnered from composing the Html morphisms won't be negated by the conversion.
 
 
 ## Stuck in the Middle
 icon-list-alt
 
-
+jQuery's primary function, <code>jQuery</code> or <code>$</code>, is actually a proxy to the primary jQuery object constructor <code>jQuery.fn.init</code>. The objects created using the function with the <code>new</code> operator have as their prototype <code>jQuery.fn</code> which is why defining Jqry morphisms on <code>$.fn</code> ensures that the <code>this</code> value will be correct when they are invoked.
 
 jquery.fn.init, Inserting a proxy object into the prototype chain, diagram
 
