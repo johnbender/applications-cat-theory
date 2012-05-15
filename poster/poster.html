@@ -48,13 +48,13 @@ jQuery( <span class="string">"div"</span> ).hide().addClass( <span class="string
   $divs[i].setAttribute( <span class="string">"style"</span>, <span class="string">"display: none;"</span> );
 }
 
-<span class="keyword">for</span>( i = 0; i &lt;= length; i++ ) {
-  $divs[i].setAttribute( <span class="string">"class"</span>, <span class="string">"foo"</span> );
-}
+$.each($divs, <span class="keyword">function</span>( <span class="js2-function-param">element</span> ) {
+  element.setAttribute( <span class="string">"class"</span>, <span class="string">"foo"</span> );
+});
 
-<span class="keyword">for</span>( i = 0; i &lt;= length; i++ ) {
-  $divs[i].setAttribute( <span class="string">"style"</span>, <span class="string">"display: block;"</span> );
-}<div class="figure"><b> Figure 3 </b></div>
+$.map($divs, <span class="keyword">function</span>( <span class="js2-function-param">element</span> ) {
+  element.setAttribute( <span class="string">"style"</span>, <span class="string">"display: block;"</span> );
+});<div class="figure"><b> Figure 3 </b></div>
 </pre>
           </div>
         </div>
@@ -75,7 +75,7 @@ jQuery( <span class="string">"div"</span> ).hide().addClass( <span class="string
         <div class="row-fluid">
           <div id="map-form" class="span6">
             <pre class="prettyprint linenums">
-$.map( <span class="builtin">this</span>, <span class="keyword">function</span>( <span class="js2-function-param">elem</span>, <span class="js2-function-param">i</span> ){
+$.map( list, <span class="keyword">function</span>( <span class="js2-function-param">elem</span>, <span class="js2-function-param">i</span> ){
   <span class="comment">// manipulate HTMLElement
 </span>  <span class="keyword">return</span> elem;
 });
@@ -255,7 +255,7 @@ jqryObject.a().attr( <span class="string">"foo"</span> <span class="js2-magic-pa
           <div class="span7">
             <pre class="prettyprint linenums stack distribute-composition-code">
 compose(functor(a), functor(b)) == functor(compose(a, b));
-compose($.fn.a, $.fn.b)         == functor(compose(a, b));
+$.compose($.fn.a, $.fn.b)       == functor(compose(a, b));
 jqryObject.b().a()              == $.map(jqryObject, compose(a, b));
 <div class="figure"><b>Figure 14 </b></div></pre>
             <div class="span7 maths" id="distribute-composition">
