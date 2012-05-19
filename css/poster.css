@@ -105,7 +105,12 @@ img {
   margin-bottom: 1em;
 }
 
-
+.large-number {
+  font-size: 3.5em;
+  line-height: 1em;
+  text-align: right;
+  text-shadow: 0px 1px 2px #555;
+}
 
 .text-block p.last {
   margin-bottom: 0;
