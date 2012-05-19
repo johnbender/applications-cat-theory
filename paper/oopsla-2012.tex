@@ -53,7 +53,7 @@
 \maketitle
 
 \begin{abstract}
-The popular \cite{bib:usage} jQuery JavaScript library makes the manipulation of HTML documents easy and intuitive, but an unfortunate side effect of its fluent interface is that an unwary programmer can easily introduce unnecessary performance overhead. And while the JavaScript execution in desktop browsers is become fast enough to hide much of the problem, the growing complexity of HTML documents and the ubiquity of web enabled mobile devices have returned performance to a place of importance in the JavaScript development community. We address this issue using category theory to identify a set of JavaScript functions and jQuery methods that can be optimized using function composition to effect loop fusion. In addition, we propose a set of guidelines and derive a library from those guidelines to help developers quickly identify opportunities to make these optimizations. As a result the developer leveraging the the technique and library should be able to spend less time focusing on performance and more time on adding features and value to his or her applications.
+The popular \cite{bib:usage} jQuery JavaScript library makes the manipulation of HTML documents easy and intuitive, but an unfortunate side effect of its fluent interface is that an unwary programmer can easily introduce unnecessary performance overhead. And while the JavaScript execution in desktop browsers is become fast enough to hide much of the problem, the growing complexity of HTML documents and the ubiquity of web enabled mobile devices persist performance as an important concern when developing JavaScript applications. We address this issue using category theory to identify a set of JavaScript functions and jQuery methods that can be optimized using function composition to effect loop fusion. In addition, we propose a set of guidelines and derive a library from those guidelines to help developers quickly identify opportunities to make these optimizations. As a result the developer leveraging the the technique and library should be able to spend less time focusing on performance and more time on adding features and value to his or her applications.
 \end{abstract}
 
 \category{D.2.7}{Distribution, Maintenance, and Enhancement}{Enhancement}
@@ -262,6 +262,10 @@ assert(functor(compose(f, g))
 
 Identity is trivial but composition warrants some explanation. On the left hand side the Functor promotes the already composed \textbf{Html} morphism using jQuery's \verb|map| method for operation on \verb|this|. On the right hand side each individual morphism is promoted and then \verb|jQuery.compose| performs the service of establishing \verb|this| for each execution. Most importantly the right hand side, as in Figure \ref{fig:sample-jqry-compose}, is functionally equivalent to the chaining of both methods promoted by the Functor. Given that the second Functor law holds we can say with complete confidence that two morphisms in \begin{math}hom(\mathbf{Html})\end{math} composed and then promoted into \begin{math}hom(\mathbf{Jqry})\end{math} are equivalent to the composition or chaining of two morphism in \begin{math}hom(\mathbf{Jqry})\end{math}. As a performance optimization the choice of the former is generally referred to as loop fusion or deforestation where the intermediate data structure is the mutated jQuery object set \cite{bib:deforestation}.
 
+\section{Haskell's List Functor}
+
+[\textbf{TODO}] Discuss the relationship here with fmap and haskell's list functor. jQuery's objec-set behavior is clearly a list. Cite previous work in that area as an influence.
+
 \section{Guidelines to Facilitate Optimization}
 
 Given that the loop fusion optimization requires the composition of at least two morphisms from \textbf{Html} and that functionality of those morphisms is always provided to the end user as the lifted version that exists in \textbf{Jqry}, we propose the following guidelines.
@@ -276,7 +280,15 @@ To assist jQuery method developers in effecting the above we also propose a smal
 
 \section{Library Aided Optimization} \label{sec:library-aided-optimization}
 
-The reader will note that the guidelines do not attempt to differentiate the optimizable jQuery methods in any appreciable fashion other than the the possible existence of the \verb|composable| property. This is a deliberate omission in preference to an automatic identification of chains with two or more methods that define the \verb|composable| property. In fact it is possible to automatically fuse the underlying JavaScript functions but this incurs a small additional cognitive overhead and an as yet unresolved performance degradation (See Appendix D). Instead we propose a small library that will log a warning any time two or more methods are invoked in sequence when each provides the \verb|composable| property. Additionally, it will log a warning when two or more of these methods occur in a method chain but are not adjacent. While more detail on one possible implementation is provided in Appendix E, a short explanation here may aid interested parties in creating their own implementation.
+The reader will note that the guidelines do not attempt to differentiate the optimizable jQuery methods in any appreciable fashion other than the the possible existence of the \verb|composable| property. This is a deliberate omission in preference to an automatic identification of chains with two or more methods that define the \verb|composable| property. In fact it is possible to automatically fuse the underlying JavaScript functions but this incurs a small additional cognitive overhead and an as yet unresolved performance degradation (See Appendix D).
+\\
+
+[\textbf{TODO}] further discuss automatic fusion and possible benefits to end users.
+
+[\textbf{TODO}] explore the reasons for the performance degredation with the automatic approach as it may be relevant to the hand fused approach.
+\\
+
+Instead we propose a small library that will log a warning any time two or more methods are invoked in sequence when each provides the \verb|composable| property. Additionally, it will log a warning when two or more of these methods occur in a method chain but are not adjacent. While more detail on one possible implementation is provided in Appendix E, a short explanation here may aid interested parties in creating their own implementation.
 
 Newly instantiated jQuery objects derive the bulk of their functionality from the \verb|jQuery.fn| object defined as their prototype. \verb|jQuery.fn| is also the object onto which new jQuery methods, or \textbf{Jqry} morphisms, are defined. Consequently it's possible to create a proxy object that can be inserted between a jQuery instance and \verb|jQuery.fn| in the prototype chain at runtime to record the sequence of method invocations and report opportunities for optimization.
 
@@ -289,11 +301,30 @@ Newly instantiated jQuery objects derive the bulk of their functionality from th
 \end{equation}
 \end{figure}
 
+[\textbf{TODO}] add diagram to illustrate prototype chain alteration
+\\
+
 Taking \begin{math}\xrightharpoonup{f}\end{math} to represent the automatic prototype look-up of \begin{math}f\end{math} on the target, and \begin{math}\xmapsto{f}\end{math} to represent a invocation of \begin{math}f\end{math} on the target by the source object we have diagram \ref{eq:jquery-default} as the default jQuery behavior and diagram \ref{eq:jquery-with-proxy} as the desired behavior.
 
 The \begin{math}Proxy\end{math} object must define it's own version of each and every function property of the \begin{math}jQuery.fn\end{math} prototype object. This allows it to count invocations of those functions and for any count greater than one raise a warning. It also allows it to invoke the method of the same name on the \begin{math}jQuery.fn\end{math} when no count is recorded, IE \begin{math}\xmapsto{f}\end{math}. Additionally the size of the jQuery object-set can be taken into account as part of configuration, as small sets of objects won't see the same benefits from composition.
 
 The primary advantage of this approach is that it is entirely unobtrusive and requires nothing more than the inclusion of the library in an HTML document following the inclusion of jQuery itself. In this way it encourages developer adoption through ease of use.
+
+\section{Initial Experimental Results}
+
+[\textbf{TODO}] simple performance examples illustrating fusion benefits. Sample: \url{http://jsperf.com/lazy-loop-fusion-vs-traditional-method-chaning/5}
+
+\section{jQuery Project Results}
+
+[\textbf{TODO}] discuss standard with jQuery core team, push for implementation in core. Talk submitted to jQuery Conference in June 2012 with this goal in mind
+
+\section{Client Project Results}
+
+[\textbf{TODO}] discuss implementation with subject application creators using jQuery. Candidates: Originate Labs, The Filament Group, Append To, Bocoup, Adobe
+
+\section{Further Work}
+
+[\textbf{TODO}] discuss further work in applying other category theoretic constructs to the two categories defined here. eg, jQuery is a Monoid, examine cartesian closed categories.
 
 \section{Conclusion}
 
