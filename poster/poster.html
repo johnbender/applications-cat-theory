@@ -279,27 +279,36 @@ jqryObject.b().a()              == $.map(jqryObject, compose(a, b));
           </div>
         </div>
         <div class="row-fluid">
-          <div class="span6 text-block">
-            <h4>All jQuery methods should, wherever possible, be built using the <code>jQuery.map</code> method.</h4>
+          <div class="span1 large-number">
+            1
           </div>
           <div class="span6 text-block">
+            <h4></span>All jQuery methods should, wherever possible, be built using the <code>jQuery.map</code> method.</h4>
+          </div>
+          <div class="span5 text-block">
             <p>In addition to setting the groundwork for providing the underlying <b>Html</b> morphism this enforces consistency and readability so that when the morphism isn't provided seperately end users can attempt to provide their own. This should not come at the sacrifice of method performance. Methods using for and each forms can still provide a morphism for composition.</p>
           </div>
         </div>
         <div class="row-fluid">
+          <div class="span1 large-number">
+            2
+          </div>
           <div class="span6 text-block">
             <h4>Methods defined with <code>jQuery.map</code> should expose an <b>Html</b> morphism as an attribute.</h4>
           </div>
-          <div class="span6 text-block">
+          <div class="span5 text-block">
             <p>Providing a consistent property makes fusion easier for the end user and enables automatic tooling like the sample identification library detailed below. We propose the <code>composable</code> attribute as the consistent reference location where the morphism can be exposed.</p>
           </div>
         </div>
         <div class="row-fluid">
+          <div class="span1 large-number">
+            3
+          </div>
           <div class="span6 text-block">
             <h4>Performance should be measured when converting jQuery methods to the map form.</h4>
           </div>
-          <div class="span6 text-block">
-            <p> Developers should verify, when converting jQuery methods from the for and each forms that there isn't a performance degredation. This will guarante ethat any theoretical speed benefits garnered from composing the <b>Html</b> morphisms won't be negated by the conversion.</p>
+          <div class="span5 text-block">
+            <p>Developers should verify, when converting jQuery methods from the for and each forms that there isn't a performance degredation. This will guarante ethat any theoretical speed benefits garnered from composing the <b>Html</b> morphisms won't be negated by the conversion.</p>
           </div>
         </div>
         <div class="row-fluid border-left">
