@@ -1,0 +1,63 @@
+\documentclass[11hpt]{article}
+\usepackage[all]{xy}
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes,shadows,arrows}
+
+\begin{document}
+
+\tikzstyle{abstract}=[rectangle, draw=black, rounded corners, fill=orange, drop shadow,
+        text centered, anchor=north, text=white, text width=3cm, ]
+
+\tikzstyle{legend-target}=[circle, draw=black, fill=orange, drop shadow,
+        text centered, anchor=north, text=white, text width=0.25cm ]
+
+\tikzstyle{fncall}=[->, -to, double]
+\tikzstyle{protolookup}=[->, -to, thick]
+
+
+\begin{equation} \label{eq:jquery-default}
+  \xymatrix{ F(A) \ar@/^/[r]^{F(f \circ g)} \ar@/_/[r]_{F(f) \circ F(g)} & F(C) }
+\end{equation}
+\begin{equation} \label{eq:jquery-with-proxy}
+  F(f) \circ F(g) = F(f \circ g)
+\end{equation}
+
+\begin{tikzpicture}[node]
+
+  \node[legend-target] (proto) at (-3, 2) {
+    \textbf{B}
+  };
+
+  \node[legend-target] (instance) at (-3, 0) {
+    \textbf{A}
+  };
+
+  \draw[protolookup] (instance.north) -| (proto.south);
+
+  \node[abstract] (jQueryFn) at (0, 2) {
+    \textbf{jQuery.fn}
+  };
+
+  \node[abstract] (jQueryFnInit) at (0, 0) {
+      \textbf{jQuery.fn.init}
+  };
+
+  \draw[protolookup] (jQueryFnInit.north) -| (jQueryFn.south);
+
+  \node[abstract] (jQueryFn) at (4, 2) {
+    \textbf{jQuery.fn}
+  };
+
+  \node[abstract] (LazyWarning) at (4, 1) {
+    \textbf{LazyWarning}
+  };
+
+  \node[abstract] (jQueryFnInit) at (4, 0) {
+      \textbf{jQuery.fn.init}
+  };
+
+  \draw[fncall] (LazyWarning.north) -| (jQueryFn.south);
+  \draw[protolookup] (jQueryFnInit.north) -| (LazyWarning.south);
+\end{tikzpicture}
+
+\end{document}
