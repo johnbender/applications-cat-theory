@@ -168,6 +168,14 @@ pre.small {
   height: 290px;
 }
 
+#prototype-chain-proxy > div > div {
+  width: auto;
+}
+
+#prototype-chain-proxy img {
+  height: 452px;
+}
+
 #html pre, #jqry pre {
   font-size: 1em;
 }

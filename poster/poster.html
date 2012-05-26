@@ -312,12 +312,16 @@ jqryObject.b().a()              == $.map(jqryObject, compose(a, b));
           </div>
         </div>
         <div class="row-fluid border-left">
-          <div class="span7 text-block">
+          <div class="span5 text-block">
             <h3><span class="icon-signin"></span>Stuck in the Middle</h3>
             <p>jQuery's primary function, <code>jQuery</code> or <code>$</code>, is actually a proxy to the primary jQuery object constructor <code>jQuery.fn.init</code>. The objects created using the function with the <code>new</code> operator have as their prototype <code>jQuery.fn</code> which is why defining <b>Jqry</b> morphisms on <code>$.fn</code> ensures that the <code>this</code> value will be correct when they are invoked.</p>
           </div>
-          <div class="span5 text-block">
-            todo, diagram of default prototype chain, actual prototype chain
+          <div class="span7 maths" id="prototype-chain-proxy">
+            <div>
+              <div>
+                <img src="img/proxy.png" />
+              </div>
+            </div>
           </div>
         </div>
 

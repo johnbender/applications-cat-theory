@@ -1,58 +1,85 @@
 \documentclass[11hpt]{article}
+\usepackage{amsmath}
+\usepackage{mathtools}
 \usepackage[all]{xy}
 \usepackage{tikz}
 \usetikzlibrary{positioning,shapes,shadows,arrows}
 
 \begin{document}
 
-\tikzstyle{abstract}=[rectangle, draw=black, rounded corners, fill=orange, drop shadow,
+\tikzstyle{abstract}=[rectangle, draw=black, rounded corners, fill=orange,
         text centered, anchor=north, text=white, text width=3cm, ]
 
-\tikzstyle{legend-target}=[circle, draw=black, fill=orange, drop shadow,
+\tikzstyle{legend-target}=[circle, draw=black, fill=orange,
         text centered, anchor=north, text=white, text width=0.25cm ]
 
 \tikzstyle{fncall}=[->, -to, double]
 \tikzstyle{protolookup}=[->, -to, thick]
 
+\section{functor formulae}
 
-\begin{equation} \label{eq:jquery-default}
+\begin{equation} \label{eq:functor-arrows}
   \xymatrix{ F(A) \ar@/^/[r]^{F(f \circ g)} \ar@/_/[r]_{F(f) \circ F(g)} & F(C) }
 \end{equation}
-\begin{equation} \label{eq:jquery-with-proxy}
+\begin{equation} \label{eq:functor-equate}
   F(f) \circ F(g) = F(f \circ g)
 \end{equation}
 
-\begin{tikzpicture}[node]
+\section{prototype configuration formulae}
 
-  \node[legend-target] (proto) at (-3, 2) {
+\begin{equation}
+ f \in hom(Jqry)
+\end{equation}
+\begin{equation} \label{eq:jquery-default}
+ jQuery.fn.init \xmapsto{\ \ f_{\sigma}\ \ } jQuery.fn
+\end{equation}
+\begin{equation} \label{eq:jquery-with-proxy}
+ jQuery.fn.init \xmapsto{\ \ f_{\sigma}\ \ } Proxy \xleftrightharpoons{\ \ f\ \ } jQuery.fn
+\end{equation}
+
+\section{diagrams}
+
+\begin{tikzpicture}
+
+  \node[legend-target] (snd-object) at (-1, 2) {
     \textbf{B}
   };
 
-  \node[legend-target] (instance) at (-3, 0) {
+  \node[legend-target] (fst-object) at (-1, 0) {
+    \textbf{A}
+  };
+
+  \draw[fncall] (fst-object) -| (snd-object);
+
+  \node[legend-target] (proto) at (0, 2) {
+    \textbf{B}
+  };
+
+  \node[legend-target] (instance) at (0, 0) {
     \textbf{A}
   };
 
   \draw[protolookup] (instance.north) -| (proto.south);
 
-  \node[abstract] (jQueryFn) at (0, 2) {
+  \node[abstract] (jQueryFn) at (3, 2) {
     \textbf{jQuery.fn}
   };
 
-  \node[abstract] (jQueryFnInit) at (0, 0) {
+  \node[abstract] (jQueryFnInit) at (3, 0) {
       \textbf{jQuery.fn.init}
   };
 
   \draw[protolookup] (jQueryFnInit.north) -| (jQueryFn.south);
 
-  \node[abstract] (jQueryFn) at (4, 2) {
+  \node[abstract] (jQueryFn) at (7, 2) {
     \textbf{jQuery.fn}
   };
 
-  \node[abstract] (LazyWarning) at (4, 1) {
+  \node[abstract] (LazyWarning) at (7, 1) {
     \textbf{LazyWarning}
   };
 
-  \node[abstract] (jQueryFnInit) at (4, 0) {
+  \node[abstract] (jQueryFnInit) at (7, 0) {
       \textbf{jQuery.fn.init}
   };
 
