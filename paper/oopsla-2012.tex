@@ -29,6 +29,8 @@
 % 11pt          To set in 11-point type instead of 9-point.
 % authoryear    To obtain author/year citation style instead of numeric.
 
+\usepackage[table]{xcolor}
+\usepackage[pdfborderstyle=0 0 0]{hyperref}
 \usepackage{amsmath}
 \usepackage{mathtools}
 \usepackage[all]{xy}
@@ -312,7 +314,7 @@ The primary advantage of this approach is that it is entirely unobtrusive and re
 
 \section{Initial Experimental Results}
 
-[\textbf{TODO}] simple performance examples illustrating fusion benefits. Sample: \url{http://jsperf.com/lazy-loop-fusion-vs-traditional-method-chaning/5}
+[\textbf{TODO}] simple performance examples illustrating fusion benefits. \href{http://jsperf.com/lazy-loop-fusion-vs-traditional-method-chaning/5}{Sample}
 
 \section{jQuery Project Results}
 
@@ -405,7 +407,7 @@ jQuery.mapable = function( htmlMorphism ){
 
 \section{Appendix D}
 
-An initial attempt was made to alter jQuery to support the deferral of method execution until being forced. The idea was to accumulate method calls that defined the \verb|composable| property (\verb|htmlMorphism| in the source) and then do the composition and execution all at once when necessary. While this is possible in JavaScript, the performance overhead of forwarding arguments for method invocations like those in Figure \ref{fig:args-juggle} down to the \textbf{Html} morphism in conjunction with the capability of modern JavaScript virtual machines to compile simple loops to machine code negated any positive effect of limiting the total iterations. You can view the results of a simple performance test at \url{http://jsperf.com/lazy-loop-fusion-vs-traditional-method-chaning/3}. You can also view the extension required to effect the lazy optimization at \url{https://github.com/johnbender/jquery-lazy-proxy/blob/master/lazy-proxy.js}. Further work and testing is required to completely rule out the possibility of this approach
+An initial attempt was made to alter jQuery to support the deferral of method execution until being forced. The idea was to accumulate method calls that defined the \verb|composable| property (\verb|htmlMorphism| in the source) and then do the composition and execution all at once when necessary. While this is possible in JavaScript, the performance overhead of forwarding arguments for method invocations like those in Figure \ref{fig:args-juggle} down to the \textbf{Html} morphism in conjunction with the capability of modern JavaScript virtual machines to compile simple loops to machine code negated any positive effect of limiting the total iterations. You can view the results of a simple performance test at \href{http://jsperf.com/lazy-loop-fusion-vs-traditional-method-chaning/5}{jsperf.com}. You can also view the extension required to effect the lazy optimization at \href{https://github.com/johnbender/jquery-lazy-proxy/blob/79ab61e22547169d6f392512f782df2e29362ebc/lazy.js}{github.com}. Further work and testing is required to completely rule out the possibility of this approach
 
 \begin{figure}[!ht]
 \small
@@ -418,7 +420,7 @@ jQuery( "div" ).foo( "bar", "baz" ).force();
 
 \section{Appendix E}
 
-A basic implementation of the object proxy described in Section \ref{sec:library-aided-optimization} can be found at \url{https://github.com/johnbender/jquery-lazy-proxy/blob/master/lazy-proxy.js} along with a simple counting and logging mechanism for identifying possible optimizations.
+A basic implementation of the object proxy described in Section \ref{sec:library-aided-optimization} can be found at \href{https://github.com/johnbender/jquery-lazy-proxy/blob/79ab61e22547169d6f392512f782df2e29362ebc/lazy.js}{github} along with a simple counting and logging mechanism for identifying possible optimizations.
 
 \bibliographystyle{abbrvnat}
 

@@ -17,7 +17,13 @@
 \tikzstyle{protolookup}=[->, -to, thick]
 
 \section{functor formulae}
+\begin{equation} \label{eq:functor-html-jqry}
+Html \to Jqry
+\end{equation}
 
+\begin{equation} \label{eq:functor-id}
+  F(id_{a}) = id_{F(a)}
+\end{equation}
 \begin{equation} \label{eq:functor-arrows}
   \xymatrix{ F(A) \ar@/^/[r]^{F(f \circ g)} \ar@/_/[r]_{F(f) \circ F(g)} & F(C) }
 \end{equation}
@@ -25,16 +31,53 @@
   F(f) \circ F(g) = F(f \circ g)
 \end{equation}
 
+\section{category laws, composition}
+\begin{equation}
+f: B \to C
+\end{equation}
+\begin{equation}
+g: A \to B
+\end{equation}
+\begin{equation}
+h = f \circ g
+\end{equation}
+\begin{equation}
+f,h,g \in hom(\mathcal{C})
+\end{equation}
+
+\section{category laws, identity}
+\begin{equation}
+id_{a}: A \to A
+\end{equation}
+\begin{equation}
+id_{b}: B \to B
+\end{equation}
+\begin{equation}
+g: A \to B
+\end{equation}
+\begin{equation}
+g \circ id_{a} = id_{b} \circ g
+\end{equation}
+
+\section{category formulae}
+\begin{equation}
+ob(\mathcal{C}),\ hom(\mathcal{C})\ |\ map(\mathcal{C})
+\end{equation}
+\begin{equation}
+ob_{\mathcal{C}},\ hom_{\mathcal{C}}\ |\ map_{\mathcal{C}}
+\end{equation}
+
+
 \section{prototype configuration formulae}
 
 \begin{equation}
  f \in hom(Jqry)
 \end{equation}
 \begin{equation} \label{eq:jquery-default}
- jQuery.fn.init \xmapsto{\ \ f_{\sigma}\ \ } jQuery.fn
+ jQuery.fn.init \xmapsto{\ f_{\sigma}\ } jQuery.fn
 \end{equation}
 \begin{equation} \label{eq:jquery-with-proxy}
- jQuery.fn.init \xmapsto{\ \ f_{\sigma}\ \ } Proxy \xleftrightharpoons{\ \ f\ \ } jQuery.fn
+ jQuery.fn.init \xmapsto{\ f_{\sigma}\ } Proxy \xleftrightharpoons{\ f\ } jQuery.fn
 \end{equation}
 
 \section{diagrams}
@@ -88,3 +131,4 @@
 \end{tikzpicture}
 
 \end{document}
+
