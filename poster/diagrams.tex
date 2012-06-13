@@ -17,18 +17,26 @@
 \tikzstyle{protolookup}=[->, -to, thick]
 
 \section{functor formulae}
-\begin{equation} \label{eq:functor-html-jqry}
-Html \to Jqry
-\end{equation}
 
-\begin{equation} \label{eq:functor-id}
-  F(id_{a}) = id_{F(a)}
-\end{equation}
 \begin{equation} \label{eq:functor-arrows}
   \xymatrix{ F(A) \ar@/^/[r]^{F(f \circ g)} \ar@/_/[r]_{F(f) \circ F(g)} & F(C) }
 \end{equation}
 \begin{equation} \label{eq:functor-equate}
   F(f) \circ F(g) = F(f \circ g)
+\end{equation}
+\begin{equation} \label{eq:functor-id}
+  F(id_{a}) = id_{F(a)}
+\end{equation}
+\begin{equation} \label{eq:functor-html-jqry}
+ob(Html) \to ob(Jqry)
+\end{equation}
+
+\begin{equation} \label{eq:functor-html-jqry}
+hom(Html) \to hom(Jqry)
+\end{equation}
+
+\begin{equation} \label{eq:functor-html-jqry}
+Html \to Jqry
 \end{equation}
 
 \section{category laws, composition}
