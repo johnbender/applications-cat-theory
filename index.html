@@ -8,7 +8,7 @@
   </head>
   <body onload="prettyPrint()">
     <div id="title">
-      <h1>Automatically Suggesting Performance Optimizations in jQuery Based JavaScript Applications</h1>
+      <h1>Automatically Identifying Performance Optimizations in jQuery Based JavaScript Applications</h1>
     </div>
     <div id="content">
       <div id="left">
@@ -36,7 +36,7 @@ jQuery( <span class="string">"div"</span> ).hide().addClass( <span class="string
           <div id="explain-chaining" class="span4 text-block">
 	          <h3><span class="icon-user"></span>Fluent Interface</h3><p>In <b> Figure 2 </b> you can see an example of a typical DOM manipulation built using jQuery's chainable methods. In this case all the <code>HTMLDivElement</code>s are selected from the DOM, hidden, the <code>foo</code> CSS class is added, and they are shown again. <b> Figure 3 </b> shows a "deabstracted" naive implementation of the method chain from <b> Figure 2 </b>, and, as you can see, iterating over the set three times where one would seemingly suffice suggests an opportunity for a performance improvement.</p>
 
-            <p>Internally these methods are implemented using for loops or in one of two forms supported by the library, the map form with <code>jQuery.map</code> and the each form with <code>jQuery.each</code>.</p>
+            <p>Internally these methods are implemented using for loops or in one of two forms built with <code>jQuery.map</code> and <code>jQuery.each</code>.</p>
           </div>
           <div id="for-loops" class="span8">
             <pre class="prettyprint linenums stack">jQuery( <span class="string">"div"</span> ).hide().addClass( <span class="string">"foo"</span> ).show();<div class="figure"><b> Figure 2 </b></div></pre>
@@ -44,7 +44,7 @@ jQuery( <span class="string">"div"</span> ).hide().addClass( <span class="string
             <pre class="prettyprint linenums">
 <span class="keyword">var</span> <span class="variable-name">$divs</span> = $( <span class="string">"div"</span> );
 
-<span class="keyword">for</span>( <span class="keyword">var</span> <span class="variable-name">i</span> = 0; i &lt;= length; i++ ) {
+<span class="keyword">for</span>( <span class="keyword">var</span> <span class="variable-name">i</span> = 0; i &lt; $divs.length; i++ ) {
   $divs[i].setAttribute( <span class="string">"style"</span>, <span class="string">"display: none;"</span> );
 }
 
@@ -85,7 +85,7 @@ jQuery.map( list, <span class="keyword">function</span>( <span class="js2-functi
           </div>
           <div id="each-form" class="span6">
             <pre class="prettyprint linenums">
-<span class="js2-external-variable">$</span>.<span class="function-name">each</span> = <span class="keyword">function</span>( <span class="js2-function-param">list</span>, <span class="js2-function-param">callback</span> ) {
+<span class="js2-external-variable">jQuery</span>.<span class="function-name">each</span> = <span class="keyword">function</span>( <span class="js2-function-param">list</span>, <span class="js2-function-param">callback</span> ) {
   jQuery.map( list, <span class="keyword">function</span>( <span class="js2-function-param">elem</span>, <span class="js2-function-param">i</span> ){
     callback( elem, i);
     <span class="keyword">return</span> elem;
@@ -132,7 +132,7 @@ jQuery.map( list, <span class="keyword">function</span>( <span class="js2-functi
           </div>
           <div class="span3">
             <pre class="prettyprint linenums small">
-<span class="keyword">function</span> <span class="function-name">compose</span>( <span class="js2-function-param">f</span>, <span class="js2-function-param">g</span> ){
+<span class="keyword">function</span> <span class="function-name">cmps</span>( <span class="js2-function-param">f</span>, <span class="js2-function-param">g</span> ){
   <span class="keyword">return</span> <span class="keyword">function</span>( <span class="js2-function-param">a</span> ) {
     <span class="keyword">return</span> f(g(a));
   };
@@ -149,7 +149,7 @@ jQuery.map( list, <span class="keyword">function</span>( <span class="js2-functi
           </div>
           <div class="span3">
             <pre class="prettyprint linenums small">
-<span class="js2-external-variable">$</span>.<span class="function-name">compose</span> = <span class="keyword">function</span>( <span class="js2-function-param">f</span>, <span class="js2-function-param">g</span> ){
+<span class="js2-external-variable">$</span>.<span class="function-name">cmps</span> = <span class="keyword">function</span>( <span class="js2-function-param">f</span>, <span class="js2-function-param">g</span> ){
   <span class="keyword">return</span> <span class="keyword">function</span>(){
     <span class="keyword">return</span> f.apply(g.apply(<span class="builtin">this</span>))
   };
@@ -186,7 +186,7 @@ jQuery.map( list, <span class="keyword">function</span>( <span class="js2-functi
 }
 
 <span class="keyword">var</span> <span class="variable-name">elem</span> = document.getElementById( <span class="string">"sample"</span> );
-elem = compose( a, b )( elem );
+elem = cmps( a, b )( elem );
 elem.getAttribute( <span class="string">"foo"</span> ); <span class="comment">// "bar"
 </span>elem.getAttribute( <span class="string">"baz"</span> ); <span class="comment">// "bak"</span><div class="figure"><b> Figure 8 </b></div></pre>
           </div>
@@ -194,16 +194,16 @@ elem.getAttribute( <span class="string">"foo"</span> ); <span class="comment">//
             <pre class="prettyprint linenums">
 <span class="js2-external-variable">$</span>.fn.<span class="function-name">a</span> = <span class="keyword">function</span>(){
   <span class="comment">// a from <b> Figure 8 </b></span>
-  <span class="keyword">return</span> $.map( <span class="builtin">this</span>, a );
+  <span class="keyword">return</span> jQuery.map( <span class="builtin">this</span>, a );
 };
 
 <span class="js2-external-variable">$</span>.fn.<span class="function-name">b</span> = <span class="keyword">function</span>(){
   <span class="comment">// b from <b> Figure 8 </b></span>
-  <span class="keyword">return</span> $.map( <span class="builtin">this</span>, b );
+  <span class="keyword">return</span> jQuery.map( <span class="builtin">this</span>, b );
 };
 
 <span class="keyword">var</span> <span class="variable-name">$elem</span> = $( <span class="string">"#sample"</span> );
-</span><span class="js2-external-variable">$</span>.fn.aAndB = $.compose( $.fn.a, $.fn.b );
+</span><span class="js2-external-variable">$</span>.fn.aAndB = $.cmps( $.fn.a, $.fn.b );
 $elem.aAndB().attr( <span class="string">"foo"</span> ); <span class="comment">// "bar"
 </span>$elem.attr( <span class="string">"baz"</span> );         <span class="comment">// "bak"</span><div class="figure"><b> Figure 11 </b></div></pre>
           </div>
@@ -211,7 +211,7 @@ $elem.aAndB().attr( <span class="string">"foo"</span> ); <span class="comment">/
 
         <div class="row-fluid">
           <div class="span5 text-block">
-            <p>Notice the use of <code>a</code> and <code>b</code> from the <strong>Html</strong> <code>compose</code> example in <b> Figure 8 </b> for the functions that are mapped using <code>$.map</code> over the set of elements in the jQuery objects in <b> Figure 11 </b>. This plays an important roll in understanding the Functor from <strong>Html</strong> to <strong>Jqry</strong>.</p>
+            <p>Notice the use of <code>a</code> and <code>b</code> from the <strong>Html</strong> <code>cmps</code> example in <b> Figure 8 </b> for the functions that are mapped using <code>jQuery.map</code> over the set of elements in the jQuery objects in <b> Figure 11 </b>. This plays an important roll in understanding the Functor from <strong>Html</strong> to <strong>Jqry</strong>.</p>
           </div>
           <div class="span2 maths" id="closed-composition">
             <div>
@@ -228,34 +228,34 @@ $elem.aAndB().attr( <span class="string">"foo"</span> ); <span class="comment">/
         <div class="row-fluid border-left">
           <div id="functor" class="span5 text-block">
             <h3><span class="icon-check"></span>Defining a Functor</h3>
-            <p>The benefits of providing these two categories are realized in a Functor from <b>Html</b> to <b>Jqry</b>. jQuery's constructor, nearly always aliased as <code>$</code>, transports the objects from <b>Html</b> (<b> Figure 12 </b>) and <code>$.map</code> partially applied to <code>this</code> transports the morphisms (<b> Figure 13 </b>).</p>
+            <p>The benefits of providing these two categories are realized in a Functor from <b>Html</b> to <b>Jqry</b>. jQuery's constructor, nearly always aliased as <code>$</code>, transports the objects from <b>Html</b> (<b> Figure 12 </b>) and <code>jQuery.map</code> partially applied to <code>this</code> transports the morphisms (<b> Figure 13 </b>).</p>
           </div>
           <div class="span7">
             <pre class="prettyprint linenums stack">
 <span class="keyword">var</span> <span class="variable-name">htmlObject</span> = document.getElementById( <span class="string">"sample"</span> );
 <span class="keyword">var</span> <span class="variable-name">jqryObject</span> = $( htmlObject );<div class="figure"><b> Figure 12 </b></div></pre>
             <pre class="prettyprint linenums">
-<span class="keyword">function</span> <span class="function-name">functor</span>( <span class="js2-function-param">htmlMorphism</span> ) {
+<span class="keyword">function</span> <span class="function-name">F</span>( <span class="js2-function-param">htmlMorphism</span> ) {
   <span class="keyword">return</span> <span class="keyword">function</span>() {
-    <span class="keyword">return</span> $.map( <span class="builtin">this</span>, htmlMorphism );
+    <span class="keyword">return</span> jQuery.map( <span class="builtin">this</span>, htmlMorphism );
   };
 }
 
 <span class="comment">// a from <b> Figure 8 </b>
-</span><span class="js2-external-variable">$</span>.fn.a = Functor(a);
+</span><span class="js2-external-variable">$</span>.fn.a = F(a);
 jqryObject.a().attr( <span class="string">"foo"</span> <span class="js2-magic-paren">)</span>; <span class="comment">// bar</span><div class="figure"><b> Figure 13 </b></div></pre>
           </div>
         </div>
         <div class="row-fluid border-left">
           <div id="functor-law-fusion" class="span5 text-block">
             <h3><span class="icon-random"></span>Fuse with Confidence</h3>
-            <p>The fact that the functor distributes over composition (<b>Figure 14</b>) suggests that jQuery methods using <code>$.map</code> with composed <b>Html</b> morphisms can be relied upon to behave identically to chains of their transported <b>Jqry</b> morphism counterparts. The reader may recognize this simply as loop fusion. With a rigorous understanding of which <b>Jqry</b> morphisms can be fused we can begin to define a standard and helper libraries to assist the end user in optimizing their jQuery method chains.</p>
+            <p>The fact that the functor distributes over composition (<b>Figure 14</b>) suggests that jQuery methods using <code>jQuery.map</code> with composed <b>Html</b> morphisms can be relied upon to behave identically to chains of their transported <b>Jqry</b> morphism counterparts. The reader may recognize this simply as loop fusion. With a rigorous understanding of which <b>Jqry</b> morphisms can be fused we can begin to define a standard and helper libraries to assist the end user in optimizing their jQuery method chains.</p>
           </div>
           <div class="span7">
             <pre class="prettyprint linenums stack distribute-composition-code">
-compose(functor(a), functor(b)) == functor(compose(a, b));
-$.compose($.fn.a, $.fn.b)       == functor(compose(a, b));
-jqryObject.b().a()              == $.map(jqryObject, compose(a, b));
+cmps(F(a), F(b))       == F(cmps(a, b));
+$.cmps($.fn.a, $.fn.b) == F(cmps(a, b));
+jqryObject.b().a()     == jQuery.map(jqryObject, cmps(a, b));
 <div class="figure"><b>Figure 14 </b></div></pre>
             <div class="span7 maths" id="distribute-composition">
               <div>
@@ -314,21 +314,33 @@ jqryObject.b().a()              == $.map(jqryObject, compose(a, b));
         <div class="row-fluid border-left">
           <div class="span5 text-block">
             <h3><span class="icon-signin"></span>Stuck in the Middle</h3>
-            <p>jQuery's primary function, <code>jQuery</code> or <code>$</code>, is actually a proxy to the primary jQuery object constructor <code>jQuery.fn.init</code>. The objects created using the function with the <code>new</code> operator have as their prototype <code>jQuery.fn</code> which is why defining <b>Jqry</b> morphisms on <code>$.fn</code> ensures that the <code>this</code> value will be correct when they are invoked.</p>
+            <p><b>Figure 15</b> shows the default prototype chain for jQuery objects. In <b>equation 1</b> the default prototype lookup is altered to mirror <b>equation 2</b> where the proxy object "captures" the prototype lookup (sigma <em>f</em>) by defining all the function properties on <code>jQuery.fn</code>. When this happens the proxy can record the number of invocations made that could be optimized (<b>Jqry</b> morphisms) and at some threshold warn the user.</p>
           </div>
           <div class="span7 maths" id="prototype-chain-proxy">
             <div>
               <div>
+                <div class="figure"><b>Figure 15</b></div>
                 <img src="img/proxy.png" />
               </div>
             </div>
           </div>
         </div>
 
-        <div class="row-fluid border-right">
-          <div class="span7 text-block">
+        <div class="row-fluid border-left">
+          <div class="span5 text-block">
             <h3><span class="icon-github-sign"></span>Sample Implementation</h3>
             <p>link to github source, mention automatic optimization attempt, warning only split method calls, drop in include</p>
+          </div>
+          <div class="span7">
+            <pre class="prettyprint linenums" >
+<span class="js2-external-variable">jQuery</span>.fn.<span class="function-name">init</span> = <span class="keyword">function</span>(<span class="js2-function-param">selector</span>, <span class="js2-function-param">context</span>, <span class="js2-function-param">rootjQuery</span>){
+  <span class="comment">// create a new proxy for each jQuery Object
+</span>  <span class="js2-external-variable">jQuery</span>.fn.init.prototype = <span class="keyword">new</span> jQuery.WarningProxy();
+
+  <span class="comment">// instantiate the new jQuery object as normal
+</span>  <span class="keyword">return</span> <span class="keyword">new</span> jQuery.fn.init(selector, context, rootjQuery);
+};            </pre>
+
           </div>
         </div>
 
