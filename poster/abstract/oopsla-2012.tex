@@ -96,16 +96,28 @@ The goal of introducing category theory is to establish a more rigorous definiti
 
 \textbf{Html} is the category of objects as HTMLElements provided by any standards compliant JavaScript DOM API \cite{bib:htmlelement, bib:all-htmlelements} and morphisms as JavaScript functions from HTMLElements to HTMLElements. Meanwhile, \textbf{Jqry} is the category of jQuery objects wrapping HTMLElements and morphisms as JavaScript methods defined on jQuery objects that return jQuery objects. Each can easily be shown to satisfy the category requirements of identity, composition, and closure under composition.
 
-With the categories in place satifying the functor laws in mapping from \textbf{Html} to \textbf{Jqry} provides the concrete set of JavaScript functions necessary to proceed with optimizing jQuery method chains. Identity is trivial but preserving composition is the central insight.
+To complement the categories we define a mapping between them, from \textbf{Html} to \textbf{Jqry}, which delivers on the promise of a concrete set of JavaScript functions necessary to proceed with optimizing jQuery method chains. Specifically, if it can be shown that composition is preserved when morphisms from \textbf{Html} are translated into \textbf{Jqry} using jQuery's \verb|map| it can also be shown that the chained \textbf{Jqry} equivelants can be replaced by a single composed \textbf{Html} morphism translated into \textbf{Jqry} (Figure \ref{fig:compose}).
+
+\begin{figure}[!ht]
+\small
+\begin{verbatim}
+var foo = jQuery( "#foo" );
+
+assert(foo.F().G() == jQuery.map(foo, cmps(f, g)));
+\end{verbatim}
+\nocaptionrule \caption{Preserving composition}
+\label{fig:compose}
+\end{figure}
+
 
 \section{A Standard to Facilitate Optimization}
 
-Given that the loop fusion optimization requires the composition of at least two morphisms from \textbf{Html} and that functionality of those morphisms is always provided to the end user as the lifted version that exists in \textbf{Jqry}, we propose the following guidelines.
+Given that the loop fusion optimization requires the composition of at least two morphisms from \textbf{Html} and that functionality of those morphisms is always provided to the end user as the translated version that exists in \textbf{Jqry}, we propose the following guidelines.
 
 \begin{enumerate}
-  \item \label{item:standard-1} All methods defined on the jQuery object prototype \verb|jQuery.fn| that leverage \verb|jQuery.map| to lift an \textbf{Html} morphism into \textbf{Jqry} must provide the underlying morphism as a property for end users. Since the behavior of a given jQuery method is often too complex for the end user to determine if it meets the criteria for loop fusion, this rightly places the onus on the developers of the jQuery methods to determine and provide the necessary JavaScript function to the end user for optimization in their applications.
-  \item \label{item:standard-2} All properties defined for this purpose should exist on the jQuery method itself to avoid confusion among users wishing to optimize their method chains. We propose \verb|composable| as the property name. This guarantees that jQuery methods remain the discreet units of functionality extension that they are today, and the proposed property name is semantically useful.
-  \item \label{item:standard-3}Developers should, wherever possible, document and test both the \textbf{Html} morphism and its \textbf{Jqry} incarnation as discrete pieces of functionality to ensure that each \textbf{Html} morphism works independent of its \textbf{Jqry} counterpart. This ensures that the individual properties of both the \textbf{Jqry} and \textbf{Html} morphisms will persist across revisions to both.
+  \item \label{item:standard-1} All methods defined on the jQuery object prototype \verb|jQuery.fn| should leverage \verb|jQuery.map| to lift an \textbf{Html} morphism into \textbf{Jqry}. In addition to setting the groundwork for providing the underlying \textbf{Html} morphism this enforces consistency and readability so that when the morphism isn't provided seperately end users can attempt to provide their own.
+  \item \label{item:standard-2} All methods defined for this purpose should expose the underlying \textbf{Html} morphism as the \verb|composable| property on the jQuery method itself. This function should return a function with it's arguments partially applied that will expect only an HTMLElement. Providing a consistent property makes fusion easier for the end user and enables automatic tooling like the sample identification library detailed below.
+  \item \label{item:standard-3}Developers should, wherever possible, document and test the performance of both the \textbf{Html} morphism and its \textbf{Jqry} incarnation. This ensures that the work performed in the name of performance will indeed yield the benefits that the end user will expect.
 \end{enumerate}
 
 To assist jQuery method developers in effecting the above we also propose a small helper function that properly applies \verb|map| to an \textbf{Html} morphism, properly forwards arguments in addition to the initial \textbf{HTMLElement} argument, and sets the \verb|composable| attribute. See Appendix C.
