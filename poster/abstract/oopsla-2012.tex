@@ -110,6 +110,10 @@ assert(foo.F().G() == jQuery.map(foo, cmps(f, g)));
 \end{figure}
 
 
+\section{Initial Experimental Results}
+
+[\textbf{TODO}] simple performance examples illustrating fusion benefits. \href{http://jsperf.com/lazy-loop-fusion-vs-traditional-method-chaning/5}{Sample}
+
 \section{A Standard to Facilitate Optimization}
 
 Given that the loop fusion optimization requires the composition of at least two morphisms from \textbf{Html} and that functionality of those morphisms is always provided to the end user as the translated version that exists in \textbf{Jqry}, we propose the following guidelines.
@@ -120,15 +124,11 @@ Given that the loop fusion optimization requires the composition of at least two
   \item \label{item:standard-3}Developers should, wherever possible, document and test the performance of both the \textbf{Html} morphism and its \textbf{Jqry} incarnation. This ensures that the work performed in the name of performance will indeed yield the benefits that the end user will expect.
 \end{enumerate}
 
-To assist jQuery method developers in effecting the above we also propose a small helper function that properly applies \verb|map| to an \textbf{Html} morphism, properly forwards arguments in addition to the initial \textbf{HTMLElement} argument, and sets the \verb|composable| attribute. See Appendix C.
+Adoption of this standard by jQuery plugin developers and the core development team will provide end users a clear path to optimizing large chains of methods, but for existing applications knowing when and where to optimize using this technique is yet left unaddressed.
 
 \section{Library Aided Optimization} \label{sec:library-aided-optimization}
 
 The reader will note that the guidelines do not attempt to differentiate the optimizable jQuery methods in any appreciable fashion other than the the possible existence of the \verb|composable| property. This is a deliberate omission in preference to an automatic identification of chains with two or more methods that define the \verb|composable| property. In fact it is possible to automatically fuse the underlying JavaScript functions but this incurs a small additional cognitive overhead and an as yet unresolved performance degradation (See Appendix D).\\
-
-[\textbf{TODO}] further discuss automatic fusion and possible benefits to end users.
-
-[\textbf{TODO}] explore the reasons for the performance degredation with the automatic approach as it may be relevant to the hand fused approach.\\
 
 Instead we propose a small library that will log a warning any time two or more methods are invoked in sequence when each provides the \verb|composable| property. Additionally, it will log a warning when two or more of these methods occur in a method chain but are not adjacent. While more detail on one possible implementation is provided in Appendix E, a short explanation here may aid interested parties in creating their own implementation.
 
@@ -143,18 +143,11 @@ Newly instantiated jQuery objects derive the bulk of their functionality from th
 \end{equation}
 \end{figure}
 
-[\textbf{TODO}] add diagram to illustrate prototype chain alteration
-\\
-
 Taking \begin{math}\xrightharpoonup{f}\end{math} to represent the automatic prototype look-up of \begin{math}f\end{math} on the target, and \begin{math}\xmapsto{f}\end{math} to represent a invocation of \begin{math}f\end{math} on the target by the source object we have diagram \ref{eq:jquery-default} as the default jQuery behavior and diagram \ref{eq:jquery-with-proxy} as the desired behavior.
 
 The \begin{math}Proxy\end{math} object must define it's own version of each and every function property of the \begin{math}jQuery.fn\end{math} prototype object. This allows it to count invocations of those functions and for any count greater than one raise a warning. It also allows it to invoke the method of the same name on the \begin{math}jQuery.fn\end{math} when no count is recorded, IE \begin{math}\xmapsto{f}\end{math}. Additionally the size of the jQuery object-set can be taken into account as part of configuration, as small sets of objects won't see the same benefits from composition.
 
 The primary advantage of this approach is that it is entirely unobtrusive and requires nothing more than the inclusion of the library in an HTML document following the inclusion of jQuery itself. In this way it encourages developer adoption through ease of use.
-
-\section{Initial Experimental Results}
-
-[\textbf{TODO}] simple performance examples illustrating fusion benefits. \href{http://jsperf.com/lazy-loop-fusion-vs-traditional-method-chaning/5}{Sample}
 
 \section{Conclusion}
 
