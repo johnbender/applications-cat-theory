@@ -35,6 +35,7 @@
 \usepackage{mathtools}
 \usepackage[all]{xy}
 \usepackage{url}
+\usepackage{float}
 
 \begin{document}
 
@@ -98,7 +99,7 @@ The goal of introducing category theory is to establish a more rigorous definiti
 
 To complement the categories we define a mapping between them, from \textbf{Html} to \textbf{Jqry}, which delivers on the promise of a concrete set of JavaScript functions necessary to proceed with optimizing jQuery method chains. Specifically, if it can be shown that composition is preserved when morphisms from \textbf{Html} are translated into \textbf{Jqry} using jQuery's \verb|map| it can also be shown that the chained \textbf{Jqry} equivelants can be replaced by a single composed \textbf{Html} morphism translated into \textbf{Jqry} (Figure \ref{fig:compose}).
 
-\begin{figure}[!ht]
+\begin{figure}
 \small
 \begin{verbatim}
 var foo = jQuery( "#foo" );
@@ -146,13 +147,13 @@ Taking \begin{math}\xmapsto{f_{\sigma}}\end{math} to represent an automatic prot
 
 \section{Experimental Results}
 
-Initial performance tests suggest that smaller jQuery object-sets and faster (generally less complex) \textbf{Html} morphisms are the best candidates for fusion as described here \cite{bib:perf}. This fits with intuition in that the overhead associated with loops in the form of counter increments and array access makes up a larger portion of the execution effort when there is less activity overall. More use cases with varying set sizes are required to get a better understanding of the best possible configuration for composing these morphisms, and this data will inform the configuration of the warning proxy library.
+Initial performance tests suggest that smaller jQuery object-sets and faster (generally less complex) \textbf{Html} morphisms are the best candidates for fusion as described here \cite{bib:perf}. This fits with intuition in that the overhead associated with loops in the form of counter increments and array access makes up a larger portion of the execution effort when there is less activity overall. More use cases with varying set sizes are required to get a better understanding of the best possible configuration for composing these morphisms, and this data will inform the configuration of the warning thresholds in the proxy library.
 
 In addition, more work must be done to understand the real world benefit and implication of these improvements for large projects depending on jQuery's fluent interface. How often optimizable method chains arise in a typical jQuery application and whether the optimizations make up a significant portion of overall performance remains to be seen.
 
 \section{Conclusion}
 
-Here we have clearly defined a common idiom in JavaScript using the jQuery library that can be targeted for performance optimization with a minimum of effort by developers. In addition we have established a small set of guidelines that jQuery extenders and plug-in authors can use to assist the consumers of their software in performing this optimization and provided the framework for an unobtrusive library that can automatically identify areas of potential performance degradation. In future work we hope to pursue the automatic optimization of jQuery method chains using lazy semantics to further reduce developer involvement while continuing to realize the advantages of loop fusion.
+By establishing a simple set of guidelines and introducing easy to use tools we hope to provide developers maintaining jQuery applictions, counted in the hundreds of thousands, with a quick and easy performance ``win''. While the early performance data is encouraging, especially when considering that the common use patterns of jQuery developers trend toward small sets of DOM elements, more data must be gathered before declaring victory over the performance leak in jQuery's fluent interface.
 
 \bibliographystyle{abbrvnat}
 
