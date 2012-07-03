@@ -1,5 +1,7 @@
 var suite = new Benchmark.Suite;
 
+$( "div" ).removeAttrWithCall( "foo" );
+
 Benchmark.prototype.setup = function() {
 	// cache the test sets
 	window.testSet = $( "[data-test]" );
