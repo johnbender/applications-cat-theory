@@ -1,4 +1,4 @@
-$(function() {
+function defineRemoveAttr() {
 	var rspace = /\s+/,
 		rboolean = /^(?:autofocus|autoplay|async|checked|controls|defer|disabled|hidden|loop|multiple|open|readonly|required|scoped|selected)$/i,
 		getSetAttribute = jQuery.support.getSetAttribute;
@@ -131,5 +131,4 @@ $(function() {
 			}
 		}
 	});
-
-});
+}

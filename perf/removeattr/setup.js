@@ -1,4 +1,6 @@
-$(function() {
+window.onload = function() {
+	window.defineRemoveAttr();
+
 	for( var i = 0; i <= (window.testElementCount || 100); i++ ){
 		var div = document.createElement("div");
 		div.setAttribute("data-test", "true");
@@ -48,4 +50,4 @@ $(function() {
 
 		return this;
 	};
-});
+};
