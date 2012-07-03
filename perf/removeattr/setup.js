@@ -1,4 +1,7 @@
+var oldLoad = window.onload || function() {};
 window.onload = function() {
+	oldLoad.apply(window, arguments);
+	
 	window.defineRemoveAttr();
 
 	for( var i = 0; i <= (window.testElementCount || 100); i++ ){
