@@ -75,7 +75,7 @@
    breaklines=true,
    showtabs=false,
    captionpos=b,
-   numbers=left,
+  numbers=left,
    numberstyle=\codesize\color{darkgray},
    numbersep=3pt
 }
@@ -115,7 +115,7 @@ JavaScript, Category Theory, Loop Fusion, Optimization
 
 JavaScript that leverages the jQuery library can often be identified by its fluency. That is, users are encouraged to make alterations to jQuery objects by ``chaining'' methods and jQuery extension authors are counseled to always return the altered jQuery object to facilitate this form of serial method invocation \cite{bib:chaining}. In Listing \ref{lst:chain-sample}, all \textbf{HTMLDivElement}s (DOM elements hereafter) in the document are retrieved using the \verb|"div"| CSS selector and used to instantiate a jQuery ``object-set''. They are then hidden, altered to remove the \verb|data-foo| attribute, and shown again. Each method invocation, \verb|hide|, \verb|addClass|, and \verb|show| alters \textit{all} the elements in the jQuery object-set and then provides them for the next method to do the same. More concretely, if \begin{math}n\end{math} methods of this form are invoked in sequence it will require \begin{math}n\end{math} full iterations over the object-set. This presents an opportunity to exploit loop fusion for a possible peformance gain.
 
-Additionally many of the methods that perform element manipulations include user friendly additional invocation patterns. Listing \ref{lst:user-friendly} shows two functionallty equivelant examples for the \verb|removeAttr| method. To support the second example, the method must parse the first argument in both cases to check for a whitespace delimitted list. Given that this is a common occurence in the library's element manipulation methods, this too represents an opportunity for performance improvements.
+Additionally many of the methods that perform element manipulations include user friendly extra invocation patterns. Listing \ref{lst:user-friendly} shows two functionally equivelant examples for the \verb|removeAttr| method. To support the second example, the method must parse the first argument in both cases to check for a whitespace delimitted list. Given that this is a common occurence in the library's element manipulation methods, this too represents an opportunity for performance improvements.
 
 In the interest of exploiting these two opportunities for improvement we introduce the following:
 
@@ -139,37 +139,27 @@ In the interest of exploiting these two opportunities for improvement we introdu
 ]{js/user-friendly.js}
 \end{lstlisting}
 
-\section{jQuery Object Method Definitions}
+\section{jQuery Object Methods}
 
-To facilitate understanding of the machinery that underpins jQuery methods, it's useful to understand the two general forms that jQuery methods take when operating on the entire set of elements. The first iterates over the jQuery object-set and relies on side effects to communicate alterations of each constituent element back into the the parent jQuery object (See Appendix A for more). The second maps JavaScript functions over the \textbf{HTMLElement}s belonging to the jQuery object-set. Hereafter referred to as the map-form, this is the form we will address during the couse of the paper. Figure \ref{fig:map-form} illustrates a simple example that uses the jQuery method \verb|map|.
+A short discussion of two important attributes required for the construction of jQuery methods will aid in understanding the categories to be defined. The first is the context in which jQuery methods are expected to operate. That is, the value of \verb|this| within jQuery methods is the jQuery object-set, a set of DOM elements. The second is that all jQuery methods must reach into the jQuery object-set and extract the DOM elements to perform any meaningful work. This is generally done on either the first element or the whole set depending on the method. For the purposes of our work we are primarily concerned with those methods that opperate on the wholes set. Listing \ref{fig:chain-sample} illustrates an example of a method that exhibits these two attributes.
 
-\begin{top}
 \begin{lstinputlisting}[
     language=JavaScript,
     caption={Sources of Html objects},
     label={fig:chain-sample}
-]{js/map-form.js}
+]{js/while-form.js}
 \end{lstlisting}
-\end{top}
 
-As with all methods defined on \verb|jQuery.fn|, \verb|this| represents an instance of the jQuery object-set. The invocation of \verb|map| on \verb|this| takes a function argument, here a closure, and passes in the index and HTMLElement of each element in the jQuery object-set. Upon successful iteration over the whole set of elements the result is returned for any subsequent method calls in a chain.
+Listing \ref{fig:naive-add-class} shows a naive implementation of the \verb|addClass| method that meets these requirements. In it \verb|cls| is the name of a new CSS class to be added to the element and \verb|e| is each DOM element in the jQuery object-set.
 
-\begin{figure}[!ht]
-\small
-\begin{verbatim}
-jQuery.fn.naiveAddClass = function( cls ){
-  return this.map(function( i, e ) {
-    var old = e.getAttribute( "class" );
-    e.setAttribute( "class", old + " " + cls );
-    return e;
-  });
-};
-\end{verbatim}
-\nocaptionrule \caption{A naive reimplementation of \$.fn.addClass}
-\label{fig:naive-add-class}
-\end{figure}
+\begin{lstinputlisting}[
+    language=JavaScript,
+    caption={Sources of Html objects},
+    label={fig:naive-add-class}
+]{js/add-class.js}
+\end{lstlisting}
 
-Figure \ref{fig:naive-add-class} shows a naive reimplementation of the \verb|addClass| method using the map-form. Here \verb|cls| is the name of a new CSS class to be added to the element and \verb|e| is each HTMLElement in the jQuery object-set. As defined it can be used as a drop in replacement for the predefined version of \verb|addClass| provided by jQuery itself in \ref{fig:jquery-sample}.
+
 
 \section{Html, Jqry, and a Functor}
 
@@ -307,6 +297,8 @@ assert(functor(compose(f, g))
 \end{figure}
 
 Identity is trivial but composition warrants some explanation. On the left hand side the Functor promotes the already composed \textbf{Html} morphism using jQuery's \verb|map| method for operation on \verb|this|. On the right hand side each individual morphism is promoted and then \verb|jQuery.compose| performs the service of establishing \verb|this| for each execution. Most importantly the right hand side, as in Figure \ref{fig:sample-jqry-compose}, is functionally equivalent to the chaining of both methods promoted by the Functor. Given that the second Functor law holds we can say with complete confidence that two morphisms in \begin{math}hom(\mathbf{Html})\end{math} composed and then promoted into \begin{math}hom(\mathbf{Jqry})\end{math} are equivalent to the composition or chaining of two morphism in \begin{math}hom(\mathbf{Jqry})\end{math}. As a performance optimization the choice of the former is generally referred to as loop fusion or deforestation where the intermediate data structure is the mutated jQuery object set \cite{bib:deforestation}.
+
+\section{Relaxing The Functor Definition}
 
 \section{Haskell's List Functor}
 
