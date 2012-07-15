@@ -74,7 +74,7 @@
    breaklines=true,
    showtabs=false,
    captionpos=b,
-  numbers=left,
+   numbers=left,
    numberstyle=\codesize\color{darkgray},
    numbersep=3pt
 }
@@ -175,38 +175,30 @@ We define the objects of \textbf{Html} as the set of JavaScript objects that rep
 
 We define the morphisms of \textbf{Html} as the set of JavaScript functions taking a single DOM element JavaScript object and returning one of the same (that is any object in \begin{math}ob(\mathbf{Html})\end{math}). Generally these functions manipulate the DOM element through the dot method invocation of JavaScript objects (Listing \ref{fig:html-hom}).
 
+[TODO] consolidate into one large figure and use line number refs
+
+
 \begin{lstinputlisting}[
     language=JavaScript,
-    caption={Sample Html morphism},
     label={fig:html-hom}
 ]{js/html-hom.js}
 \end{lstlisting}
 
 Next, we define the identity function for \textbf{Html} in the manner you would expect:
 
-\begin{figure}[!ht]
-\small
-\begin{verbatim}
-function id( a ) {
-  return a;
-}
-\end{verbatim}
-\nocaptionrule \caption{The identity morphism in Html}
-\end{figure}
+\begin{lstinputlisting}[
+    language=JavaScript,
+    label={fig:html-id}
+]{js/html-id.js}
+\end{lstlisting}
 
 The composition operation is nearly as simple, returning a new closure that, when invoked, will process the function execution in the expected order (See Appendix B for an example):
 
-\begin{figure}[!ht]
-\small
-\begin{verbatim}
-function compose( f, g ){
-  return function( a ) {
-    return f(g(a));
-  };
-}
-\end{verbatim}
-\nocaptionrule \caption{The compose operation for Html}
-\end{figure}
+\begin{lstinputlisting}[
+    language=JavaScript,
+    label={fig:html-cmps}
+]{js/html-cmps.js}
+\end{lstlisting}
 
 To show associativity it suffices that, given different associations, the reduction remains the same, see Figure \ref{fig:html-associativity}.
 
@@ -495,6 +487,10 @@ A basic implementation of the object proxy described in Section \ref{sec:library
   MIT Press, Massachusets,
   First Edition,
   1991.
+\bibitem{bib:dom}
+  www.w3.org,
+  Document Object Model (DOM) Level 3 Core Specification,
+  \url{http://dev.w3.org/html5/spec/elements.html}
 \bibitem{bib:htmlelement}
   W3.org,
   HTMLElement interface specification,
