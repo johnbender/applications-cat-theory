@@ -39,7 +39,6 @@
 \usepackage{float}
 \usepackage{listings}
 
-
 \newcommand{\codesize}{\fontsize{7}{11}\selectfont}
 \newfloat{bottom}{b}{}
 \newfloat{top}{t}{}
@@ -141,7 +140,7 @@ In the interest of exploiting these two opportunities for improvement we introdu
 
 \section{jQuery Object Methods}
 
-A short discussion of two important attributes required for the construction of jQuery methods will aid in understanding the categories to be defined. The first is the context in which jQuery methods are expected to operate. That is, the value of \verb|this| within jQuery methods is the jQuery object-set, a set of DOM elements. The second is that all jQuery methods must reach into the jQuery object-set and extract the DOM elements to perform any meaningful work. This is generally done on either the first element or the whole set depending on the method. For the purposes of our work we are primarily concerned with those methods that opperate on the wholes set. Listing \ref{fig:chain-sample} illustrates an example of a method that exhibits these two attributes.
+A short discussion of two important attributes required in the construction of jQuery methods will aid in understanding the forthcoming categories. The first is the context in which jQuery methods are expected to operate. That is, the value of \verb|this| within jQuery methods is the jQuery object-set, a set of DOM elements. The second is that all jQuery methods must reach into the jQuery object-set and extract the DOM elements to perform any meaningful work. This is generally done on either the first element or the whole set depending on the method. For the purposes of our work we are primarily concerned with those methods that opperate on the wholes set. Listing \ref{fig:chain-sample} illustrates an example of a method that exhibits these two attributes.
 
 \begin{lstinputlisting}[
     language=JavaScript,
@@ -159,13 +158,29 @@ Listing \ref{fig:naive-add-class} shows a naive implementation of the \verb|addC
 ]{js/add-class.js}
 \end{lstlisting}
 
+The pattern is relatively simple but, as we will illustrate, it conflates two distinct types of opperations: those on DOM Elements and those on jQuery object-sets.
 
+\section{Categories}
 
-\section{Html, Jqry, and a Functor}
+To define \textbf{Html} and \textbf{Jqry} we must define the classes \begin{math}ob(\mathcal{C})\end{math} of objects and \begin{math}hom(\mathcal{C})\end{math} of morphisms for each. Then for both we must provide the identity morphism, show that composition is possible, show that composition is associative, and finally that each set of morphisms is closed under composition \cite[p. ~1]{bib:category-definition}. To start we will address \textbf{Html}.
 
-To define \textbf{Html} and \textbf{Jqry} we must define the classes \begin{math}ob(\mathbf{Html})\end{math} of objects and \begin{math}hom(\mathbf{Html})\end{math} of morphisms for each. Then for both we must show that an identity morphism exists, composition is possible for the morphisms, that composition is associative, and finally that the set of morphisms is closed under composition \cite[p. ~1]{bib:category-definition}.
+We define the objects of \textbf{Html} as the set of JavaScript objects that represent HTML elements outlined in the World Wide Web Constortium's HTML5 Element specification \cite{bib:dom}. More intuitively, the objects are the result of querying the DOM in browsers complying with the specification using a method like \verb|querySelector| (Listing \ref{fig:html-ob}).
 
-To start we define \begin{math}ob(\mathbf{Html})\end{math} as the set of the \textbf{HTMLElement} type and all its subclasses provided by a standards compliant browser's JavaScript API \cite{bib:htmlelement, bib:all-htmlelements}. We also define \begin{math}hom(\mathbf{Html})\end{math} as JavaScript functions from and to objects in \begin{math}ob(\mathbf{Html})\end{math}.
+\begin{lstinputlisting}[
+    language=JavaScript,
+    caption={Sources of Html objects},
+    label={fig:html-ob}
+]{js/html-ob.js}
+\end{lstlisting}
+
+We define the morphisms of \textbf{Html} as the set of JavaScript functions taking a single DOM element JavaScript object and returning one of the same (that is any object in \begin{math}ob(\mathbf{Html})\end{math}). Generally these functions manipulate the DOM element through the dot method invocation of JavaScript objects (Listing \ref{fig:html-hom}).
+
+\begin{lstinputlisting}[
+    language=JavaScript,
+    caption={Sample Html morphism},
+    label={fig:html-hom}
+]{js/html-hom.js}
+\end{lstlisting}
 
 Next, we define the identity function for \textbf{Html} in the manner you would expect:
 
