@@ -1,4 +1,4 @@
-jQuery.fn.sampleWhileForm = function(){
+@\label{fig-line:while-form-method-def}@jQuery.fn.sampleWhileForm = function(){
 	var length = this.length;
 
 	while( length-- ){
@@ -9,3 +9,6 @@ jQuery.fn.sampleWhileForm = function(){
 		// ...
 	}
 };
+
+// invocation
+@\label{fig-line:while-form-method-inv}@$( "div" ).sampleWhileForm();

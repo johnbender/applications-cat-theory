@@ -129,36 +129,29 @@ In the interest of exploiting these two opportunities for improvement we introdu
     caption={Sources of Html objects},
     label={lst:chain-sample}
 ]{js/chain-sample.js}
-\end{lstlisting}
+\end{lstinputlisting}
 
 \begin{lstinputlisting}[
     language=JavaScript,
     caption={User friendly overhead},
     label={lst:user-friendly}
 ]{js/user-friendly.js}
-\end{lstlisting}
+\end{lstinputlisting}
 
 \section{jQuery Object Methods}
 
-A short discussion of two important attributes required in the construction of jQuery methods will aid in understanding the forthcoming categories. The first is the context in which jQuery methods are expected to operate. That is, the value of \verb|this| within jQuery methods is the jQuery object-set, a set of DOM elements. The second is that all jQuery methods must reach into the jQuery object-set and extract the DOM elements to perform any meaningful work. This is generally done on either the first element or the whole set depending on the method. For the purposes of our work we are primarily concerned with those methods that opperate on the wholes set. Listing \ref{fig:chain-sample} illustrates an example of a method that exhibits these two attributes.
-
-\begin{lstinputlisting}[
-    language=JavaScript,
-    caption={Sources of Html objects},
-    label={fig:chain-sample}
-]{js/while-form.js}
-\end{lstlisting}
-
-Listing \ref{fig:naive-add-class} shows a naive implementation of the \verb|addClass| method that meets these requirements. In it \verb|cls| is the name of a new CSS class to be added to the element and \verb|e| is each DOM element in the jQuery object-set.
-
-\begin{lstinputlisting}[
-    language=JavaScript,
-    caption={Sources of Html objects},
-    label={fig:naive-add-class}
-]{js/add-class.js}
-\end{lstlisting}
+A short discussion of two important attributes required in the construction of jQuery methods will aid in understanding the forthcoming categories. The first is the context in which jQuery methods are expected to operate. That is, the value of \verb|this| within jQuery methods is an instance of a jQuery object-set, a set of DOM elements. Though that context can be set manually, its value is most often set by the simple act of defining it on the jQuery object prototype \verb|jQuery.fn| which then permits invocation directly on a jQuery object. The second is that all jQuery methods must reach into the jQuery object-set and extract the DOM elements to perform any meaningful work. This is generally done on either the first element or the whole set depending on the method. For the purposes of our work we are primarily concerned with those methods that opperate on the wholes set. In Listing \ref{fig:while-form} on line \ref{fig-line:while-form-method-def} is an example of a method that exhibits these two attributes, while line \ref{fig-line:while-form-method-inv} shows the invocation pattern that assures the context is properly set.
 
 The pattern is relatively simple but, as we will illustrate, it conflates two distinct types of opperations: those on DOM Elements and those on jQuery object-sets.
+
+\begin{lstinputlisting}[
+    language=JavaScript,
+    caption={Sources of Html objects},
+    label={fig:while-form},
+    escapeinside={@}{@}
+]{js/while-form.js}
+\end{lstinputlisting}
+
 
 \section{Categories}
 
@@ -171,9 +164,9 @@ We define the objects of \textbf{Html} as the set of JavaScript objects that rep
     caption={Sources of Html objects},
     label={fig:html-ob}
 ]{js/html-ob.js}
-\end{lstlisting}
+\end{lstinputlisting}
 
-We define the morphisms of \textbf{Html} as the set of JavaScript functions taking a single DOM element JavaScript object and returning one of the same (that is any object in \begin{math}ob(\mathbf{Html})\end{math}). Generally these functions manipulate the DOM element through the dot method invocation of JavaScript objects (Listing \ref{fig:html-hom}).
+We define the morphisms of \textbf{Html} as the set of JavaScript functions taking a single DOM element JavaScript object and returning one of the same (that is any object in \begin{math}ob(\mathbf{Html})\end{math}). Generally these functions manipulate the DOM element through the dot method invocation of JavaScript objects (e.g. Listing \ref{fig:html-hom}).
 
 [TODO] consolidate into one large figure and use line number refs
 
@@ -182,23 +175,16 @@ We define the morphisms of \textbf{Html} as the set of JavaScript functions taki
     language=JavaScript,
     label={fig:html-hom}
 ]{js/html-hom.js}
-\end{lstlisting}
+\end{lstinputlisting}
 
-Next, we define the identity function for \textbf{Html} in the manner you would expect:
-
-\begin{lstinputlisting}[
-    language=JavaScript,
-    label={fig:html-id}
-]{js/html-id.js}
-\end{lstlisting}
-
-The composition operation is nearly as simple, returning a new closure that, when invoked, will process the function execution in the expected order (See Appendix B for an example):
+Next, we define the identity function for \textbf{Html} in the manner you would expect (Listing \ref{fig:html-id-cmps}, line \ref{fig-line:html-id}). The composition operation is nearly as simple, returning a new closure that will process the function execution in the expected order (See Appendix B for an example):
 
 \begin{lstinputlisting}[
     language=JavaScript,
-    label={fig:html-cmps}
-]{js/html-cmps.js}
-\end{lstlisting}
+    label={fig:html-id-cmps},
+    escapeinside={@}{@}
+]{js/html-id-cmps.js}
+\end{lstinputlisting}
 
 To show associativity it suffices that, given different associations, the reduction remains the same, see Figure \ref{fig:html-associativity}.
 
@@ -221,7 +207,7 @@ f(g(h(x)))\ &= f(g(h(x)))\\
 \label{fig:html-associativity}
 \end{figure}
 
-Finally we know that the morphisms in \textbf{Html} are closed under composition because the source and target objects for each morphism both exist in \begin{math}ob(\mathbf{Html})\end{math} as \textbf{HTMLElement} or one of its subclasses.
+Finally we know that the morphisms in \textbf{Html} are closed under composition because the source and target objects for each morphism, as defined, both exist in \begin{math}ob(\mathbf{Html})\end{math}
 
 To define \textbf{Jqry} we must demonstrate the same properties. The class \begin{math}ob(\mathbf{Jqry})\end{math} has a single object, the type of the jQuery constructor, \textbf{jQuery}. The class \begin{math}hom(\mathbf{Jqry})\end{math} is all morphisms from \textbf{jQuery} to \textbf{jQuery}. As before we first define the identity function and then the composition operation in Figure \ref{fig:jquery-id-compose}.
 
