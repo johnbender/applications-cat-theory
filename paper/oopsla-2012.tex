@@ -126,7 +126,7 @@ In the interest of exploiting these two opportunities for improvement we introdu
 
 \begin{lstinputlisting}[
     language=JavaScript,
-    caption={Sources of Html objects},
+    caption={Sample method chain},
     label={lst:chain-sample}
 ]{js/chain-sample.js}
 \end{lstinputlisting}
@@ -146,7 +146,7 @@ The pattern is relatively simple but, as we will illustrate, it conflates two di
 
 \begin{lstinputlisting}[
     language=JavaScript,
-    caption={Sources of Html objects},
+    caption={Sample jQuery method},
     label={fig:while-form},
     escapeinside={@}{@}
 ]{js/while-form.js}
@@ -169,7 +169,6 @@ We define the objects of \textbf{Html} as the set of JavaScript objects that rep
 We define the morphisms of \textbf{Html} as the set of JavaScript functions taking a single DOM element JavaScript object and returning one of the same (that is any object in \begin{math}ob(\mathbf{Html})\end{math}). Generally these functions manipulate the DOM element through the dot method invocation of JavaScript objects (e.g. Listing \ref{fig:html-hom}).
 
 [TODO] consolidate into one large figure and use line number refs
-
 
 \begin{lstinputlisting}[
     language=JavaScript,
@@ -209,24 +208,14 @@ f(g(h(x)))\ &= f(g(h(x)))\\
 
 Finally we know that the morphisms in \textbf{Html} are closed under composition because the source and target objects for each morphism, as defined, both exist in \begin{math}ob(\mathbf{Html})\end{math}
 
-To define \textbf{Jqry} we must demonstrate the same properties. The class \begin{math}ob(\mathbf{Jqry})\end{math} has a single object, the type of the jQuery constructor, \textbf{jQuery}. The class \begin{math}hom(\mathbf{Jqry})\end{math} is all morphisms from \textbf{jQuery} to \textbf{jQuery}. As before we first define the identity function and then the composition operation in Figure \ref{fig:jquery-id-compose}.
+To define \textbf{Jqry} we must demonstrate the same properties. The class \begin{math}ob(\mathbf{Jqry})\end{math} has a single object, the type of the jQuery constructor, \textbf{jQuery}. The class \begin{math}hom(\mathbf{Jqry})\end{math} is all morphisms from \textbf{jQuery} to \textbf{jQuery}. As before we first define the identity function and then the composition operation in Listing \ref{fig:jqry-id-cmps}.
 
-\begin{figure}[!ht]
-\small
-\begin{verbatim}
-jQuery.fn.id = function() {
-  return this;
-}
-
-jQuery.compose = function( f, g ){
-  return function() {
-    return f.call(g.call(this));
-  };
-}
-\end{verbatim}
-\nocaptionrule \caption{Identity and the compose operation for Jqry}
-\label{fig:jquery-id-compose}
-\end{figure}
+\begin{lstinputlisting}[
+    language=JavaScript,
+    label={fig:jqry-id-cmps},
+    escapeinside={@}{@}
+]{js/jqry-id-cmps.js}
+\end{lstinputlisting}
 
 These are distinct from their \textbf{Html} counterparts in that they ignore any parameters and rely on \verb|this| as an implicit parameter. This stems from the use of the morphisms in \textbf{Jqry} with the JavaScript dot notation which dictates the value of \verb|this| and will become important later when discussing the Functor from \textbf{Html} to \textbf{Jqry}.
 
