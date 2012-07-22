@@ -24,7 +24,7 @@
 \newfloat{bottom}{b}{}
 \newfloat{top}{t}{}
 
-\definecolor{lightgray}{rgb}{.9,.9,.9}
+n\definecolor{lightgray}{rgb}{.9,.9,.9}
 \definecolor{darkgray}{rgb}{.4,.4,.4}
 \definecolor{purple}{rgb}{0.65, 0.12, 0.82}
 
@@ -50,7 +50,7 @@
    showstringspaces=false,
    showspaces=false,
    numberstyle=\footnotesize,
-   numbersep=4pt,
+   numbersep=8pt,
    tabsize=2,
    breaklines=true,
    showtabs=false,
@@ -58,7 +58,9 @@
    numbers=left,
    xleftmargin=7pt,
    numberstyle=\codesize\color{darkgray},
-   numbersep=3pt
+   numbersep=3pt,
+   abovecaptionskip=5pt,
+   belowcaptionskip=0pt
 }
 
 \begin{document}
@@ -71,7 +73,7 @@
 % 'preprint' option specified.
 \preprintfooter{Identifying jQuery Performance Optimizations}
 
-\title{Automatically Identifying Performance Optimizations for jQuery Based JavaScript Applications}
+\title{Applications of Category Theory in jQuery Based JavaScript}
 
 \authorinfo{John Bender}
            {john.m.bender@gmail.com}
@@ -151,6 +153,7 @@ We define the morphisms of \textbf{Html} as the set of JavaScript functions taki
 
 Next, we define the identity function for \textbf{Html} in the manner you would expect (Listing \ref{lst:html-id-cmps}, line \ref{lst-line:html-id}). The composition operation is nearly as simple, returning a new closure that will process the function execution in the expected order (See Appendix B for an example):
 
+\begin{bottom}
 \begin{lstinputlisting}[
     language=JavaScript,
     caption={Identity and Composition in Html},
@@ -158,6 +161,7 @@ Next, we define the identity function for \textbf{Html} in the manner you would 
     escapeinside={@}{@}
 ]{js/html-id-cmps.js}
 \end{lstinputlisting}
+\end{bottom}
 
 To show associativity it suffices that the reduction remains the same for different associations (Figure \ref{fig:html-associativity}) and we know that the morphisms in \textbf{Html} are closed under composition because the source and target objects for each morphism both exist in \begin{math}ob(\mathbf{Html})\end{math}
 
@@ -175,6 +179,7 @@ f(g(h(x)))\ &= f(g(h(x)))\\
 
 To define \textbf{Jqry} we must demonstrate the same properties. The class \begin{math}ob(\mathbf{Jqry})\end{math} has as its members all jQuery objects. The class \begin{math}hom(\mathbf{Jqry})\end{math} is all morphisms from jQuery objecst to jQuer y objects. As before we first define the identity function and then the composition operation (Listing \ref{lst:jqry-id-cmps}).
 
+\begin{bottom}
 \begin{lstinputlisting}[
     language=JavaScript,
     caption={Identity and Composition in Jqry},
@@ -182,11 +187,13 @@ To define \textbf{Jqry} we must demonstrate the same properties. The class \begi
     escapeinside={@}{@}
 ]{js/jqry-id-cmps.js}
 \end{lstinputlisting}
+\end{bottom}
 
 Identity in \textbf{Jqry} is different from its \textbf{Html} counterpart in that it relys on \verb|this| as an implicit parameter. \verb|jQuery.cmps| leverages JavaScript's \verb|apply| to manually define the context in which its argument functions will run, thereby simulating the context equivelant of argument passing. It is defined in the \verb|jQuery| namespace only for the sake of differentiating it from \verb|cmps| in later listings and it needs no context for operation. Again, we take associativity to be evident by reduction and we know that \textbf{Jqry} morphisms are closed under composition because the source and target objects are the same.
 
 Next we define a Functor from \textbf{Html} to \textbf{Jqry} which consists of two operations. The first is the invocation of the \verb|jQuery| function with a raw DOM element which returns a jQuery object set wrapping the element (Listing \ref{lst:functor}, line \ref{lst-line:ob}). The second uses jQuery's \verb|map| helper inside a new closure that expects a jQuery object as its execution context. \verb|map| will pull each DOM element out of the jQuery object-set (\verb|this|) and pass it to the callback provided as its second argument.
 
+\begin{bottom}
 \begin{lstinputlisting}[
     language=JavaScript,
     caption={Functor from Html to Jqry},
@@ -194,19 +201,21 @@ Next we define a Functor from \textbf{Html} to \textbf{Jqry} which consists of t
     escapeinside={@}{@}
 ]{js/functor.js}
 \end{lstinputlisting}
+\end{bottom}
 
 The Functor must also preserve identity and composition \cite[p. ~36]{bib:category-definition}. The preservation of identity is clear. Wrapping a DOM element returned by the identity \textbf{Html} morphism with the functor's first operation produces the same result as invoking the \textbf{Jqry} identity morphism on an already wrapped DOM element (Listing \ref{lst:functor-laws}, Line \ref{lst-line:functor-law-id}).
 
 Preserving composition is more subtle. While the final results of either side of the equivelance (Listing \ref{lst:functor-laws} line \ref{lst-line:functor-law-cmps}) will be identical, the side effects of DOM manipulations along with the iterative nature of jQuery methods mean that the order of invocation can be significant. In the original method chain example (Listing \ref{lst:chain-sample}) the invocation order will perform each opperation on the complete set of elements one method at a time.  If it is important to the developer that all the elements be hidden before performing any operations, composition of the \textbf{Html} morphisms violates the equivelance. Alternately if the developer only cares that the opperations take place on each element in the original order then the equivelance holds. We provide more detail on this in Section \ref{sec:fusing-method-chains}.
 
+\begin{bottom}
 \begin{lstinputlisting}[
     language=JavaScript,
     caption={Satisfying the Functor Laws},
     label={lst:functor-laws},
     escapeinside={@}{@}
 ]{js/functor-laws.js}
-\vspace{-10pt}
 \end{lstinputlisting}
+\end{bottom}
 
 \section{Splitting jQuery in Two}
 
@@ -217,19 +226,19 @@ A close examination of the functor exposes an interesting relationship between \
 \begin{equation}
 F : \mathbf{Html} \to \mathbf{Jqry}
 \end{equation}
-\vspace{-10pt}
+\vspace{-15pt}
 \begin{equation}
 ob(\mathbf{Jqry}_{h}) = ob(\mathbf{Jqry})
 \end{equation}
-\vspace{-10pt}
+\vspace{-15pt}
 \begin{equation}
 hom(\mathbf{Jqry}_{h}) = \{ F(f)\ |\ f \in hom(\mathbf{Html}) \}
 \end{equation}
-\vspace{-10pt}
+\vspace{-15pt}
 \begin{equation}
 hom(\mathbf{Jqry}_{h}) \subsetneq hom(\mathbf{Jqry})
 \end{equation}
-\vspace{-10pt}
+\vspace{-15pt}
 \caption{Jqry Subcategory Dependency}
 \vspace{-10pt}
 \label{fig:dependent-sub-cat}
@@ -237,13 +246,28 @@ hom(\mathbf{Jqry}_{h}) \subsetneq hom(\mathbf{Jqry})
 
 Though this relationship clearly exists in the abstract, the implementation of DOM manipulation methods in jQuery rarely exemplifies it. The code that would otherwise be defined in an \textbf{Html} morphism is most often found mixed into a \textbf{Jqry} morphism. As an example, the \verb|jQuery.fn.removeProp| method mixes the deletion of DOM element properties with the extraction of those elements from the jQuery object-set (Listing \ref{lst:removeprop}, line \ref{lst-line:remove-prop-jqry}). Deconstructing the mixed together methods along the lines suggested by the dependency presents an opportunity for improvement on a few fronts.
 
+\begin{top}
 \begin{lstinputlisting}[
     language=JavaScript,
     caption={Satisfying the Functor Laws},
     label={lst:removeprop},
     escapeinside={@}{@}
 ]{js/removeprop.js}
+\vspace{-15pt}
 \end{lstinputlisting}
+\end{top}
+
+One such improvement comes as a consequence of separating the \textbf{Html} morphism from each morphism in \begin{math}hom(\mathbf{Jqry}_{h})\end{math} and providing them to the developer directly as a subset of the jQuery API. That is, if the developer only needs the \textbf{Html} morphism because they are willing to use the standard DOM API for element selection along with JavaScript's basic looping constructs it's possible to significantly reduce the JavaScript payload size.
+
+[TODO] find actual payload reduction for the library or some significant subset
+
+[TODO] discuss the overhead in additional file size for the existing library
+
+In addition to a possible payload reduction, there are two possible performance improvements that fall out of this separation. The first is a small reduction in the overhead imposed by rewrapping DOM elements with the \verb|jQuery| method which is a common idiom in jQuery applications. In the looping methods (e.g. \verb|jQuery.map| and \verb|jQuery.each|) and event bindings the object passed into the callback is a raw DOM element and developers often create a one element jQuery object-set to gain access to the easier-to-use DOM manipulations. Assuming that these same DOM manipulations are available, the ``rewrapping'' can be avoided thereby improving performance.
+
+[TODO] gather performance data for wrapping overhead
+
+The second performance improvement requires some additional constraint on the roles of both \textbf{Jqry} and \textbf{Html} morphisms.
 
 \section{Fusing Method Chains}\label{sec:fusing-method-chains}
 
@@ -346,10 +370,6 @@ Taking \begin{math}\xrightharpoonup{f}\end{math} to represent the automatic prot
 The \begin{math}Proxy\end{math} object must define it's own version of each and every function property of the \begin{math}jQuery.fn\end{math} prototype object. This allows it to count invocations of those functions and for any count greater than one raise a warning. It also allows it to invoke the method of the same name on the \begin{math}jQuery.fn\end{math} when no count is recorded, IE \begin{math}\xmapsto{f}\end{math}. Additionally the size of the jQuery object-set can be taken into account as part of configuration, as small sets of objects won't see the same benefits from composition.
 
 The primary advantage of this approach is that it is entirely unobtrusive and requires nothing more than the inclusion of the library in an HTML document following the inclusion of jQuery itself. In this way it encourages developer adoption through ease of use.
-
-\section{Initial Experimental Results}
-
-[\textbf{TODO}] simple performance examples illustrating fusion benefits. \href{http://jsperf.com/lazy-loop-fusion-vs-traditional-method-chaning/5}{Sample}
 
 \section{jQuery Project Results}
 
