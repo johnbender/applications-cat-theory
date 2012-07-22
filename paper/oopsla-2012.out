@@ -1,17 +1,19 @@
-\BOOKMARK [1][-]{section.1}{Introduction}{}
-\BOOKMARK [1][-]{section.2}{jQuery Object Methods}{}
-\BOOKMARK [1][-]{section.3}{Categories}{}
-\BOOKMARK [1][-]{section.4}{Relaxing The Functor Definition}{}
-\BOOKMARK [1][-]{section.5}{Haskell's List Functor}{}
-\BOOKMARK [1][-]{section.6}{Guidelines to Facilitate Optimization}{}
-\BOOKMARK [1][-]{section.7}{Library Aided Optimization}{}
-\BOOKMARK [1][-]{section.8}{Initial Experimental Results}{}
-\BOOKMARK [1][-]{section.9}{jQuery Project Results}{}
-\BOOKMARK [1][-]{section.10}{Client Project Results}{}
-\BOOKMARK [1][-]{section.11}{Further Work}{}
-\BOOKMARK [1][-]{section.12}{Conclusion}{}
-\BOOKMARK [1][-]{appendix.A}{Appendix A: Each-form}{}
-\BOOKMARK [1][-]{appendix.B}{Appendix B: Composition of Html Morphisms}{}
-\BOOKMARK [1][-]{appendix.C}{Appendix C: Mapable Helper Function}{}
-\BOOKMARK [1][-]{appendix.D}{Appendix D}{}
-\BOOKMARK [1][-]{appendix.E}{Appendix E}{}
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{jQuery Object Methods}{}% 2
+\BOOKMARK [1][-]{section.3}{Categories}{}% 3
+\BOOKMARK [1][-]{section.4}{Splitting jQuery in Two}{}% 4
+\BOOKMARK [1][-]{section.5}{Fused Method Chain Performance}{}% 5
+\BOOKMARK [1][-]{section.6}{Relaxing The Functor Definition}{}% 6
+\BOOKMARK [1][-]{section.7}{Haskell's List Functor}{}% 7
+\BOOKMARK [1][-]{section.8}{Guidelines to Facilitate Optimization}{}% 8
+\BOOKMARK [1][-]{section.9}{Library Aided Optimization}{}% 9
+\BOOKMARK [1][-]{section.10}{Initial Experimental Results}{}% 10
+\BOOKMARK [1][-]{section.11}{jQuery Project Results}{}% 11
+\BOOKMARK [1][-]{section.12}{Client Project Results}{}% 12
+\BOOKMARK [1][-]{section.13}{Further Work}{}% 13
+\BOOKMARK [1][-]{section.14}{Conclusion}{}% 14
+\BOOKMARK [1][-]{appendix.A}{Appendix A: Each-form}{}% 15
+\BOOKMARK [1][-]{appendix.B}{Appendix B: Composition of Html Morphisms}{}% 16
+\BOOKMARK [1][-]{appendix.C}{Appendix C: Mapable Helper Function}{}% 17
+\BOOKMARK [1][-]{appendix.D}{Appendix D}{}% 18
+\BOOKMARK [1][-]{appendix.E}{Appendix E}{}% 19

@@ -1,8 +1,8 @@
-@\label{fig-line:html-id}@function id( a ) {
+@\label{lst-line:html-id}@function id( a ) {
 	return a;
 }
 
-@\label{fig-line:html-cmps}@function compose( f, g ) {
+@\label{lst-line:html-cmps}@function cmps( f, g ) {
 	return function( a ) {
 		return f(g(a));
 	};
