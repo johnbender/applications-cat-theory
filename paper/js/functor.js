@@ -7,9 +7,3 @@
 		return jQuery.map(this, morphism);
 	};
 }
-
-@\label{fig-line:functor-hom-use}@jQuery.fn.sample = functor(function( elem ) {
-	// ...
-	// alteration of domElement
-	// ...
-});

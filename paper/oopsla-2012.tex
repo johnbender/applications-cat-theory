@@ -1,4 +1,4 @@
-\documentclass[preprint]{sigplanconf}
+\documentclass[preprint, leqno]{sigplanconf}
 \nocaptionrule
 
 % The following \documentclass options may be useful:
@@ -56,6 +56,7 @@
    showtabs=false,
    captionpos=b,
    numbers=left,
+   xleftmargin=7pt,
    numberstyle=\codesize\color{darkgray},
    numbersep=3pt
 }
@@ -184,7 +185,7 @@ To define \textbf{Jqry} we must demonstrate the same properties. The class \begi
 
 Identity in \textbf{Jqry} is different from its \textbf{Html} counterpart in that it relys on \verb|this| as an implicit parameter. \verb|jQuery.cmps| leverages JavaScript's \verb|apply| to manually define the context in which its argument functions will run, thereby simulating the context equivelant of argument passing. It is defined in the \verb|jQuery| namespace only for the sake of differentiating it from \verb|cmps| in later listings and it needs no context for operation. Again, we take associativity to be evident by reduction and we know that \textbf{Jqry} morphisms are closed under composition because the source and target objects are the same.
 
-Next we define a Functor from \textbf{Html} to \textbf{Jqry} which consists of two operations. The first is the invocation of the \verb|jQuery| function with a raw DOM element which returns a jQuery object set wrapping the element (Listing \ref{lst:functor}, line \ref{lst-line:ob}). The second use's jQuery's \verb|map| helper inside a new closure that expects a jQuery object as its execution context. \verb|map| will pull each DOM element out of the jQuery object-set (\verb|this|) and pass them to the function provided as the second argument.
+Next we define a Functor from \textbf{Html} to \textbf{Jqry} which consists of two operations. The first is the invocation of the \verb|jQuery| function with a raw DOM element which returns a jQuery object set wrapping the element (Listing \ref{lst:functor}, line \ref{lst-line:ob}). The second uses jQuery's \verb|map| helper inside a new closure that expects a jQuery object as its execution context. \verb|map| will pull each DOM element out of the jQuery object-set (\verb|this|) and pass it to the callback provided as its second argument.
 
 \begin{lstinputlisting}[
     language=JavaScript,
@@ -234,7 +235,7 @@ hom(\mathbf{Jqry}_{h}) \subsetneq hom(\mathbf{Jqry})
 \label{fig:dependent-sub-cat}
 \end{figure}
 
-Though this relationship clearly exists in the abstract, the implementation of DOM manipulation methods in jQuery rarely exemplifies it. The code that would otherwise be defined in an \textbf{Html} morphism is most often found mixed into a \textbf{Jqry} morphism. As an example, the \verb|jQuery.fn.removeProp| method mixes the deletion of DOM element properties with the extraction of those elements from the jQuery object-set (Listing \ref{lst:removeprop}, line \ref{lst-line:remove-prop-jqry}). Deconstructing the mixed together methods along the lines suggested by the dependency (Listing \ref{lst:removeprop}, line \ref{lst-line:remove-prop-html}) presents an opportunity for improvement on a few fronts.
+Though this relationship clearly exists in the abstract, the implementation of DOM manipulation methods in jQuery rarely exemplifies it. The code that would otherwise be defined in an \textbf{Html} morphism is most often found mixed into a \textbf{Jqry} morphism. As an example, the \verb|jQuery.fn.removeProp| method mixes the deletion of DOM element properties with the extraction of those elements from the jQuery object-set (Listing \ref{lst:removeprop}, line \ref{lst-line:remove-prop-jqry}). Deconstructing the mixed together methods along the lines suggested by the dependency presents an opportunity for improvement on a few fronts.
 
 \begin{lstinputlisting}[
     language=JavaScript,

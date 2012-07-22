@@ -7,9 +7,3 @@
 		delete elem[ name ];
 	});
 };
-
-// exists in hom(Html)
-@\label{lst-line:remove-prop-html}@function removeProp( elem ) {
-	elem[ name ] = undefined;
-	delete elem[ name ];
-};
