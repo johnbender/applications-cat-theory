@@ -5,16 +5,20 @@ Benchmark.prototype.setup = function() {
 	window.testSetCurrent = jQuery( "[data-test]" );
 	window.testSetSplit = jqsplit( "[data-test]" );
 
-	window.testSetCurrent.wrap("<div></div>");
+	if( !window.testSetCurrent.parent().is( "body") ){
+		var wrapper = window.testSetCurrent.parent();
+		window.testSetCurrent.appendTo( "body" );
+		wrapper.remove();
+	}
 };
 
 // add tests
 suite
-	.add( 'unwrap (1.8)', function(){
-		window.testSetCurrent.unwrap();
+	.add( 'wrapAll with string (1.8)', function(){
+		window.testSetCurrent.wrapAll( "<div></div>" );
 	})
-	.add( 'unwrap (split)', function() {
-		window.testSetSplit.unwrap();
+	.add( 'wrapAll with string (split)', function() {
+		window.testSetSplit.wrapAll( "<div></div>" );
 	})
 	.on('complete', function() {
 		$( "#results" ).text('Results: Fastest is ' + this.filter('fastest').pluck('name'));
