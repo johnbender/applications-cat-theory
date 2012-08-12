@@ -24,7 +24,7 @@
 \newfloat{bottom}{b}{}
 \newfloat{top}{t}{}
 
-n\definecolor{lightgray}{rgb}{.9,.9,.9}
+\definecolor{lightgray}{rgb}{.9,.9,.9}
 \definecolor{darkgray}{rgb}{.4,.4,.4}
 \definecolor{purple}{rgb}{0.65, 0.12, 0.82}
 
@@ -73,7 +73,7 @@ n\definecolor{lightgray}{rgb}{.9,.9,.9}
 % 'preprint' option specified.
 \preprintfooter{Identifying jQuery Performance Optimizations}
 
-\title{Applications of Category Theory in jQuery Based JavaScript}
+\title{Applications of Category Theory in Modern Web Development}
 
 \authorinfo{John Bender}
            {john.m.bender@gmail.com}
@@ -108,6 +108,7 @@ In the interest of exploiting these two opportunities for improvement we introdu
 \item We construct a simple and unobtrusive utility for jQuery developers that will alert them to opportunities to optimize method chains and leverage the propsed API additions to improve application performance.
 \end{enumerate}
 
+\begin{bottom}
 \begin{lstinputlisting}[
     language=JavaScript,
     caption={Sample method chain},
@@ -121,6 +122,7 @@ In the interest of exploiting these two opportunities for improvement we introdu
     label={lst:user-friendly}
 ]{js/user-friendly.js}
 \end{lstinputlisting}
+\end{bottom}
 
 \section{jQuery Object Methods}
 
@@ -128,6 +130,7 @@ A short discussion of two important attributes required in the construction of j
 
 The pattern is relatively simple but, as we will illustrate, it conflates two distinct types of opperations: those on DOM Elements and those on jQuery object-sets.
 
+\begin{top}
 \begin{lstinputlisting}[
     language=JavaScript,
     caption={Sample jQuery method},
@@ -135,6 +138,7 @@ The pattern is relatively simple but, as we will illustrate, it conflates two di
     escapeinside={@}{@}
 ]{js/while-form.js}
 \end{lstinputlisting}
+\end{top}
 
 \section{Categories}
 
@@ -142,12 +146,14 @@ To define \textbf{Html} and \textbf{Jqry} we must define the classes \begin{math
 
 We define the objects of \textbf{Html} as the set of JavaScript objects that represent HTML elements outlined in the World Wide Web Constortium's HTML5 Element specification \cite{bib:dom}. More intuitively, the objects are the result of querying the DOM in browsers complying with the specification using a method like \verb|querySelector| (Listing \ref{lst:html-ob}).
 
+\begin{bottom}
 \begin{lstinputlisting}[
     language=JavaScript,
     caption={Sources of Html objects},
     label={lst:html-ob}
 ]{js/html-ob.js}
 \end{lstinputlisting}
+\end{bottom}
 
 We define the morphisms of \textbf{Html} as the set of JavaScript functions taking a single DOM element JavaScript object and returning one of the same (that is any object in \begin{math}ob(\mathbf{Html})\end{math}). Generally these functions manipulate the DOM element through the dot method invocation of JavaScript objects.
 
@@ -257,17 +263,19 @@ Though this relationship clearly exists in the abstract, the implementation of D
 \end{lstinputlisting}
 \end{top}
 
-One such improvement comes as a consequence of separating the \textbf{Html} morphism from each morphism in \begin{math}hom(\mathbf{Jqry}_{h})\end{math} and providing them to the developer directly as a subset of the jQuery API. That is, if the developer only needs the \textbf{Html} morphism because they are willing to use the standard DOM API for element selection along with JavaScript's basic looping constructs it's possible to significantly reduce the JavaScript payload size.
+One improvement comes as a consequence of separating the \textbf{Html} morphism from each morphism in \begin{math}hom(\mathbf{Jqry}_{h})\end{math} and providing them to the developer directly as a subset of the jQuery API. That is, if the developer only needs the \textbf{Html} morphism because they are willing to use the standard DOM API for element selection along with JavaScript's basic looping constructs it's possible to significantly reduce the JavaScript payload size.
 
 [TODO] find actual payload reduction for the library or some significant subset
 
-[TODO] discuss the overhead in additional file size for the existing library
+[TODO] find and discuss the overhead in additional file size for the existing library
 
-In addition to a possible payload reduction, there are two possible performance improvements that fall out of this separation. The first is a small reduction in the overhead imposed by rewrapping DOM elements with the \verb|jQuery| method which is a common idiom in jQuery applications. In the looping methods (e.g. \verb|jQuery.map| and \verb|jQuery.each|) and event bindings the object passed into the callback is a raw DOM element and developers often create a one element jQuery object-set to gain access to the easier-to-use DOM manipulations. Assuming that these same DOM manipulations are available, the ``rewrapping'' can be avoided thereby improving performance.
+In addition to a file size reduction, there are two possible performance improvements that fall out of this separation. The first is a small reduction in the overhead imposed by ``rewrapping'' DOM elements with the \verb|jQuery| method which is a common idiom in jQuery applications. In the looping methods (e.g. \verb|jQuery.map| and \verb|jQuery.each|) and event bindings the object passed into the callback is a raw DOM element and developers often create a one element jQuery object-set to gain access to the easier-to-use DOM manipulations. Assuming that these same DOM manipulations are available, the rewrapping can be avoided thereby improving performance.
 
-[TODO] gather performance data for wrapping overhead
+[TODO] gather performance data for wrapping overhead, no-op is faster but how much matters
 
-The second performance improvement requires some additional constraint on the roles of both \textbf{Jqry} and \textbf{Html} morphisms.
+The second performance improvement requires some additional clarification of the roles of both \textbf{Jqry} and \textbf{Html} morphisms. In Listing \ref{lst:user-friendly}, \verb|jQuery.fn.removeAttr| supports two invocation patterns. We propose that in abstracting the \textbf{Html} morphism from within methods like \verb|jQuery.fn.removeAttr| a single, canonical invocation pattern be selected and that support for others be retained in the associated \textbf{Jqry} morphism. In the aforementioned example that would translate to support for the removal of a single attribute in the \textbf{Html} morphism. The result is a significantly less complex and more performant execution path in many cases.
+
+[TODO] graph sample performance data from removeAttr, eventually include larger subset of data
 
 \section{Fusing Method Chains}\label{sec:fusing-method-chains}
 
