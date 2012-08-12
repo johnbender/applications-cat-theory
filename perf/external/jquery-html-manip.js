@@ -11,7 +11,7 @@
  * Copyright 2012, The Dojo Foundation
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Sat Aug 11 2012 18:53:47 GMT-0700 (PDT)
+ * Date: Sat Aug 11 2012 22:49:36 GMT-0700 (PDT)
  */
 (function( window, undefined ) {
 var
@@ -5543,22 +5543,16 @@ jQuery.fn.extend({
 	},
 
 	append: function() {
-		return this.domManip(arguments, true, function( append, elem ) {
-			jQuery.append( elem, append );
-		});
+		return this.domManip(arguments, true, jQuery.append);
 	},
 
 	prepend: function() {
-		return this.domManip(arguments, true, function( prepend, elem ) {
-			jQuery.prepend( elem, prepend );
-		});
+		return this.domManip(arguments, true,	jQuery.prepend);
 	},
 
 	before: function() {
 		if ( !isDisconnected( this[0] ) ) {
-			return this.domManip(arguments, false, function( newElem, existing ) {
-				jQuery.before( existing, newElem );
-			});
+			return this.domManip(arguments, false, jQuery.before);
 		}
 
 		if ( arguments.length ) {
@@ -5569,9 +5563,7 @@ jQuery.fn.extend({
 
 	after: function() {
 		if ( !isDisconnected( this[0] ) ) {
-			return this.domManip(arguments, false, function( newElem, existing ) {
-				jQuery.after( existing, newElem );
-			});
+			return this.domManip(arguments, false, jQuery.after);
 		}
 
 		if ( arguments.length ) {
@@ -5693,14 +5685,10 @@ jQuery.extend({
 
 		if ( next ) {
 			// TODO deal with the text node directly to avoid dom manip
-			jQuery.domManip([next], [value], false, function( before, elem ) {
-				jQuery.before( elem, before );
-			});
+			jQuery.domManip([next], [value], false, jQuery.before);
 		} else {
 			// TODO deal with the text node directly to avoid dom manip
-			jQuery.domManip([parent], [value], false, function( append, elem ) {
-				jQuery.append( elem, append );
-			});
+			jQuery.domManip([parent], [value], false, jQuery.append);
 		}
 	},
 
@@ -5802,9 +5790,7 @@ jQuery.extend({
 					jQuery.empty(this[i] || {});
 				}
 
-				jQuery.domManip(set, [value], true, function( elem, existing ) {
-					jQuery.append( existing, elem );
-				});
+				jQuery.domManip(set, [value], true,	jQuery.append);
 			}
 		}, null, value, arguments.length - 1);
 	},
@@ -5849,14 +5835,13 @@ jQuery.extend({
 				// being emptied incorrectly in certain situations (#8070).
 				// Fragments from the fragment cache must always be cloned and never used in place.
 				for ( iNoClone = results.cacheable || l - 1; i < l; i++ ) {
-					callback.call(
+					callback(
 						table && jQuery.nodeName( set[i], "table" ) ?
 							findOrAppend( set[i], "tbody" ) :
 							set[i],
 						i === iNoClone ?
 							fragment :
-							jQuery.clone( fragment, true, true ),
-						set[i]
+							jQuery.clone( fragment, true, true )
 					);
 				}
 			}
