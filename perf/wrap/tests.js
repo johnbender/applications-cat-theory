@@ -1,4 +1,4 @@
-var suite = new Benchmark.Suite;
+var suite = new Benchmark.Suite, i = 0;
 
 Benchmark.prototype.setup = function() {
 	// cache the test sets
@@ -6,7 +6,6 @@ Benchmark.prototype.setup = function() {
 	window.testSetSplit = jqsplit( "[data-test]" );
 
 	window.testSetCurrent.unwrap();
-	window.testSetSplit.unwrap();
 };
 
 // add tests
