@@ -7,5 +7,5 @@ This subdirectory contains code for performance tests hosted and run through [js
 The following tests compare the existing implementatin of `jQuery.fn` methods and a hypothetical implementation that contains an abstraction of the DOM Manipulations found within them.
 
 - wrap: http://jsperf.com/wrap-vs-split-wrap
-- unrap: http://jsperf.com/unwrap-vs-split-unwrap
+- unwrap: http://jsperf.com/unwrap-vs-split-unwrap
 - append: http://jsperf.com/append-vs-split-append
