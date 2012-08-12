@@ -9,3 +9,4 @@ The following tests compare the existing implementatin of `jQuery.fn` methods an
 - wrap: http://jsperf.com/wrap-vs-split-wrap
 - unwrap: http://jsperf.com/unwrap-vs-split-unwrap
 - append: http://jsperf.com/append-vs-split-append
+- wrapAll: http://jsperf.com/wrapall-vs-split-wrapall
