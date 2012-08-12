@@ -18,7 +18,6 @@ suite
 		window.testSetSplit.wrap( "<div></div>" );
 	})
 	.on('complete', function() {
-		debugger;
-		$( "#results" ).text('Results: Fastest is ' + this.filter('fastest').pluck('name'));
+		$( "#results" ).text('Results: Fastest is ' + this.filter('1fastest').pluck('name'));
 	})
 	.run();
