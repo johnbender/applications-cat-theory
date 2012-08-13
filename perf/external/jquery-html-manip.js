@@ -11,7 +11,7 @@
  * Copyright 2012, The Dojo Foundation
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Mon Aug 13 2012 00:54:19 GMT-0700 (PDT)
+ * Date: Mon Aug 13 2012 01:06:44 GMT-0700 (PDT)
  */
 (function( window, undefined ) {
 var
@@ -5514,7 +5514,7 @@ jQuery.fn.extend({
 	},
 
 	wrapAll: function( html ) {
-		var set;
+		var set, elem;
 
 		if ( jQuery.isFunction( html ) ) {
 			return this.each(function(i) {
@@ -5522,15 +5522,15 @@ jQuery.fn.extend({
 			});
 		}
 
-		if ( this[0] ) {
+		elem = this[0];
+		set = this;
+
+		if ( elem ) {
 			// The elements to wrap the target around
-			var wrap = jQuery( html, this[0].ownerDocument ).eq(0).clone(true),
-				elem = this[0];
+			var wrap = jQuery( html, elem.ownerDocument ).eq(0).clone(true);
 
-			set = this;
-
-			wrap.each(function() {
-				jQuery.wrapAll( set, this );
+			wrap.each(function(i, e) {
+				jQuery.wrapAll( set, e );
 			});
 		}
 
