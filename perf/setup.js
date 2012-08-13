@@ -19,5 +19,5 @@ if( window.old.fn.jquery !== "1.8.0"
 }
 
 // cache the test sets
-window.testSetCurrent = jQuery( "[data-test]" );
+window.testSetCurrent = old( "[data-test]" );
 window.testSetSplit = jqsplit( "[data-test]" );
