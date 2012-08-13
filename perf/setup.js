@@ -5,9 +5,19 @@ for( var i = 0; i <= (window.testElementCount || 100); i++ ){
 	$( div ).data("baz", "bak").appendTo( "body" );
 }
 
-// make sure the we use the right verion for our performance tests
-window.jqsplit = jQuery.noConflict();
+// make sure the two jQuery versions don't conflict
+window.old = jQuery.noConflict( true );
+window.jqsplit = window.jQuery;
 
- // cache the test sets
+// make sure the tests fail if the versions are wrong
+// NOTE the versions here are arbitrary based on the two includes
+//      but this setup is used in many tests so these will likely
+//      remain static
+if( window.old.fn.jquery !== "1.8.0"
+	|| window.jqsplit.fn.jquery !== "1.8.0pre"){
+	throw "wrong versions";
+}
+
+// cache the test sets
 window.testSetCurrent = jQuery( "[data-test]" );
 window.testSetSplit = jqsplit( "[data-test]" );
