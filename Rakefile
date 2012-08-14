@@ -1,17 +1,11 @@
 task :pdf do
-  Kernel.exec(<<-CMD)
-    bash bin/pdf.sh
-  CMD
+  `bash bin/pdf.sh`
 end
 
-task :'gh-pages' => :pdf do
-  Kernel.exec(<<-CMD)
-    bash bin/gh-pages.sh
-  CMD
+task :"gh-pages" => :pdf do
+  `bash bin/gh-pages.sh`
 end
 
 task :clean do
-  Kernel.exec(<<-CMD)
-    bash bin/clean.sh
-  CMD
+  `bash bin/clean.sh`
 end
