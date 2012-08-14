@@ -1,7 +1,9 @@
 *.aux
 *.dvi
 *.log
+*.out
 *_*
 *~
 *#
 **/*.pdf
+diagrams.pdf
