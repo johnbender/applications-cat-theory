@@ -1,0 +1,212 @@
+%-----------------------------------------------------------------------------
+%
+%               Template for sigplanconf LaTeX Class
+%
+% Name:         sigplanconf-template.tex
+%
+% Purpose:      A template for sigplanconf.cls, which is a LaTeX 2e class
+%               file for SIGPLAN conference proceedings.
+%
+% Guide:        Refer to "Author's Guide to the ACM SIGPLAN Class,"
+%               sigplanconf-guide.pdf
+%
+% Author:       Paul C. Anagnostopoulos
+%               Windfall Software
+%               978 371-2316
+%               paul@windfall.com
+%
+% Created:      15 February 2005
+%
+%-----------------------------------------------------------------------------
+
+
+\documentclass[preprint]{sigplanconf}
+\nocaptionrule
+
+% The following \documentclass options may be useful:
+%
+% 10pt          To set in 10-point type instead of 9-point.
+% 11pt          To set in 11-point type instead of 9-point.
+% authoryear    To obtain author/year citation style instead of numeric.
+
+\usepackage[table]{xcolor}
+\usepackage[pdfborderstyle=0 0 0]{hyperref}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage[all]{xy}
+\usepackage{url}
+\usepackage{float}
+
+\begin{document}
+
+\conferenceinfo{OOPSLA 2012}{October 19--26, Tucson, AZ}
+\copyrightyear{2012}
+\copyrightdata{[to be supplied]}
+
+% These are ignored unless
+% 'preprint' option specified.
+\preprintfooter{Identifying jQuery Performance Optimizations}
+
+\title{Automatically Identifying Performance Optimizations for jQuery Based JavaScript Applications}
+
+\authorinfo{John Bender}
+           {john.m.bender@gmail.com}
+           {April, 2012}
+
+\maketitle
+
+\begin{abstract}
+The popular \cite{bib:usage} jQuery JavaScript library makes the manipulation of HTML documents easy and intuitive, but an unfortunate side effect of its fluent interface is that an unwary programmer can easily introduce unnecessary performance overhead. And while the JavaScript execution in desktop browsers has become fast enough to hide much of the problem, the growing complexity of HTML documents and the ubiquity of web enabled mobile devices continue to make performance an important concern when developing JavaScript applications. We address this issue using category theory to identify a set of JavaScript functions and jQuery methods that can be optimized using function composition to effect loop fusion. In addition, we propose a set of guidelines and derive a library from those guidelines to help developers quickly identify opportunities to make these optimizations. As a result the developer leveraging the technique and library should be able to spend less time focusing on performance and more time on adding features and value to his or her applications.
+\end{abstract}
+
+\category{D.2.7}{Distribution, Maintenance, and Enhancement}{Enhancement}
+\category{D.2.2}{Design Tools and Techniques}{Software libraries}
+
+\terms
+Performance, Design
+
+\keywords
+JavaScript, Category Theory, Loop Fusion, Optimization
+
+\section{Introduction}
+
+JavaScript that leverages the jQuery library can often be identified by its fluency. That is, users are encouraged to make alterations to jQuery objects by ``chaining'' methods and jQuery extension authors are counseled to always return the altered jQuery object to facilitate this form of serial method invocation \cite{bib:chaining}.
+
+\begin{figure}[!ht]
+\small
+\begin{verbatim}
+jQuery( "div" ).hide().addClass( "foo" ).show();
+\end{verbatim}
+\nocaptionrule \caption{Sample jQuery method chain}
+\label{fig:jquery-sample}
+\end{figure}
+
+In Figure \ref{fig:jquery-sample}, all \textbf{HTMLDivElement}s in the document are retrieved using the \verb|"div"| CSS selector and used to instantiate a jQuery ``object-set''. They are then hidden, altered to add an additional CSS class, and shown again. Each method invocation, \verb|hide|, \verb|addClass|, and \verb|show| alters \textit{all} the elements in the jQuery object-set and then provides them for the next method to do the same. More concretely, if \begin{math}n\end{math} methods of this form are invoked in sequence it will require \begin{math}n\end{math} full iterations over the object-set.
+
+Given that each of the methods that behave in this fashion iterates over the entirety of the jQuery object-set it's easy to see where a long sequence of them presents an opportunity for optimization by reducing the number of total iterations. Here, we hope to aid developers in reducing the number of full iterations undertaken with long method chains while otherwise maintaining the appealing fluent interface:
+
+\begin{enumerate}
+\item We define two categories \textbf{Html} and \textbf{Jqry} along with a Functor that maps from \textbf{Html} to \textbf{Jqry}. In doing so we will identify one set of JavaScript functions, the morphisms of \textbf{Html}, and their jQuery method counterparts, the morphisms of \textbf{Jqry}, that can be composed while remaining confident in the effects of their execution.
+\item We define a simple standard for jQuery method and plug-in developers to follow that will allow end users to manually optimize their method chains where appropriate.
+\item We construct a simple and unobtrusive utility for JavaScript developers using jQuery that will alert them to possible opportunities for optimization when chaining methods that adhere to the proposed guidelines.
+\end{enumerate}
+
+\section{Html, Jqry, and a Functor}
+
+The goal of introducing category theory is to establish a more rigorous definition of the set of JavaScript functions that meet the criteria for optimization using loop fusion. This implementation follows the well documented pattern established in other programming language environments like Haskell \cite[p. ~90]{bib:haskell-functor}.
+
+\textbf{Html} is the category of objects as HTMLElements provided by any standards compliant JavaScript DOM API \cite{bib:htmlelement, bib:all-htmlelements} and morphisms as JavaScript functions from HTMLElements to HTMLElements. Meanwhile, \textbf{Jqry} is the category of jQuery objects wrapping HTMLElements and morphisms as JavaScript methods defined on jQuery objects that return jQuery objects. Each can easily be shown to satisfy the category requirements of identity, composition, and closure under composition.
+
+To complement the categories we define a mapping between them, from \textbf{Html} to \textbf{Jqry}, which delivers on the promise of a concrete set of JavaScript functions necessary to proceed with optimizing jQuery method chains. Specifically, if it can be shown that composition is preserved when morphisms from \textbf{Html} are translated into \textbf{Jqry} using jQuery's \verb|map| it can also be shown that the chained \textbf{Jqry} equivelants can be replaced by a single composed \textbf{Html} morphism translated into \textbf{Jqry} (Figure \ref{fig:compose}).
+
+\begin{figure}
+\small
+\begin{verbatim}
+var foo = jQuery( "#foo" );
+
+assert(foo.F().G() == jQuery.map(foo, cmps(f, g)));
+\end{verbatim}
+\nocaptionrule \caption{Preserving composition}
+\label{fig:compose}
+\end{figure}
+
+For both categories and the Functor we ensure that they satisfy their respective laws \cite[p. ~1]{bib:category-definition}.
+
+\section{A Standard to Facilitate Optimization}
+
+Given that the loop fusion optimization requires the composition of at least two morphisms from \textbf{Html} and that functionality of those morphisms is always provided to the end user as the translated version that exists in \textbf{Jqry}, we propose the following guidelines.
+
+\begin{enumerate}
+  \item \label{item:standard-1} All methods defined on the jQuery object prototype \verb|jQuery.fn| should leverage \verb|jQuery.map| where possible. In addition to setting the groundwork for providing the underlying \textbf{Html} morphism this enforces consistency and readability so that when the morphism isn't provided seperately end users can attempt to provide their own.
+  \item \label{item:standard-2} All methods defined for this purpose should expose the underlying \textbf{Html} morphism as the \verb|composable| property on the jQuery method itself. This function should return a function with its arguments partially applied that will expect only an HTMLElement. Providing a consistent property makes fusion easier for the end user and enables automatic tooling like the sample identification library detailed below.
+  \item \label{item:standard-3}Developers should, wherever possible, document and test the performance of both the \textbf{Html} morphism and its \textbf{Jqry} incarnation. This ensures that the work performed in the name of performance will indeed yield the benefits that the end user will expect.
+\end{enumerate}
+
+Adoption of this standard by jQuery plugin developers and the core development team will provide end users a clear path to optimizing large chains of methods.
+
+\section{Library Aided Optimization} \label{sec:library-aided-optimization}
+
+The reader will note that the guidelines do not attempt to differentiate the optimizable jQuery methods in any appreciable fashion other than the the possible existence of the \verb|composable| property. This is a deliberate omission in preference to an automatic identification of chains with two or more methods that define the \verb|composable| property. We propose a small library that can warn the user any time two or more methods are invoked in sequence when each provides the \verb|composable| property.
+
+Newly instantiated jQuery objects, which are constructed with the function \verb|jQuery.fn.init|, derive their functionality from \verb|jQuery.fn| through the prototype lookup mechanism in JavaScript. That is, when a method is invoked on an unaltered jQuery object typically it requires a prototype lookup on \verb|jQuery.fn| before it executes (see Figure \ref{eq:jquery-proto}, equation 2). By inserting a proxy object into the prototype lookup chain between the jQuery instance and \verb|jQuery.fn| at instantiation it is possible to record the sequence of method invocations and report opportunities for optimization (see Figure \ref{eq:jquery-proto}, equation 3).
+
+\begin{figure}
+\begin{equation}
+ f \in hom(Jqry)
+\end{equation}
+\begin{equation} jQuery.fn.init \xmapsto{\ f_{\sigma}\ } jQuery.fn
+\end{equation}
+\begin{equation}
+ jQuery.fn.init \xmapsto{\ f_{\sigma}\ } Proxy \xleftrightharpoons{\ f\ } jQuery.fn
+\end{equation}
+\nocaptionrule \caption{jQuery prototype chains}
+\label{eq:jquery-proto}
+\end{figure}
+
+Taking \begin{math}\xmapsto{f_{\sigma}}\end{math} to represent an automatic prototype check on the target object for some \textbf{Jqry} morphism \begin{math}f\end{math} missing on the source, and \begin{math}\xleftrightharpoons{f}\end{math} to represent a invocation of \begin{math}f\end{math} on the target by the source, we have Figure \ref{eq:jquery-proto} as a more formal reprepresentation of the core functionality in our sample warning proxy JavaScript library \cite{bib:github-warning-proxy}.
+
+\section{Experimental Results}
+
+Initial performance tests suggest that smaller jQuery object-sets and faster (generally less complex) \textbf{Html} morphisms are the best candidates for fusion as described here \cite{bib:perf}. This fits with intuition in that the overhead associated with loops in the form of counter increments and array access makes up a larger portion of the execution effort when there is less activity overall. More use cases with varying set sizes are required to get a better understanding of the best possible configuration for composing these morphisms, and this data will inform the configuration of the warning thresholds in the proxy library.
+
+In addition, more work must be done to understand the real world benefit and implication of these improvements for large projects depending on jQuery's fluent interface. How often optimizable method chains arise in a typical jQuery application and whether the optimizations make up a significant portion of overall performance remains to be seen.
+
+\section{Conclusion}
+
+By establishing a simple set of guidelines and introducing easy to use tools we hope to provide developers maintaining jQuery applictions, counted in the hundreds of thousands, with a quick and easy performance ``win''. While the early performance data is encouraging, especially when considering that the common use patterns of jQuery developers trend toward small sets of DOM elements, more data must be gathered before declaring victory over the performance leak in jQuery's fluent interface.
+
+\bibliographystyle{abbrvnat}
+
+% The bibliography should be embedded for final submission.
+
+\begin{thebibliography}{}
+\softraggedright
+
+\bibitem{bib:usage}
+  BuiltWith.com,
+  jQuery Usage Statistics,
+  \url{http://blog.builtwith.com/2011/10/31/jquery-version-and-usage-report/}.
+\bibitem{bib:chaining}
+  jQuery.com,
+  Plugin Authoring,
+  Maintaining Chainability,
+  \url{http://docs.jquery.com/Plugins/Authoring#Maintaining_Chainability}.
+\bibitem{bib:haskell-functor}
+  Jones, S.P.,
+  \emph{Haskell 98 Language and Libraries: The Revised Report}
+  Cambridge University Press,
+  2003.
+\bibitem{bib:htmlelement}
+  W3.org,
+  HTMLElement interface specification,
+  \url{http://dev.w3.org/html5/spec/elements.html#htmlelement}.
+\bibitem{bib:all-htmlelements}
+  W3.org,
+  HTMLElement list,
+  \url{http://dev.w3.org/html5/markup/elements.html#html-elements}.
+\bibitem{bib:category-definition}
+  Pierce, B.,
+  \emph{Basic Category Theory for Computer Scientists}.
+  MIT Press, Massachusets,
+  First Edition,
+  1991.
+\bibitem{bib:deforestation}
+  Wadler, P.,
+  \emph{Deforestation: Transforming programs to eliminate trees}.
+  Theoretical computer science,
+  Elsevier,
+  1990.
+\bibitem{bib:github-warning-proxy}
+  Bender, J.,
+  jQuery.WarningProxy,
+  \url{https://github.com/johnbender/jquery-lazy-proxy#jquerywarningproxy}.
+\bibitem{bib:perf}
+  Bender, J.,
+  Manual Loop Fusion Performance,
+  \url{https://github.com/johnbender/jquery-lazy-proxy#manual-loop-fusion-performance}.
+
+
+
+\end{thebibliography}
+
+\end{document}

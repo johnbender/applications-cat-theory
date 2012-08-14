@@ -1,0 +1,32 @@
+* introduction
+** motivation
+*** jQuery usage statistics
+*** performance improvements impact large swaths of applications
+** problem sample
+*** hide/addClass/show
+*** naive example implementations
+** goals
+*** categories, functor
+*** standard
+*** prototype proxy sample
+* categories, functor
+** Purpose
+** Html, Jqry
+*** minimal proofs
+** Functor
+*** minimal proofs
+*** tie in to loop fusion
+* standard
+** jQuery.map
+*** possible variant
+** composable()
+*** partial application
+*** returns htmlmorphism
+** performance monitoring
+* proxy sample
+** constructor alterations
+** sample invocation
+** links to completed library
+* conclusion
+** restate value
+** further work
