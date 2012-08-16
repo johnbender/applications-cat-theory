@@ -14,5 +14,5 @@ The following tests compare the existing implementatin of `jQuery.fn` methods an
 - before: http://jsperf.com/before-vs-split-before/2
 - after: http://jsperf.com/after-vs-after-split
 - remove: http://jsperf.com/remove-vs-split-remove
-- empty:
+- empty: http://jsperf.com/empty-vs-split-empty
 - replaceWith:

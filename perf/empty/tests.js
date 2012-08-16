@@ -15,6 +15,7 @@ Benchmark.prototype.setup = function() {
 // add tests
 suite
 	.add( 'empty (1.8)', function(){
+		debugger;
 		window.testSetCurrent.first().empty();
 		window.testSetCurrent = window.testSetCurrent.slice( 1 );
 	})
