@@ -11,7 +11,7 @@ The following tests compare the existing implementatin of `jQuery.fn` methods an
 - unwrap: http://jsperf.com/unwrap-vs-split-unwrap/2
 - append: http://jsperf.com/append-vs-split-append/2
 - prepend: http://jsperf.com/prepend-vs-split-prepend
-- before: http://jsperf.com/before-vs-split-before
+- before: http://jsperf.com/before-vs-split-before/2
 - after:
 - remove:
 - empty:
