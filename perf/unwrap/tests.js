@@ -2,10 +2,23 @@ var suite = new Benchmark.Suite, i = 0;
 
 Benchmark.prototype.setup = function() {
 	// cache the test sets
-	window.testSetCurrent = jQuery( "[data-test]" );
-	window.testSetSplit = jqsplit( "[data-test]" );
+	var l = 500;
 
-	window.testSetCurrent.wrap("<div></div>");
+	// make sure there are enough wrapping divs to keep the tests busy
+	while( l-- ){
+		window.testSetCurrent.wrap("<div class='cleanup'></div>");
+	}
+
+	window.testSetCurrent = old( "[data-test]" );
+	window.testSetSplit = jqsplit( "[data-test]" );
+};
+
+Benchmark.prototype.setup = function() {
+	// move the test set back into the body
+	window.testSetCurrent.appendTo( "body" );
+
+	// remove all the wrappers
+	old( '.cleanup' ).remove();
 };
 
 // add tests

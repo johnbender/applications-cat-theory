@@ -1,9 +1,6 @@
 var suite = new Benchmark.Suite;
 
 Benchmark.prototype.setup = function() {
-	window.testSetCurrent = old( "[data-test]" );
-	window.testSetSplit = jqsplit( "[data-test]" );
-
 	window.testSetClone = window.testSetCurrent.clone();
 };
 
@@ -15,10 +12,10 @@ Benchmark.prototype.teardown = function() {
 // add tests
 suite
 	.add( 'remove (1.8)', function(){
-		window.testSetCurrent.first().remove();
+		old( "body > .test" ).first().remove();
 	})
 	.add( 'remove (split)', function() {
-		window.testSetSplit.first().remove();
+		jqsplit( "body > .test" ).first().remove();
 	})
 	.on('complete', function() {
 		$( "#results" ).text('Results: Fastest is ' + this.filter('fastest').pluck('name'));
