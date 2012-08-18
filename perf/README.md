@@ -15,4 +15,4 @@ The following tests compare the existing implementatin of `jQuery.fn` methods an
 - after: http://jsperf.com/after-vs-after-split
 - remove: http://jsperf.com/remove-vs-split-remove
 - empty: http://jsperf.com/empty-vs-split-empty
-- replaceWith:
+- replaceWith: http://jsperf.com/replacewith-vs-split-replacewith
