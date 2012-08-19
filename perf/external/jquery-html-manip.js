@@ -1,5 +1,5 @@
 /*!
- * jQuery JavaScript Library v1.8.1-htmlmanip
+ * jQuery JavaScript Library v1.8.0-htmlmanip
  * http://jquery.com/
  *
  * Includes Sizzle.js
@@ -9,7 +9,7 @@
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: Sun Aug 19 2012 00:32:17 GMT-0700 (PDT)
+ * Date: Sun Aug 19 2012 00:48:07 GMT-0700 (PDT)
  */
 (function( window, undefined ) {
 var
@@ -186,7 +186,7 @@ jQuery.fn = jQuery.prototype = {
 	selector: "",
 
 	// The current version of jQuery being used
-	jquery: "1.8.1-htmlmanip",
+	jquery: "1.8.0-htmlmanip",
 
 	// The default length of a jQuery object is 0
 	length: 0,
@@ -997,10 +997,9 @@ jQuery.Callbacks = function( options ) {
 					var start = list.length;
 					(function add( args ) {
 						jQuery.each( args, function( _, arg ) {
-							var type = jQuery.type( arg );
-							if ( type === "function" && ( !options.unique || !self.has( arg ) ) ) {
+							if ( jQuery.isFunction( arg ) && ( !options.unique || !self.has( arg ) ) ) {
 								list.push( arg );
-							} else if ( arg && arg.length && type !== "string" ) {
+							} else if ( arg && arg.length ) {
 								// Inspect recursively
 								add( arg );
 							}
@@ -1453,8 +1452,10 @@ jQuery.support = (function() {
 		support.boxSizing = ( div.offsetWidth === 4 );
 		support.doesNotIncludeMarginInBodyOffset = ( body.offsetTop !== 1 );
 
-		// NOTE: To any future maintainer, we've window.getComputedStyle
-		// because jsdom on node.js will break without it.
+		// NOTE: To any future maintainer, window.getComputedStyle was used here
+		// instead of getComputedStyle because it gave a better gzip size.
+		// The difference between window.getComputedStyle and getComputedStyle is
+		// 7 bytes
 		if ( window.getComputedStyle ) {
 			support.pixelPosition = ( window.getComputedStyle( div, null ) || {} ).top !== "1%";
 			support.boxSizingReliable = ( window.getComputedStyle( div, null ) || { width: "4px" } ).width === "4px";
@@ -5494,6 +5495,8 @@ jQuery.fn.extend({
 	},
 
 	wrapAll: function( html ) {
+		var set;
+
 		if ( jQuery.isFunction( html ) ) {
 			return this.each(function(i) {
 				jQuery(this).wrapAll( html.call(this, i) );
@@ -5502,21 +5505,14 @@ jQuery.fn.extend({
 
 		if ( this[0] ) {
 			// The elements to wrap the target around
-			var wrap = jQuery( html, this[0].ownerDocument ).eq(0).clone(true);
+			var wrap = jQuery( html, this[0].ownerDocument ).eq(0).clone(true),
+				elem = this[0];
 
-			if ( this[0].parentNode ) {
-				wrap.insertBefore( this[0] );
-			}
+			set = this;
 
-			wrap.map(function() {
-				var elem = this;
-
-				while ( elem.firstChild && elem.firstChild.nodeType === 1 ) {
-					elem = elem.firstChild;
-				}
-
-				return elem;
-			}).append( this );
+			wrap.each(function() {
+				jQuery.wrapAll( set, this );
+			});
 		}
 
 		return this;
@@ -5598,7 +5594,7 @@ jQuery.fn.extend({
 					jQuery.cleanData( [ elem ] );
 				}
 
-				jQuery.remove( elem, keepData );
+				jQuery.remove( elem );
 			}
 		}
 
@@ -5723,7 +5719,7 @@ jQuery.extend({
 		jQuery.remove( elem, true );
 	},
 
-	remove: function( elem, keepData ) {
+	remove: function( elem ) {
 		if ( elem.parentNode ) {
 			elem.parentNode.removeChild( elem );
 		}
@@ -6681,12 +6677,12 @@ jQuery.extend({
 	}
 });
 
-// NOTE: To any future maintainer, we've window.getComputedStyle
-// because jsdom on node.js will break without it.
+// NOTE: To any future maintainer, we've used both window.getComputedStyle
+// and getComputedStyle here to produce a better gzip size
 if ( window.getComputedStyle ) {
 	curCSS = function( elem, name ) {
 		var ret, width, minWidth, maxWidth,
-			computed = window.getComputedStyle( elem, null ),
+			computed = getComputedStyle( elem, null ),
 			style = elem.style;
 
 		if ( computed ) {
@@ -7305,7 +7301,7 @@ jQuery.fn.load = function( url, params, callback ) {
 		params = undefined;
 
 	// Otherwise, build a param string
-	} else if ( params && typeof params === "object" ) {
+	} else if ( typeof params === "object" ) {
 		type = "POST";
 	}
 
