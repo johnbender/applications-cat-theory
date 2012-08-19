@@ -11,7 +11,7 @@
  * Copyright 2012, The Dojo Foundation
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Sun Aug 19 2012 00:10:52 GMT-0700 (PDT)
+ * Date: Sun Aug 19 2012 00:06:31 GMT-0700 (PDT)
  */
 (function( window, undefined ) {
 var
@@ -5589,9 +5589,7 @@ jQuery.fn.extend({
 					jQuery.cleanData( [ elem ] );
 				}
 
-				if ( elem.parentNode ) {
-					jQuery.remove( elem );
-				}
+				jQuery.remove( elem );
 			}
 		}
 
@@ -5717,7 +5715,9 @@ jQuery.extend({
 	},
 
 	remove: function( elem ) {
-		elem.parentNode.removeChild( elem );
+		if ( elem.parentNode ) {
+			elem.parentNode.removeChild( elem );
+		}
 	},
 
 	append: function( elem, append ) {
