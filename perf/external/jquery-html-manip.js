@@ -11,7 +11,7 @@
  * Copyright 2012, The Dojo Foundation
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Mon Aug 13 2012 01:15:09 GMT-0700 (PDT)
+ * Date: Sun Aug 19 2012 00:03:48 GMT-0700 (PDT)
  */
 (function( window, undefined ) {
 var
@@ -5584,6 +5584,11 @@ jQuery.fn.extend({
 
 		for ( ; (elem = this[i]) != null; i++ ) {
 			if ( !selector || jQuery.filter( selector, [ elem ] ).length ) {
+				if ( !keepData && elem.nodeType === 1 ) {
+					jQuery.cleanData( elem.getElementsByTagName("*") );
+					jQuery.cleanData( [ elem ] );
+				}
+
 				jQuery.remove( elem, keepData );
 			}
 		}
@@ -5710,11 +5715,6 @@ jQuery.extend({
 	},
 
 	remove: function( elem, keepData ) {
-		if ( !keepData && elem.nodeType === 1 ) {
-			jQuery.cleanData( elem.getElementsByTagName("*") );
-			jQuery.cleanData( [ elem ] );
-		}
-
 		if ( elem.parentNode ) {
 			elem.parentNode.removeChild( elem );
 		}
