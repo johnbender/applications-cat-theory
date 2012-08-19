@@ -1,16 +1,12 @@
 var suite = new Benchmark.Suite;
 
 Benchmark.prototype.setup = function() {
+	window.createTestSet( 10000 );
 	window.testSetCurrent.append( "<div></div>" );
 	window.testSetSplit.append( "<div></div>" );
 
 	window.testSetCurrentLength = window.testSetCurrent.length;
 	window.testSetSplitLength = window.testSetSplit.length;
-};
-
-Benchmark.prototype.teardown = function() {
-	$( "[data-test]" ).remove();
-	window.createTestSet();
 };
 
 // add tests
