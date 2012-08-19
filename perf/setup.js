@@ -22,3 +22,5 @@ if( window.old.fn.jquery !== "1.8.0"
 // cache the test sets
 window.testSetCurrent = old( "[data-test]" );
 window.testSetSplit = jqsplit( "[data-test]" );
+
+$( "body" ).append( "<div id='staging'></div>" );
