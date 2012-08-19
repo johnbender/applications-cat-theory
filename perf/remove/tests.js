@@ -1,7 +1,7 @@
 var suite = new Benchmark.Suite;
 
 Benchmark.prototype.setup = function() {
-	window.testSetClone = window.testSetCurrent.clone();
+	window.testSetClone = $( "[data-test]" );
 };
 
 Benchmark.prototype.teardown = function() {
