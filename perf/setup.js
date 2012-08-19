@@ -1,6 +1,6 @@
 window.createTestSet = function( count ){
 	$( "[data-test]" ).remove();
-	
+
 	for( var i = 0; i <= ( count || window.testElementCount || 100); i++ ){
 		var div = document.createElement("div");
 		div.setAttribute("data-test", "true");
@@ -23,7 +23,7 @@ window.jqsplit = window.jQuery;
 //      but this setup is used in many tests so these will likely
 //      remain static
 if( window.old.fn.jquery !== "1.8.0"
-	|| window.jqsplit.fn.jquery !== "1.8.0pre"){
+	|| window.jqsplit.fn.jquery !== "1.8.0-htmlmanip"){
 	throw "wrong versions";
 }
 
