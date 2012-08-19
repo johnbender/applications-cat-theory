@@ -11,7 +11,7 @@
  * Copyright 2012, The Dojo Foundation
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Sun Aug 19 2012 00:06:31 GMT-0700 (PDT)
+ * Date: Sun Aug 19 2012 00:20:56 GMT-0700 (PDT)
  */
 (function( window, undefined ) {
 var
@@ -3668,9 +3668,9 @@ jQuery.each( ("blur focus focusin focusout load resize scroll unload click dblcl
 });
 /*!
  * Sizzle CSS Selector Engine
- *  Copyright 2012, The Dojo Foundation
- *  Released under the MIT, BSD, and GPL Licenses.
- *  More information: http://sizzlejs.com/
+ *  Copyright 2012 jQuery Foundation and other contributors
+ *  Released under the MIT license
+ *  http://sizzlejs.com/
  */
 (function( window, undefined ) {
 
@@ -3697,18 +3697,21 @@ var cachedruns,
 	// Whitespace characters http://www.w3.org/TR/css3-selectors/#whitespace
 	whitespace = "[\\x20\\t\\r\\n\\f]",
 	// http://www.w3.org/TR/css3-syntax/#characters
-	characterEncoding = "(?:\\\\.|[-\\w]|[^\\x00-\\xa0])",
+	characterEncoding = "(?:\\\\.|[-\\w]|[^\\x00-\\xa0])+",
 
-	// Loosely modeled on Javascript identifier characters
-	identifier = "(?:[\\w#_-]|[^\\x00-\\xa0]|\\\\.)",
+	// Loosely modeled on CSS identifier characters
+	// An unquoted value should be a CSS identifier (http://www.w3.org/TR/css3-selectors/#attribute-selectors)
+	// Proper syntax: http://www.w3.org/TR/CSS21/syndata.html#value-def-identifier
+	identifier = characterEncoding.replace( "w", "w#" ),
+
 	// Acceptable operators http://www.w3.org/TR/selectors/#attribute-selectors
 	operators = "([*^$|!~]?=)",
-	attributes = "\\[" + whitespace + "*(" + characterEncoding + "+)" + whitespace +
-		"*(?:" + operators + whitespace + "*(?:(['\"])((?:\\\\.|[^\\\\])*?)\\3|(" + identifier + "+)|)|)" + whitespace + "*\\]",
-	pseudos = ":(" + characterEncoding + "+)(?:\\((?:(['\"])((?:\\\\.|[^\\\\])*?)\\2|(.*))\\)|)",
+	attributes = "\\[" + whitespace + "*(" + characterEncoding + ")" + whitespace +
+		"*(?:" + operators + whitespace + "*(?:(['\"])((?:\\\\.|[^\\\\])*?)\\3|(" + identifier + ")|)|)" + whitespace + "*\\]",
+	pseudos = ":(" + characterEncoding + ")(?:\\((?:(['\"])((?:\\\\.|[^\\\\])*?)\\2|((?:[^,]|\\\\,|(?:,(?=[^\\[]*\\]))|(?:,(?=[^\\(]*\\))))*))\\)|)",
 	pos = ":(nth|eq|gt|lt|first|last|even|odd)(?:\\((\\d*)\\)|)(?=[^-]|$)",
 	combinators = whitespace + "*([\\x20\\t\\r\\n\\f>+~])" + whitespace + "*",
-	groups = "(?=[^\\x20\\t\\r\\n\\f])(?:\\\\.|" + attributes + "|" + pseudos.replace( 2, 6 ) + "|[^\\\\(),])+",
+	groups = "(?=[^\\x20\\t\\r\\n\\f])(?:\\\\.|" + attributes + "|" + pseudos.replace( 2, 7 ) + "|[^\\\\(),])+",
 
 	// Leading and non-escaped trailing whitespace, capturing some non-whitespace characters preceding the latter
 	rtrim = new RegExp( "^" + whitespace + "+|((?:^|[^\\\\])(?:\\\\.)*)" + whitespace + "+$", "g" ),
@@ -3728,7 +3731,7 @@ var cachedruns,
 	// Easily-parseable/retrievable ID or TAG or CLASS selectors
 	rquickExpr = /^(?:#([\w\-]+)|(\w+)|\.([\w\-]+))$/,
 
-	rsibling = /^[\x20\t\r\n\f]*[+~]/,
+	rsibling = /[\x20\t\r\n\f]*[+~]/,
 	rendsWithNot = /:not\($/,
 
 	rheader = /h\d/i,
@@ -3737,18 +3740,18 @@ var cachedruns,
 	rbackslash = /\\(?!\\)/g,
 
 	matchExpr = {
-		"ID": new RegExp( "^#(" + characterEncoding + "+)" ),
-		"CLASS": new RegExp( "^\\.(" + characterEncoding + "+)" ),
-		"NAME": new RegExp( "^\\[name=['\"]?(" + characterEncoding + "+)['\"]?\\]" ),
-		"TAG": new RegExp( "^(" + characterEncoding.replace( "[-", "[-\\*" ) + "+)" ),
+		"ID": new RegExp( "^#(" + characterEncoding + ")" ),
+		"CLASS": new RegExp( "^\\.(" + characterEncoding + ")" ),
+		"NAME": new RegExp( "^\\[name=['\"]?(" + characterEncoding + ")['\"]?\\]" ),
+		"TAG": new RegExp( "^(" + characterEncoding.replace( "[-", "[-\\*" ) + ")" ),
 		"ATTR": new RegExp( "^" + attributes ),
 		"PSEUDO": new RegExp( "^" + pseudos ),
 		"CHILD": new RegExp( "^:(only|nth|last|first)-child(?:\\(" + whitespace +
 			"*(even|odd|(([+-]|)(\\d*)n|)" + whitespace + "*(?:([+-]|)" + whitespace +
 			"*(\\d+)|))" + whitespace + "*\\)|)", "i" ),
 		"POS": new RegExp( pos, "ig" ),
-		// For use in libraries implementing .is(), an unaltered POS
-		"globalPOS": new RegExp( pos, "i" )
+		// For use in libraries implementing .is()
+		"needsContext": new RegExp( "^" + whitespace + "*[>+~]|" + pos, "i" )
 	},
 
 	classCache = {},
@@ -4248,11 +4251,24 @@ var Expr = Sizzle.selectors = {
 		},
 
 		"parent": function( elem ) {
-			return !!elem.firstChild;
+			return !Expr.pseudos["empty"]( elem );
 		},
 
 		"empty": function( elem ) {
-			return !elem.firstChild;
+			// http://www.w3.org/TR/selectors/#empty-pseudo
+			// :empty is only affected by element nodes and content nodes(including text(3), cdata(4)),
+			//   not comment, processing instructions, or others
+			// Thanks to Diego Perini for the nodeName shortcut
+			//   Greater than "@" means alpha characters (specifically not starting with "#" or "?")
+			var nodeType;
+			elem = elem.firstChild;
+			while ( elem ) {
+				if ( elem.nodeName > "@" || (nodeType = elem.nodeType) === 3 || nodeType === 4 ) {
+					return false;
+				}
+				elem = elem.nextSibling;
+			}
+			return true;
 		},
 
 		"contains": markFunction(function( text ) {
@@ -4471,19 +4487,21 @@ var getText = Sizzle.getText = function( elem ) {
 
 Sizzle.attr = function( elem, name ) {
 	var attr,
-		xml = isXML( elem ),
-		normalized = xml ? name : name.toLowerCase();
-	if ( Expr.attrHandle[ normalized ] ) {
-		return Expr.attrHandle[ normalized ]( elem );
+		xml = isXML( elem );
+
+	if ( !xml ) {
+		name = name.toLowerCase();
+	}
+	if ( Expr.attrHandle[ name ] ) {
+		return Expr.attrHandle[ name ]( elem );
 	}
 	if ( assertAttributes || xml ) {
-		return elem.getAttribute( normalized );
+		return elem.getAttribute( name );
 	}
-	attr = elem.attributes || {};
-	attr = attr[ normalized ] || attr[ name ];
+	attr = elem.getAttributeNode( name );
 	return attr ?
-		typeof elem[ normalized ] === "boolean" ?
-			elem[ normalized ] ? normalized : null :
+		typeof elem[ name ] === "boolean" ?
+			elem[ name ] ? name : null :
 			attr.specified ? attr.value : null :
 		null;
 };
@@ -4690,10 +4708,14 @@ function handlePOS( selector, context, results, seed, groups ) {
 		}
 
 		if ( elements ) {
-			push.apply( ret, elements );
+			ret = ret.concat( elements );
 
 			if ( (part = selector.slice( anchor )) && part !== ")" ) {
-				multipleContexts( part, ret, results, seed );
+				if ( rcombinators.test(part) ) {
+					multipleContexts( part, ret, results, seed );
+				} else {
+					Sizzle( part, context, results, seed ? seed.concat(elements) : elements );
+				}
 			} else {
 				push.apply( results, ret );
 			}
@@ -4789,7 +4811,7 @@ function addCombinator( matcher, combinator, context ) {
 			while ( (elem = elem[ dir ]) ) {
 				if ( elem.nodeType === 1 ) {
 					if ( (cache = elem[ expando ]) === cachedkey ) {
-						return false;
+						return elem.sizset;
 					} else if ( typeof cache === "string" && cache.indexOf(dirkey) === 0 ) {
 						if ( elem.sizset ) {
 							return elem;
@@ -4852,7 +4874,6 @@ var compile = Sizzle.compile = function( selector, context, xml ) {
 
 	// Return a cached group function if already generated (context dependent)
 	if ( cached && cached.context === context ) {
-		cached.dirruns++;
 		return cached;
 	}
 
@@ -4915,8 +4936,7 @@ var select = function( selector, context, results, seed, xml ) {
 			selector = selector.slice( tokens.shift().length );
 		}
 
-
-		findContext = (tokens.length >= 1 && rsibling.test( tokens[0] ) && context.parentNode) || context;
+		findContext = ( (match = rsibling.exec( tokens[0] )) && !match.index && context.parentNode ) || context;
 
 		// Get the last token, excluding :not
 		notTokens = tokens.pop();
@@ -4949,10 +4969,10 @@ var select = function( selector, context, results, seed, xml ) {
 	// If selector is empty, we're already done
 	if ( selector ) {
 		matcher = compile( selector, context, xml );
-		dirruns = matcher.dirruns;
+		dirruns = matcher.dirruns++;
 
 		if ( elements == null ) {
-			elements = Expr.find["TAG"]( "*", context );
+			elements = Expr.find["TAG"]( "*", (rsibling.test( selector ) && context.parentNode) || context );
 		}
 		for ( i = 0; (elem = elements[i]); i++ ) {
 			cachedruns = matcher.runs++;
@@ -5034,11 +5054,9 @@ if ( document.querySelectorAll ) {
 				// and working up from there (Thanks to Andrew Dupont for the technique)
 				// IE 8 doesn't work on object elements
 				} else if ( context.nodeType === 1 && context.nodeName.toLowerCase() !== "object" ) {
-					var newSelector,
-						oldContext = context,
-						old = context.getAttribute( "id" ),
+					var old = context.getAttribute("id"),
 						nid = old || expando,
-						parent = context.parentNode;
+						newContext = rsibling.test( selector ) && context.parentNode || context;
 
 					if ( old ) {
 						nid = nid.replace( rescape, "\\$&" );
@@ -5046,20 +5064,15 @@ if ( document.querySelectorAll ) {
 						context.setAttribute( "id", nid );
 					}
 
-					if ( parent && rsibling.test( selector ) ) {
-						context = parent;
-					}
-
 					try {
-						if ( context ) {
-							newSelector = selector.replace( rtrim, "" ).replace( rgroups, "[id='" + nid + "'] $&" );
-							push.apply( results, slice.call(context.querySelectorAll( newSelector ), 0) );
-							return results;
-						}
+						push.apply( results, slice.call( newContext.querySelectorAll(
+							selector.replace( rgroups, "[id='" + nid + "'] $&" )
+						), 0 ) );
+						return results;
 					} catch(qsaError) {
 					} finally {
 						if ( !old ) {
-							oldContext.removeAttribute( "id" );
+							context.removeAttribute("id");
 						}
 					}
 				}
@@ -5078,7 +5091,7 @@ if ( document.querySelectorAll ) {
 				// Gecko does not error, returns false instead
 				try {
 					matches.call( div, "[test!='']:sizzle" );
-					rbuggyMatches.push( Expr.match.PSEUDO );
+					rbuggyMatches.push( Expr.match.PSEUDO.source, Expr.match.POS.source, "!=" );
 				} catch ( e ) {}
 			});
 
