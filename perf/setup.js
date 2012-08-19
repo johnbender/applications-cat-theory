@@ -1,10 +1,16 @@
-for( var i = 0; i <= (window.testElementCount || 100); i++ ){
-	var div = document.createElement("div");
-	div.setAttribute("data-test", "true");
-	div.setAttribute("data-test-foo", "true");
-	div.setAttribute("class", "test");
-	$( div ).data("baz", "bak").appendTo( "body" );
-}
+window.createTestSet = function(){
+	for( var i = 0; i <= (window.testElementCount || 100); i++ ){
+		var div = document.createElement("div");
+		div.setAttribute("data-test", "true");
+		div.setAttribute("data-test-foo", "true");
+		div.setAttribute("class", "test");
+		$( div ).data("baz", "bak").appendTo( "body" );
+	}
+
+	// cache the test sets
+	window.testSetCurrent = old( "[data-test]" );
+	window.testSetSplit = jqsplit( "[data-test]" );
+};
 
 // make sure the two jQuery versions don't conflict
 window.old = jQuery.noConflict( true );
@@ -19,8 +25,7 @@ if( window.old.fn.jquery !== "1.8.0"
 	throw "wrong versions";
 }
 
-// cache the test sets
-window.testSetCurrent = old( "[data-test]" );
-window.testSetSplit = jqsplit( "[data-test]" );
-
 $( "body" ).append( "<div id='staging'></div>" );
+
+// create the initial test set
+window.createTestSet();

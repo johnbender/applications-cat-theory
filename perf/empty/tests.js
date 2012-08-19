@@ -4,24 +4,30 @@ Benchmark.prototype.setup = function() {
 	window.testSetCurrent.append( "<div></div>" );
 	window.testSetSplit.append( "<div></div>" );
 
-	var l = 10;
+	window.testSetCurrentLength = window.testSetCurrent.length;
+	window.testSetSplitLength = window.testSetSplit.length;
+};
 
-	while( l-- ){
-		window.testSetCurrent.children().wrapAll( "<div></div>" );
-		window.testSetSplit.children().wrapAll( "<div></div>" );
-	}
+Benchmark.prototype.teardown = function() {
+	$( "[data-test]" ).remove();
+	window.createTestSet();
 };
 
 // add tests
 suite
 	.add( 'empty (1.8)', function(){
-		debugger;
-		window.testSetCurrent.first().empty();
-		window.testSetCurrent = window.testSetCurrent.slice( 1 );
+		window.testSetCurrent.eq(window.testSetCurrentLength--).empty();
+
+		if( window.testSetCurrentLength < 0 ){
+			throw "shit";
+		}
 	})
 	.add( 'empty (split)', function() {
-		window.testSetSplit.first().empty();
-		window.testSetSplit = window.testSetSplit.slice( 1 );
+		window.testSetSplit.eq(window.testSetSplitLength--).empty();
+
+		if( window.testSetSplitLength < 0 ){
+			throw "shit";
+		}
 	})
 	.on('complete', function() {
 		$( "#results" ).text('Results: Fastest is ' + this.filter('fastest').pluck('name'));

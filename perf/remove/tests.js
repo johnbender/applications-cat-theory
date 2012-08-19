@@ -9,8 +9,6 @@ Benchmark.prototype.setup = function() {
 
 	window.testSetCurrentLength = window.testSetCurrent.length;
 	window.testSetSplitLength = window.testSetSplit.length;
-	console.log( window.testSetCurrentLength );
-	console.log( window.testSetSplitLength );
 };
 
 Benchmark.prototype.teardown = function() {
