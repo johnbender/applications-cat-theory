@@ -1,5 +1,5 @@
 /*!
- * jQuery JavaScript Library v1.8.0-htmlmanip
+ * jQuery JavaScript Library v1.8.0
  * http://jquery.com/
  *
  * Includes Sizzle.js
@@ -9,7 +9,7 @@
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: Mon Aug 20 2012 10:19:11 GMT-0700 (PDT)
+ * Date: Thu Aug 09 2012 16:24:48 GMT-0400 (Eastern Daylight Time)
  */
 (function( window, undefined ) {
 var
@@ -186,7 +186,7 @@ jQuery.fn = jQuery.prototype = {
 	selector: "",
 
 	// The current version of jQuery being used
-	jquery: "1.8.0-htmlmanip",
+	jquery: "1.8.0",
 
 	// The default length of a jQuery object is 0
 	length: 0,
@@ -5495,8 +5495,6 @@ jQuery.fn.extend({
 	},
 
 	wrapAll: function( html ) {
-		var set;
-
 		if ( jQuery.isFunction( html ) ) {
 			return this.each(function(i) {
 				jQuery(this).wrapAll( html.call(this, i) );
@@ -5505,14 +5503,21 @@ jQuery.fn.extend({
 
 		if ( this[0] ) {
 			// The elements to wrap the target around
-			var wrap = jQuery( html, this[0].ownerDocument ).eq(0).clone(true),
-				elem = this[0];
+			var wrap = jQuery( html, this[0].ownerDocument ).eq(0).clone(true);
 
-			set = this;
+			if ( this[0].parentNode ) {
+				wrap.insertBefore( this[0] );
+			}
 
-			wrap.each(function() {
-				jQuery.wrapAll( set, this );
-			});
+			wrap.map(function() {
+				var elem = this;
+
+				while ( elem.firstChild && elem.firstChild.nodeType === 1 ) {
+					elem = elem.firstChild;
+				}
+
+				return elem;
+			}).append( this );
 		}
 
 		return this;
@@ -5548,21 +5553,33 @@ jQuery.fn.extend({
 
 	unwrap: function() {
 		return this.parent().each(function() {
-			jQuery.unwrap( this );
+			if ( !jQuery.nodeName( this, "body" ) ) {
+				jQuery( this ).replaceWith( this.childNodes );
+			}
 		}).end();
 	},
 
 	append: function() {
-		return this.domManip(arguments, true, jQuery.append);
+		return this.domManip(arguments, true, function( elem ) {
+			if ( this.nodeType === 1 || this.nodeType === 11 ) {
+				this.appendChild( elem );
+			}
+		});
 	},
 
 	prepend: function() {
-		return this.domManip(arguments, true, jQuery.prepend);
+		return this.domManip(arguments, true, function( elem ) {
+			if ( this.nodeType === 1 || this.nodeType === 11 ) {
+				this.insertBefore( elem, this.firstChild );
+			}
+		});
 	},
 
 	before: function() {
 		if ( !isDisconnected( this[0] ) ) {
-			return this.domManip(arguments, false, jQuery.before);
+			return this.domManip(arguments, false, function( elem ) {
+				this.parentNode.insertBefore( elem, this );
+			});
 		}
 
 		if ( arguments.length ) {
@@ -5573,7 +5590,9 @@ jQuery.fn.extend({
 
 	after: function() {
 		if ( !isDisconnected( this[0] ) ) {
-			return this.domManip(arguments, false, jQuery.after);
+			return this.domManip(arguments, false, function( elem ) {
+				this.parentNode.insertBefore( elem, this.nextSibling );
+			});
 		}
 
 		if ( arguments.length ) {
@@ -5594,7 +5613,9 @@ jQuery.fn.extend({
 					jQuery.cleanData( [ elem ] );
 				}
 
-				jQuery.remove( elem );
+				if ( elem.parentNode ) {
+					elem.parentNode.removeChild( elem );
+				}
 			}
 		}
 
@@ -5606,7 +5627,15 @@ jQuery.fn.extend({
 			i = 0;
 
 		for ( ; (elem = this[i]) != null; i++ ) {
-			jQuery.empty( elem );
+			// Remove element nodes and prevent memory leaks
+			if ( elem.nodeType === 1 ) {
+				jQuery.cleanData( elem.getElementsByTagName("*") );
+			}
+
+			// Remove any remaining nodes
+			while ( elem.firstChild ) {
+				elem.removeChild( elem.firstChild );
+			}
 		}
 
 		return this;
@@ -5621,158 +5650,21 @@ jQuery.fn.extend({
 		});
 	},
 
-	replaceWith: function( value ) {
-		if ( !isDisconnected( this[0] ) ) {
-			// Make sure that the elements are removed from the DOM before they are inserted
-			// this can help fix replacing a parent with child elements
-			if ( jQuery.isFunction( value ) ) {
-				return this.each(function(i) {
-					var self = jQuery(this), old = self.html();
-					self.replaceWith( value.call( this, i, old ) );
-				});
-			}
-
-			if ( typeof value !== "string" ) {
-				value = jQuery( value ).detach();
-			}
-
-			return this.each(function() {
-				jQuery.replaceWith( this, value );
-			});
-		}
-
-		return this.length ?
-			this.pushStack( jQuery(jQuery.isFunction(value) ? value() : value), "replaceWith", value ) :
-			this;
-	},
-
-	detach: function( selector ) {
-		return this.remove( selector, true );
-	},
-
-	domManip: function( args, table, callback ) {
-		return jQuery.domManip( this, args, table, callback );
-	},
-
 	html: function( value ) {
-		return arguments.length === 0 ? jQuery.html( this ) : jQuery.html( this, value );
-	}
-});
-
-jQuery.extend({
-	wrap: function( elem, wrap ) {
-		jQuery.wrapAll( [elem], wrap );
-	},
-
-	wrapAll: function( elems, wrap ) {
-		var l = elems.length;
-
-		// if the set is empty bail
-		if( !l ){
-			return;
-		}
-
-		if ( elems[0].parentNode ) {
-			jQuery.before( elems[0], wrap );
-		}
-
-		// innermost child element for appending the wrapped content
-		while ( wrap.firstChild && wrap.firstChild.nodeType === 1 ) {
-			wrap = wrap.firstChild;
-		}
-
-		for( var i = 0; i < l; i++ ) {
-			jQuery.append( wrap, elems[i] );
-		}
-	},
-
-	unwrap: function( elem ) {
-		if ( !jQuery.nodeName( elem, "body" ) ) {
-			jQuery.replaceWith( elem, elem.childNodes );
-		}
-	},
-
-	replaceWith: function( elem, value ) {
-		var next = elem.nextSibling,
-			parent = elem.parentNode;
-
-		jQuery.remove( elem );
-
-		if ( next ) {
-			// TODO deal with the text node directly to avoid dom manip
-			jQuery.domManip([next], [value], false, jQuery.before);
-		} else {
-			// TODO deal with the text node directly to avoid dom manip
-			jQuery.domManip([parent], [value], false, jQuery.append);
-		}
-	},
-
-	before: function( elem, insert ) {
-		elem.parentNode.insertBefore( insert, elem );
-	},
-
-	after: function( elem, insert ) {
-		elem.parentNode.insertBefore( insert, elem.nextSibling );
-	},
-
-	detach: function( elem ) {
-		jQuery.remove( elem, true );
-	},
-
-	remove: function( elem ) {
-		if ( elem.parentNode ) {
-			elem.parentNode.removeChild( elem );
-		}
-	},
-
-	append: function( elem, append ) {
-		if ( elem.nodeType === 1 || elem.nodeType === 11 ) {
-			elem.appendChild( append );
-		}
-	},
-
-	prepend: function( elem, prepend ) {
-		if ( elem.nodeType === 1 || elem.nodeType === 11 ) {
-			elem.insertBefore( prepend, elem.firstChild );
-		}
-	},
-
-	empty: function( elem ) {
-		// Remove element nodes and prevent memory leaks
-		if ( elem.nodeType === 1 ) {
-			jQuery.cleanData( elem.getElementsByTagName("*") );
-		}
-
-		// Remove any remaining nodes
-		while ( elem.firstChild ) {
-			elem.removeChild( elem.firstChild );
-		}
-
-		return elem;
-	},
-
-
-	// TODO sort out collection based methods, and possible
-	//      additional abstractions
-	getHtml: function( elem ) {
-		return elem.nodeType === 1 ?
-			elem.innerHTML.replace( rinlinejQuery, "" ) :
-			undefined;
-	},
-
-	html: function( set, value ) {
-		return jQuery.access( set, function( value ) {
+		return jQuery.access( this, function( value ) {
 			var elem = this[0] || {},
 				i = 0,
 				l = this.length;
 
 			if ( value === undefined ) {
-				return jQuery.getHtml( elem );
+				return elem.nodeType === 1 ?
+					elem.innerHTML.replace( rinlinejQuery, "" ) :
+					undefined;
 			}
 
 			// See if we can take a shortcut and just use innerHTML
 			if ( typeof value === "string" && !rnoInnerhtml.test( value ) &&
-				( jQuery.support.htmlSerialize || !rnoshimcache.test( value )	 ) &&
+				( jQuery.support.htmlSerialize || !rnoshimcache.test( value )  ) &&
 				( jQuery.support.leadingWhitespace || !rleadingWhitespace.test( value ) ) &&
 				!wrapMap[ ( rtagName.exec( value ) || ["", ""] )[1].toLowerCase() ] ) {
 
@@ -5795,17 +5687,51 @@ jQuery.extend({
 			}
 
 			if ( elem ) {
-				for (i = 0; i < l; i++ ) {
-					// clean each element in the set
-					jQuery.empty(this[i] || {});
-				}
-
-				jQuery.domManip(set, [value], true,	jQuery.append);
+				this.empty().append( value );
 			}
-		}, null, value, arguments.length - 1);
+		}, null, value, arguments.length );
 	},
 
-	domManip: function( set, args, table, callback ) {
+	replaceWith: function( value ) {
+		if ( !isDisconnected( this[0] ) ) {
+			// Make sure that the elements are removed from the DOM before they are inserted
+			// this can help fix replacing a parent with child elements
+			if ( jQuery.isFunction( value ) ) {
+				return this.each(function(i) {
+					var self = jQuery(this), old = self.html();
+					self.replaceWith( value.call( this, i, old ) );
+				});
+			}
+
+			if ( typeof value !== "string" ) {
+				value = jQuery( value ).detach();
+			}
+
+			return this.each(function() {
+				var next = this.nextSibling,
+					parent = this.parentNode;
+
+				jQuery( this ).remove();
+
+				if ( next ) {
+					jQuery(next).before( value );
+				} else {
+					jQuery(parent).append( value );
+				}
+			});
+		}
+
+		return this.length ?
+			this.pushStack( jQuery(jQuery.isFunction(value) ? value() : value), "replaceWith", value ) :
+			this;
+	},
+
+	detach: function( selector ) {
+		return this.remove( selector, true );
+	},
+
+	domManip: function( args, table, callback ) {
+
 		// Flatten any nested arrays
 		args = [].concat.apply( [], args );
 
@@ -5813,24 +5739,25 @@ jQuery.extend({
 			i = 0,
 			value = args[0],
 			scripts = [],
-			l = set.length;
+			l = this.length;
 
 		// We can't cloneNode fragments that contain checked, in WebKit
 		if ( !jQuery.support.checkClone && l > 1 && typeof value === "string" && rchecked.test( value ) ) {
-			return jQuery.each(set, function() {
-				jQuery.domManip( [this], args, table, callback );
+			return this.each(function() {
+				jQuery(this).domManip( args, table, callback );
 			});
 		}
 
 		if ( jQuery.isFunction(value) ) {
-			return jQuery.each(set, function(i) {
-				args[0] = value.call( this, i, table ? jQuery.html(set) : this );
-				jQuery.domManip( [this], args, table, callback );
+			return this.each(function(i) {
+				var self = jQuery(this);
+				args[0] = value.call( this, i, table ? self.html() : undefined );
+				self.domManip( args, table, callback );
 			});
 		}
 
-		if ( set[0] ) {
-			results = jQuery.buildFragment( args, set, scripts );
+		if ( this[0] ) {
+			results = jQuery.buildFragment( args, this, scripts );
 			fragment = results.fragment;
 			first = fragment.firstChild;
 
@@ -5845,10 +5772,10 @@ jQuery.extend({
 				// being emptied incorrectly in certain situations (#8070).
 				// Fragments from the fragment cache must always be cloned and never used in place.
 				for ( iNoClone = results.cacheable || l - 1; i < l; i++ ) {
-					callback(
-						table && jQuery.nodeName( set[i], "table" ) ?
-							findOrAppend( set[i], "tbody" ) :
-							set[i],
+					callback.call(
+						table && jQuery.nodeName( this[i], "table" ) ?
+							findOrAppend( this[i], "tbody" ) :
+							this[i],
 						i === iNoClone ?
 							fragment :
 							jQuery.clone( fragment, true, true )
@@ -5885,7 +5812,7 @@ jQuery.extend({
 			}
 		}
 
-		return set;
+		return this;
 	}
 });
 
