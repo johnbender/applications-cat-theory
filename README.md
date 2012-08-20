@@ -10,14 +10,14 @@ The paper covers two main topics, the first is a possible method chain fusion pe
 
 ### Compiling
 
-On linux after installing the tex-live distrubution and the necessary packages (found at the top of `paper/paper.text`) the document can be compiled to `.dvi` and viewed with
+On linux after installing the tex-live distrubution and the necessary packages (found at the top of `paper/paper.tex`) the document can be compiled to `.dvi` and viewed with
 
     $ cd paper
-    $ latex oopsla-2012.tex
-    $ evince oopsla-2012.dvi
+    $ latex paper.tex
+    $ evince paper.dvi
 
 or to `.pdf` with
 
     $ cd paper
-    $ pdflatex oopsla-2012.tex
-    $ evince oopsla-2012.pdf
+    $ pdflatex paper.tex
+    $ evince paper.pdf
