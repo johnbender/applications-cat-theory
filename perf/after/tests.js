@@ -4,7 +4,6 @@ Benchmark.prototype.setup = function() {
   window.createTestSet( 1 );
 };
 
-
 // add tests
 suite
 	.add( 'after with string (1.8)', function(){

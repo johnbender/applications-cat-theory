@@ -12,9 +12,9 @@ The following tests compare the existing implementation of `jQuery.fn` methods a
 - append: http://jsperf.com/append-vs-split-append/2
 - prepend: http://jsperf.com/prepend-vs-split-prepend
 - before: http://jsperf.com/before-vs-split-before/2
-- after: http://jsperf.com/after-vs-after-split
-- remove: http://jsperf.com/remove-vs-split-remove/3, http://jsperf.com/basic-abstracted-remove
-- empty: http://jsperf.com/empty-vs-split-empty
+- after: http://jsperf.com/after-vs-after-split/2
+- remove: http://jsperf.com/remove-vs-split-remove/6, http://jsperf.com/basic-abstracted-remove
+- empty: http://jsperf.com/empty-vs-split-empty/3
 - replaceWith: http://jsperf.com/replacewith-vs-split-replacewith
 
 ## Core
