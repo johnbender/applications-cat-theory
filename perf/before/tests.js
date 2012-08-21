@@ -1,5 +1,9 @@
 var suite = new Benchmark.Suite, setupRun = 0, testRun = 0;
 
+Benchmark.prototype.setup = function() {
+  window.createTestSet( 1 );
+};
+
 Benchmark.prototype.teardown = function() {
 	$( ".cleanup" ).remove();
 };
