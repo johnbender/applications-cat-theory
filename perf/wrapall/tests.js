@@ -1,11 +1,11 @@
 var suite = new Benchmark.Suite, i = 0;
 
-Benchmark.prototype.teardown = function() {
-	window.testSetCurrent.clone( true ).appendTo( "body" );
-	old( ".cleanup" ).remove();
+Benchmark.prototype.setup = function() {
+	window.createTestSet( 10 );
+};
 
-	window.testSetCurrent = old( "[data-test]" );
-	window.testSetSplit = jqsplit( "[data-test]" );
+Benchmark.prototype.teardown = function() {
+	$( ".cleanup" ).remove();
 };
 
 // add tests

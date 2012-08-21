@@ -6,7 +6,7 @@ window.createTestSet = function( count ){
 		div.setAttribute("data-test", "true");
 		div.setAttribute("data-test-foo", "true");
 		div.setAttribute("class", "test");
-		$( div ).data("baz", "bak").appendTo( "body" );
+		$( div ).appendTo( "body" );
 	}
 
 	// cache the test sets
@@ -23,7 +23,7 @@ window.jqsplit = window.jQuery;
 //      but this setup is used in many tests so these will likely
 //      remain static
 if( window.old.fn.jquery !== "1.8.0"
-	|| window.jqsplit.fn.jquery !== "1.8.0-htmlmanip"){
+	|| window.jqsplit.fn.jquery !== "1.8.0-htmlmanip" ){
 	throw "wrong versions";
 }
 
