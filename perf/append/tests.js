@@ -16,7 +16,7 @@ suite
 	.add( 'append with string (1.8)', function() {
 		window.testSetCurrent.append( "<div class='cleanup'></div>" );
 	})
-	.add( 'append with string (core)', function() {
+	.add( 'append with element (core)', function() {
 		var l = window.testSetCurrent.length, append;
 
 		while( l-- ) {

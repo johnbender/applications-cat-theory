@@ -7,9 +7,18 @@ suite
 		window.testSetCurrent.wrapAll( "<div class='cleanup'></div>" );
 		$( ".cleanup" ).remove();
 	})
-	.add( 'wrapAll with string (split)', function() {
+	.add( 'wrapAll with string (split)', function() {n
 		window.createTestSet( 1 );
 		window.testSetSplit.wrapAll( "<div class='cleanup'></div>" );
+		$( ".cleanup" ).remove();
+	})
+	.add( 'wrapAll with element (core)', function() {
+		var wrapper;
+
+		window.createTestSet( 1 );
+		wrapper = document.createElement( "div" );
+		wrapper.setAttribute( "class", "cleanup" );
+		jqsplit.wrapAll( window.testSetCurrent, wrapper );
 		$( ".cleanup" ).remove();
 	})
 	.on('complete', function() {

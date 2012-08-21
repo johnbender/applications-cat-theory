@@ -21,6 +21,6 @@ The following tests compare the existing implementation of `jQuery.fn` methods a
 
 The following tests compare the existing implementation of `jQuery.fn` methods and the "core" abstraction with a while loop:
 
-- append: http://jsperf.com/append-vs-core-append/2
-- prepend: http://jsperf.com/prepend-vs-core-prepend
--
+- wrapAll: http://jsperf.com/wrapall-vs-core-wrapall
+- append: http://jsperf.com/append-vs-core-append/4
+- prepend: http://jsperf.com/prepend-vs-core-prepend/2

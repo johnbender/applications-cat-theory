@@ -15,7 +15,7 @@ suite
 	.add( 'prepend with string (1.8)', function() {
 		window.testSetCurrent.prepend( "<div class='cleanup'></div>" );
 	})
-	.add( 'prepend with string (core)', function() {
+	.add( 'prepend with element (core)', function() {
 		var l = window.testSetCurrent.length, prepend;
 
 		while( l-- ) {
