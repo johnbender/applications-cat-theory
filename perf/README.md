@@ -2,7 +2,7 @@
 
 This subdirectory contains code for performance tests hosted and run through [jsperf.com](http://jsperf.com). The idea is to provide a comprehensive view of the performance benefits and expenses incured for both method chain fusion and the abstraction of DOM manipulations from `jQuery.fn` methods.
 
-## Abstraction
+## Function Overhead
 
 The following tests compare the existing implementation of `jQuery.fn` methods and a hypothetical implementation that contains an abstraction of the DOM Manipulations found within them.
 
@@ -17,10 +17,14 @@ The following tests compare the existing implementation of `jQuery.fn` methods a
 - empty: http://jsperf.com/empty-vs-split-empty/3
 - replaceWith: http://jsperf.com/replacewith-vs-split-replacewith
 
-## Core
+## Core Abstraction
 
 The following tests compare the existing implementation of `jQuery.fn` methods and the "core" abstraction with a while loop:
 
 - wrapAll: http://jsperf.com/wrapall-vs-core-wrapall
 - append: http://jsperf.com/append-vs-core-append/4
 - prepend: http://jsperf.com/prepend-vs-core-prepend/2
+
+## Notes
+
+Some of the tests have to do setup and teardown inside the timed code portion because of the way the DOM manipulations slow down overtime. For example, `wrapAll` nests elements and without a cleanup the DOM tree appears to explode and ruin the test numbers.
