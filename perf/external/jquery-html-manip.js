@@ -9,7 +9,7 @@
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: Mon Aug 20 2012 10:19:11 GMT-0700 (PDT)
+ * Date: Tue Aug 21 2012 12:28:40 GMT-0700 (PDT)
  */
 (function( window, undefined ) {
 var
@@ -5495,8 +5495,6 @@ jQuery.fn.extend({
 	},
 
 	wrapAll: function( html ) {
-		var set;
-
 		if ( jQuery.isFunction( html ) ) {
 			return this.each(function(i) {
 				jQuery(this).wrapAll( html.call(this, i) );
@@ -5505,14 +5503,21 @@ jQuery.fn.extend({
 
 		if ( this[0] ) {
 			// The elements to wrap the target around
-			var wrap = jQuery( html, this[0].ownerDocument ).eq(0).clone(true),
-				elem = this[0];
+			var wrap = jQuery( html, this[0].ownerDocument ).eq(0).clone(true);
 
-			set = this;
+			if ( this[0].parentNode ) {
+				wrap.insertBefore( this[0] );
+			}
 
-			wrap.each(function() {
-				jQuery.wrapAll( set, this );
-			});
+			wrap.map(function() {
+				var elem = this;
+
+				while ( elem.firstChild && elem.firstChild.nodeType === 1 ) {
+					elem = elem.firstChild;
+				}
+
+				return elem;
+			}).append( this );
 		}
 
 		return this;
